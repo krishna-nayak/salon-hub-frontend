@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Route,
   createBrowserRouter,
@@ -33,12 +32,12 @@ function App() {
 const Root = () => {
   return (
     <>
-      {/* <div>
+      <div className="space-x-5">
         <Link to="/">Home</Link>
         <Link to="/salonRegForm">SalonRegForm</Link>
         <Link to="/userLogin">UserLogin</Link>
         <Link to="/userRegistration">UserRegistration</Link>
-      </div> */}
+      </div>
       <div>
         <Outlet />
       </div>
