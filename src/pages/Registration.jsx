@@ -1,14 +1,37 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { Validation } from "../utility/validation/ValReg";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function UserRegistration() {
-  const [userDetails, setUserDetails] = useState({
-    name: "",
+  const [values, setValues] = useState({
+    fullName: "",
     email: "",
-    role: "",
     password: "",
-    confirmPassword: "",
   });
+  const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const error = Validation(values);
+    setErrors((prev) => ({ ...prev, ...Validation(values) }));
+    if (error.fullName == "" && error.email == "" && error.password == "") {
+      axios
+        .post("http://localhost:3000/users", values)
+        .then((res) => {
+          navigate("/userLogin");
+          console.log(res);
+        })
 
+        .catch((err) => console.log(err));
+    } else {
+      console.log(Validation(values));
+      //console.log("Validation not atching");
+    }
+  };
+  const handleInput = (e) => {
+    setValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
   return (
     <section className="bg-gray-100 ">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -17,7 +40,30 @@ export default function UserRegistration() {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
               Create and account
             </h1>
-            <form className="space-y-4 md:space-y-6" action="#">
+            <form
+              className="space-y-4 md:space-y-6"
+              action="#"
+              onSubmit={handleSubmit}
+            >
+              <div>
+                <label
+                  htmlFor="fullName"
+                  className="block mb-2 text-sm font-medium text-gray-900 "
+                >
+                  Name
+                </label>
+                <input
+                  type="text"
+                  name="fullName"
+                  id="fullName"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-200 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Full Name"
+                  onChange={handleInput}
+                />
+                {errors.fullName && (
+                  <span className="text-red-600">{errors.fullName}</span>
+                )}
+              </div>
               <div>
                 <label
                   htmlFor="email"
@@ -31,8 +77,11 @@ export default function UserRegistration() {
                   id="email"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-200 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="name@company.com"
-                  required=""
+                  onChange={handleInput}
                 />
+                {errors.email && (
+                  <span className="text-red-600">{errors.email}</span>
+                )}
               </div>
               <div>
                 <label
@@ -47,11 +96,14 @@ export default function UserRegistration() {
                   id="password"
                   placeholder="••••••••"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-200 dark:placeholder-gray-400sddd dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  required={true}
+                  onChange={handleInput}
                   autoComplete="off"
                 />
+                {errors.password && (
+                  <span className="text-red-600">{errors.password}</span>
+                )}
               </div>
-              <div>
+              {/* <div>
                 <label
                   htmlFor="confirm-password"
                   className="block mb-2 text-sm font-medium text-gray-900 "
@@ -59,14 +111,17 @@ export default function UserRegistration() {
                   Confirm password
                 </label>
                 <input
-                  type="confirm-password"
-                  name="confirm-password"
-                  id="confirm-password"
+                  type="password"
+                  name="confirmPassword"
+                  id="confirmPassword"
                   placeholder="••••••••"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-200 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  required=""
+                  onChange={handleInput}
                 />
-              </div>
+                {errors.confirmPassword && (
+                  <span className="text-red-600">{errors.confirmPassword}</span>
+                )}
+              </div> 
               <div>
                 <label
                   htmlFor="email"
@@ -78,23 +133,27 @@ export default function UserRegistration() {
                   {" "}
                   <div className="flex items-center ">
                     <input
-                      id="default-checkbox"
+                      name="role"
+                      checked
+                      id="checkForUser"
                       type="checkbox"
                       value=""
+                      onChange={handleInput}
                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                     />
                     <label
                       htmlFor="default-checkbox"
                       className="ms-2 text-sm font-medium text-gray-400 "
                     >
-                      Admin
+                      User
                     </label>
                   </div>
                   <div className="flex items-center">
                     <input
-                      id="checked-checkbox"
+                      id="checkForAdmin"
                       type="checkbox"
                       value=""
+                      disabled
                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                     />
                     <label
@@ -102,11 +161,27 @@ export default function UserRegistration() {
                       value=""
                       className="ms-2 text-sm font-medium text-gray-400 "
                     >
-                      Customer
+                      Admin
+                    </label>
+                  </div>{" "}
+                  <div className="flex items-center">
+                    <input
+                      id="checkForShopkeeper"
+                      type="checkbox"
+                      value=""
+                      disabled
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    />
+                    <label
+                      htmlFor="checked-checkbox"
+                      value=""
+                      className="ms-2 text-sm font-medium text-gray-400 "
+                    >
+                      Shopkeeper
                     </label>
                   </div>{" "}
                 </div>
-              </div>
+              </div>*/}
               <div className="flex items-center justify-between">
                 <div className="flex items-start">
                   <div className="flex items-center h-5">
