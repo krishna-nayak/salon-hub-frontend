@@ -24,7 +24,7 @@ if (!sname || !location || !description) {
 
   return (
     <div>
-      <div className="">
+      <div>
         <div className="w-full bg-white rounded-lg shadow mt-0  xl:p-0 ">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
@@ -92,11 +92,11 @@ if (!sname || !location || !description) {
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 0 y-600 r-gray-400  -blue-500 er-blue-500"
                 placeholder="Salon starts at "
                 required
-                value={salonData.openingHr}
+                value={salonData.openinghourstart}
                 onChange={(event) =>
                   setSalonData({
                     ...salonData,
-                    openingHr: event.target.value,
+                    openinghourstart: event.target.value,
                   })
                 }
               />
@@ -112,11 +112,11 @@ if (!sname || !location || !description) {
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 0 y-600 r-gray-400  -blue-500 er-blue-500"
                 placeholder="Salon ends at"
                 required
-                value={salonData.closeingHr}
+                value={salonData.closeingHour}
                 onChange={(event) =>
                   setSalonData({
                     ...salonData,
-                    closeingHr: event.target.value,
+                    closeingHour: event.target.value,
                   })
                 }
               />

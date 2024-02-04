@@ -3,6 +3,7 @@ import SalonRegister from "./SalonRegistration";
 import SalonServices from "./SalonServices";
 
 import axios from "axios";
+
 function SalonRegForm() {
   const [page, setPage] = useState(0);
   const [salonData, setSalonData] = useState({
@@ -27,6 +28,7 @@ function SalonRegForm() {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
+    // console.log(salonData);
     try {
       const response = await axios.post(
         `https://swya6iuf0f.execute-api.ap-south-1.amazonaws.com/salon`,
@@ -42,7 +44,7 @@ function SalonRegForm() {
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0  max-sm:w-96">
         <form
           className="space-y-4 md:space-y-6"
-          onClick={handleFormSubmit}
+          onSubmit={handleFormSubmit}
           action="#"
         >
           {" "}
