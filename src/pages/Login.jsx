@@ -1,4 +1,35 @@
+import { useState } from "react";
+import { Validation } from "../utility/validation/ValLogin.js";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 export default function UserLogin() {
+  const [values, setValues] = useState({
+    email: "",
+    password: "",
+  });
+  const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const error = Validation(values);
+    setErrors((prev) => ({ ...prev, ...Validation(values) }));
+    if (error.email == "" && error.password == "") {
+      axios
+        .post("http://localhost:3000/login", values)
+        .then((res) => {
+          navigate("/");
+          console.log(res);
+        })
+        .catch((err) => console.log(err));
+    } else {
+      console.log(Validation(values));
+      //console.log("Validation not atching");
+    }
+  };
+  const handleInput = (e) => {
+    setValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
   return (
     <section className="bg-gray-100 ">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -7,7 +38,11 @@ export default function UserLogin() {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
               Sign in to your account
             </h1>
-            <form className="space-y-4 md:space-y-6" action="#">
+            <form
+              className="space-y-4 md:space-y-6"
+              onSubmit={handleSubmit}
+              action="#"
+            >
               <div>
                 <label
                   htmlFor="email"
@@ -21,8 +56,11 @@ export default function UserLogin() {
                   id="email"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-200 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="name@company.com"
-                  required=""
+                  onChange={handleInput}
                 />
+                {errors.email && (
+                  <span className="text-red-600">{errors.email}</span>
+                )}
               </div>
               <div>
                 <label
@@ -37,9 +75,12 @@ export default function UserLogin() {
                   id="password"
                   placeholder="••••••••"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-200 dark:placeholder-gray-400sddd dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  required={true}
                   autoComplete="off"
+                  onChange={handleInput}
                 />
+                {errors.password && (
+                  <span className="text-red-600">{errors.password}</span>
+                )}
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-start">
