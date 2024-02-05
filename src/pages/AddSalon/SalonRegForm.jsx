@@ -1,11 +1,15 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import SalonRegister from "./SalonRegistration";
 import SalonServices from "./SalonServices";
 
 import axios from "axios";
 
 function SalonRegForm() {
+  const navigator = useNavigate();
   const [page, setPage] = useState(0);
+  const [file, setFile] = useState("");
   const [salonData, setSalonData] = useState({
     name: "",
     description: "",
@@ -13,30 +17,76 @@ function SalonRegForm() {
     city: "",
     openinghourstart: "",
     closeingHour: "",
+    email: "",
   });
+
+  const [styles, setStyles] = useState([]);
 
   const FTitles = [" Register Salon", " Service Provided"];
   const PageDisplay = () => {
     if (page === 0) {
       return (
-        <SalonRegister salonData={salonData} setSalonData={setSalonData} />
+        <SalonRegister
+          salonData={salonData}
+          setSalonData={setSalonData}
+          setFile={setFile}
+        />
       );
     } else if (page === 1) {
-      return <SalonServices />;
+      return <SalonServices setStyles={setStyles} />;
     }
   };
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    // console.log(salonData);
+    console.log("submit", salonData);
+    if (page !== 2) return;
+
     try {
-      const response = await axios.post(
-        `https://swya6iuf0f.execute-api.ap-south-1.amazonaws.com/salon`,
-        salonData
+      const formData = new FormData();
+
+      formData.append("name", salonData.name);
+      formData.append("description", salonData.description);
+      formData.append("address", salonData.address);
+      formData.append("city", salonData.city);
+      formData.append("openingHourStart", salonData.openinghourstart);
+      formData.append("closeingHour", salonData.closeingHour);
+      formData.append("files", file);
+      formData.append("email", salonData.email);
+
+      console.log("loading");
+      const salon_response = await axios.post(
+        `http://localhost:3000/salon`,
+        formData
       );
-      console.log("Salon Registered:", response.data);
+
+      console.log("complete", salon_response.data.salonId);
+
+      console.log(styles);
+      setPage((currPage) => currPage - 1);
+
+      const service_id = salon_response.data?.salonId;
+
+      const service_response = await axios.post(
+        `http://localhost:3000/salon/${service_id}/services`,
+        { services: styles }
+      );
+
+      console.log("Salon Registered:", service_response.data);
+
+      navigator("/");
     } catch (error) {
-      console.error("Error registering salon:", error);
+      console.error(error.response.data.message || "Error");
+      setPage((currPage) => currPage - 1);
+    }
+  };
+
+  const handleFilter = () => {
+    if (page === FTitles.length - 1) {
+      setPage((currPage) => currPage + 1);
+      alert("Submited");
+    } else {
+      setPage((currPage) => currPage + 1);
     }
   };
   return (
@@ -45,32 +95,21 @@ function SalonRegForm() {
         <form
           className="space-y-4 md:space-y-6"
           onSubmit={handleFormSubmit}
-          action="#"
+          encType="multipart/form-data"
         >
-          {" "}
           {PageDisplay()}
           <div className="flex w-full gap-2">
             <button
-              type="submit"
               disabled={page == 0}
-              onClick={() => {
-                setPage((currPage) => currPage - 1);
-              }}
-              //onClick={() => navigate("/salonServices")}
+              onClick={() => setPage((currPage) => currPage - 1)}
               className="w-full  text-white bg-neutral-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center-600 primary-700 -primary-800"
             >
               Previous
             </button>
             <button
-              onClick={() => {
-                if (page === FTitles.length - 1) {
-                  alert("Submited");
-                } else {
-                  setPage((currPage) => currPage + 1);
-                }
-              }}
-              //onClick={() => navigate("/salonServices")}
-              className="w-full  text-white bg-neutral-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center -600 rimary-700 -primary-800"
+              type={page == 0 ? "" : "submit"}
+              onClick={handleFilter}
+              className="w-full text-white bg-neutral-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center -600 rimary-700 -primary-800"
             >
               {page === FTitles.length - 1 ? "Create" : "Next"}
             </button>

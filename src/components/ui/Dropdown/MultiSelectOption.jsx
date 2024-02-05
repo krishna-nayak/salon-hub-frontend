@@ -1,25 +1,18 @@
 import { useState } from "react";
 import Select from "react-select";
 
-const colourOptions = [
-  { value: "Hair Cut", label: "Hair Cut", price: 0 },
-  { value: "Hair Color", label: "Hair Color", price: 0 },
-  { value: "Manicure", label: "Manicure", price: 0 },
-  { value: "Pedicure", label: "Pedicure", price: 0 },
-  { value: "Shaving", label: "Shaving", price: 0 },
-  { value: "Makeup", label: "Makeup", price: 0 },
-];
-
-const MultiSelectOption = () => {
+const MultiSelectOption = ({ Options, setStyles }) => {
   const [values, setValues] = useState([]);
 
   const handleChange = (e) => {
     const update_values = values.map((value, key) => {
-      if (key === parseInt(e.target.name))
+      if (key === parseInt(e.target.name) && e.target.id === "price")
         return { ...value, price: e.target.value };
       return value;
     });
     setValues(update_values);
+    console.log("update_values", update_values);
+    setStyles(update_values);
   };
   return (
     <div className="">
@@ -30,6 +23,7 @@ const MultiSelectOption = () => {
         <div className="mt-4 bg-slate-100  border border-gray-300 rounded-lg p-8">
           <div className=" w-96 max-sm:w-80 rounded-md  bg-white ">
             <Select
+              className={"capitalize"}
               closeMenuOnSelect={false}
               defaultValue={null}
               value={values}
@@ -37,9 +31,9 @@ const MultiSelectOption = () => {
               isClearable
               onChange={(newValue, actionMeta) => {
                 setValues(newValue);
+                setStyles(newValue);
               }}
-              options={colourOptions}
-              className=""
+              options={Options}
             />
           </div>
           <div className="mt-8">
@@ -77,7 +71,7 @@ const MultiSelectOption = () => {
                 </div>
               );
             })}
-          </div>{" "}
+          </div>
         </div>
       </div>
     </div>

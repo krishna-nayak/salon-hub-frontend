@@ -2,25 +2,18 @@ import React, { useState } from "react";
 //import axios from "axios";
 //import { useNavigate } from "react-router-dom";
 
-function SalonRegister({ salonData, setSalonData }) {
-  /* const handleFormSubmit = async (event) => {
-    event.preventDefault();
+function SalonRegister({ salonData, setSalonData, setFile }) {
+  const handleChange = (e) => {
+    setSalonData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
-if (!sname || !location || !description) {
-      alert("Fillup the empty fields");
-    } else {
-      alert("Success");
-    }
-    try {
-      const response = await axios.post(
-        `https://swya6iuf0f.execute-api.ap-south-1.amazonaws.com/salon`,
-        salonData
-      );
-      console.log("Salon Registered:", response.data);
-    } catch (error) {
-      console.error("Error registering salon:", error);
-    }
-  };*/
+  const handleFile = (e) => {
+    console.log(e.target.files);
+    setFile(e.target.files[0]);
+  };
 
   return (
     <div className="  ">
@@ -41,12 +34,23 @@ if (!sname || !location || !description) {
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 0 y-600 r-gray-400  -blue-500 er-blue-500"
                 placeholder="name@salon"
                 value={salonData.name}
-                onChange={(event) =>
-                  setSalonData({ ...salonData, name: event.target.value })
-                }
+                onChange={handleChange}
               />
             </div>
-
+            <div>
+              <label className="block mb-2 text-sm font-medium text-gray-900 ">
+                Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 0 y-600 r-gray-400  -blue-500 er-blue-500"
+                placeholder="name@salon"
+                value={salonData.email}
+                onChange={handleChange}
+              />
+            </div>
             <div>
               <label className="block mb-2 text-sm font-medium text-gray-900 ">
                 Address
@@ -59,9 +63,7 @@ if (!sname || !location || !description) {
                 placeholder="Salon address"
                 required
                 value={salonData.address}
-                onChange={(event) =>
-                  setSalonData({ ...salonData, address: event.target.value })
-                }
+                onChange={handleChange}
               />
             </div>
             <div>
@@ -76,29 +78,25 @@ if (!sname || !location || !description) {
                 placeholder="Salon city"
                 required
                 value={salonData.city}
-                onChange={(event) =>
-                  setSalonData({ ...salonData, city: event.target.value })
-                }
+                onChange={handleChange}
               />
             </div>
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-900 ">
+              <label
+                htmlFor="openinghourstart"
+                className="block mb-2 text-sm font-medium text-gray-900 "
+              >
                 Opening Hour
               </label>
               <input
                 type="text"
-                name="openingHr"
-                id="openingHr"
+                name="openinghourstart"
+                id="openinghourstart"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 0 y-600 r-gray-400  -blue-500 er-blue-500"
                 placeholder="Salon starts at "
                 required
                 value={salonData.openinghourstart}
-                onChange={(event) =>
-                  setSalonData({
-                    ...salonData,
-                    openinghourstart: event.target.value,
-                  })
-                }
+                onChange={handleChange}
               />
             </div>
             <div>
@@ -107,18 +105,13 @@ if (!sname || !location || !description) {
               </label>
               <input
                 type="text"
-                name="closeingHr"
-                id="closeingHr"
+                name="closeingHour"
+                id="closeingHour"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 0 y-600 r-gray-400  -blue-500 er-blue-500"
                 placeholder="Salon ends at"
                 required
                 value={salonData.closeingHour}
-                onChange={(event) =>
-                  setSalonData({
-                    ...salonData,
-                    closeingHour: event.target.value,
-                  })
-                }
+                onChange={handleChange}
               />
             </div>
             <div className="mb-3 w-96">
@@ -132,8 +125,10 @@ if (!sname || !location || !description) {
                 className=" border-gray-300 relative block w-auto flex-auto rounded border border-solid  bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700  file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100 max-sm:w-60"
                 type="file"
                 id="formFileMultiple"
-                multiple
+                name="image"
+                onChange={handleFile}
               />
+              {salonData?.image != null ? <>{salonData?.image}</> : <></>}
             </div>
             <div className="flex items-start">
               <div className="flex items-center h-5">
@@ -188,3 +183,22 @@ export default SalonRegister;
               />
             </div>
             */
+
+/* const handleFormSubmit = async (event) => {
+    event.preventDefault();
+
+if (!sname || !location || !description) {
+      alert("Fillup the empty fields");
+    } else {
+      alert("Success");
+    }
+    try {
+      const response = await axios.post(
+        `https://swya6iuf0f.execute-api.ap-south-1.amazonaws.com/salon`,
+        salonData
+      );
+      console.log("Salon Registered:", response.data);
+    } catch (error) {
+      console.error("Error registering salon:", error);
+    }
+  };*/
