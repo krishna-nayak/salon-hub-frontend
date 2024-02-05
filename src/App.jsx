@@ -11,6 +11,7 @@ import UserLogin from "./pages/Login";
 import UserRegistration from "./pages/Registration";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound404";
+import Salon from "./pages/Salon";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -20,6 +21,7 @@ function App() {
         <Route path="/userLogin" element={<UserLogin />} />
         <Route path="/userRegistration" element={<UserRegistration />} />
         <Route path="/notFound404" element={<NotFound />} />
+        <Route path="/salon" element={<Salon />} />
       </Route>
     )
   );
@@ -37,6 +39,7 @@ const Root = () => {
         <Link to="/salonRegForm">SalonRegForm</Link>
         <Link to="/userLogin">UserLogin</Link>
         <Link to="/userRegistration">UserRegistration</Link>
+        <Link to="/salon">salon</Link>
       </div>
       <div>
         <Outlet />

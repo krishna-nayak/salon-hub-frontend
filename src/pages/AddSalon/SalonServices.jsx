@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import MultiSelectOption from "../../components/ui/Dropdown/MultiSelectOption";
 
 export default function SalonServices({ salonData, setSalonData }) {
-  const [serviceInput, setServiceInput] = useState("");
+  /* const [serviceInput, setServiceInput] = useState("");
   const [priceInput, setPriceInput] = useState("");
   const [descInput, setdescInput] = useState("");
   const [durationInput, setdurationInput] = useState("");
@@ -25,9 +26,10 @@ export default function SalonServices({ salonData, setSalonData }) {
   const removeTag = (removedTag) => {
     const newTags = tags.filter((tag) => tag !== removedTag);
     setTags(newTags);
-  };
+  };*/
   return (
-    <div className="">
+    <MultiSelectOption />
+    /*<div className="">
       <div>
         <label className="block mb-2 text-2xl font-bold  text-gray-900 ">
           Service Provided
@@ -86,7 +88,7 @@ export default function SalonServices({ salonData, setSalonData }) {
                 <br />
                 Duration:{tag.duration}
               </span>
-
+ 
               <span
                 onClick={() => removeTag(tag)}
                 className="ml-2 text-sm font-bold bg-white py-1 cursor-pointer"
@@ -97,15 +99,6 @@ export default function SalonServices({ salonData, setSalonData }) {
           ))}
         </div>
       </div>
-    </div>
+    </div>*/
   );
 }
-
-/*
-<button
-     type="submit"
-     className="w-full text-white bg-neutral-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center -600 rimary-700 -primary-800"
-    >
-    Create Salon
-</button>{" "}
-*/
