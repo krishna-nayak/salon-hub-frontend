@@ -1,13 +1,10 @@
 import React from "react";
-import MultiSelectOption from "../components/ui/Dropdown/MultiSelectOption";
+import Search from "../components/Search";
 
 export default function Home() {
   return (
     <div>
-      Home
-      <div>
-        <MultiSelectOption />
-      </div>
+      <Search />
     </div>
   );
 }
