@@ -2,7 +2,7 @@ import React, { useState } from "react";
 //import axios from "axios";
 //import { useNavigate } from "react-router-dom";
 
-function SalonRegister({ salonData, setSalonData, setFile }) {
+function SalonRegister({ salonData, setSalonData, setFile, errors }) {
   const handleChange = (e) => {
     setSalonData((prev) => ({
       ...prev,
@@ -20,109 +20,100 @@ function SalonRegister({ salonData, setSalonData, setFile }) {
       <div className="max-sm:w-80">
         <div className="w-full bg-slate-100 rounded-lg shadow mt-0  xl:p-0 ">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
-              Register Salon
-            </h1>
+            <h1>Register Salon</h1>
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-900 ">
-                Name
-              </label>
+              <label className="label ">Name</label>
               <input
+                className="inputBox"
                 type="text"
                 name="name"
                 id="name"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 0 y-600 r-gray-400  -blue-500 er-blue-500"
                 placeholder="name@salon"
                 value={salonData.name}
                 onChange={handleChange}
               />
+              {errors.name && <span className="error">{errors.name}</span>}
             </div>
+
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-900 ">
-                Email
-              </label>
+              <label className="label ">Email</label>
               <input
+                className="inputBox"
                 type="email"
                 name="email"
                 id="email"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 0 y-600 r-gray-400  -blue-500 er-blue-500"
-                placeholder="name@salon"
+                placeholder="email@salon"
                 value={salonData.email}
                 onChange={handleChange}
               />
+              {errors.email && <span className="error">{errors.email}</span>}
             </div>
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-900 ">
-                Address
-              </label>
+              <label className="label ">Address</label>
               <input
+                className="inputBox"
                 type="text"
                 name="address"
                 id="address"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 0 y-600 r-gray-400  -blue-500 er-blue-500"
                 placeholder="Salon address"
-                required
                 value={salonData.address}
                 onChange={handleChange}
               />
+              {errors.address && (
+                <span className="error">{errors.address}</span>
+              )}
             </div>
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-900 ">
-                City
-              </label>
+              <label className="label ">City</label>
               <input
+                className="inputBox"
                 type="text"
                 name="city"
                 id="city"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 0 y-600 r-gray-400  -blue-500 er-blue-500"
                 placeholder="Salon city"
-                required
                 value={salonData.city}
                 onChange={handleChange}
               />
+              {errors.city && <span className="error">{errors.city}</span>}
             </div>
             <div>
-              <label
-                htmlFor="openinghourstart"
-                className="block mb-2 text-sm font-medium text-gray-900 "
-              >
+              <label htmlFor="openinghourstart" className="label ">
                 Opening Hour
               </label>
               <input
+                className="inputBox"
                 type="text"
                 name="openinghourstart"
                 id="openinghourstart"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 0 y-600 r-gray-400  -blue-500 er-blue-500"
                 placeholder="Salon starts at "
-                required
                 value={salonData.openinghourstart}
                 onChange={handleChange}
               />
+              {errors.openinghourstart && (
+                <span className="error">{errors.openinghourstart}</span>
+              )}
             </div>
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-900 ">
-                Closing Hour
-              </label>
+              <label className="label ">Closing Hour</label>
               <input
+                className="inputBox"
                 type="text"
                 name="closeingHour"
                 id="closeingHour"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 0 y-600 r-gray-400  -blue-500 er-blue-500"
                 placeholder="Salon ends at"
-                required
                 value={salonData.closeingHour}
                 onChange={handleChange}
               />
+              {errors.closeingHour && (
+                <span className="error">{errors.closeingHour}</span>
+              )}
             </div>
             <div className="mb-3 w-96">
-              <label
-                htmlFor="formFileMultiple"
-                className="mb-2 text-sm font-medium inline-block text-gray-900 "
-              >
+              <label htmlFor="formFileMultiple" className="label ">
                 Upload images of salon
               </label>
               <input
-                className=" border-gray-300 relative block w-auto flex-auto rounded border border-solid  bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700  file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100 max-sm:w-60"
+                className="inputFile"
                 type="file"
                 id="formFileMultiple"
                 name="image"
@@ -133,11 +124,10 @@ function SalonRegister({ salonData, setSalonData, setFile }) {
             <div className="flex items-start">
               <div className="flex items-center h-5">
                 <input
+                  className="inputBox"
                   id="terms"
                   aria-describedby="terms"
                   type="checkbox"
-                  className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 0 y-600 -primary-600 t-gray-800"
-                  required=""
                 />
               </div>
 
@@ -160,45 +150,3 @@ function SalonRegister({ salonData, setSalonData, setFile }) {
   );
 }
 export default SalonRegister;
-
-/*DESCRIPTION
-            <div>
-              <label className="block mb-2 text-sm font-medium text-gray-900 ">
-                Description
-              </label>
-              <input
-                type="text"
-                name="description"
-                id="description"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 0 y-600 r-gray-400  -blue-500 er-blue-500"
-                placeholder="About your salon"
-                required
-                value={salonData.description}
-                onChange={(event) =>
-                  setSalonData({
-                    ...salonData,
-                    description: event.target.value,
-                  })
-                }
-              />
-            </div>
-            */
-
-/* const handleFormSubmit = async (event) => {
-    event.preventDefault();
-
-if (!sname || !location || !description) {
-      alert("Fillup the empty fields");
-    } else {
-      alert("Success");
-    }
-    try {
-      const response = await axios.post(
-        `https://swya6iuf0f.execute-api.ap-south-1.amazonaws.com/salon`,
-        salonData
-      );
-      console.log("Salon Registered:", response.data);
-    } catch (error) {
-      console.error("Error registering salon:", error);
-    }
-  };*/

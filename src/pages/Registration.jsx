@@ -37,160 +37,67 @@ export default function UserRegistration() {
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:border-gray-300">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
-              Create and account
-            </h1>
+            <h1>Create and account</h1>
             <form
               className="space-y-4 md:space-y-6"
               action="#"
               onSubmit={handleSubmit}
             >
               <div>
-                <label
-                  htmlFor="fullName"
-                  className="block mb-2 text-sm font-medium text-gray-900 "
-                >
+                <label htmlFor="fullName" className="label">
                   Name
                 </label>
                 <input
+                  className="inputBox"
                   type="text"
                   name="fullName"
                   id="fullName"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-200 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Full Name"
                   onChange={handleInput}
                 />
                 {errors.fullName && (
-                  <span className="text-red-600">{errors.fullName}</span>
+                  <span className="error">{errors.fullName}</span>
                 )}
               </div>
               <div>
-                <label
-                  htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-gray-900 "
-                >
+                <label htmlFor="email" className="label">
                   Your email
                 </label>
                 <input
+                  className="inputBox"
                   type="email"
                   name="email"
                   id="email"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-200 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="name@company.com"
                   onChange={handleInput}
                 />
-                {errors.email && (
-                  <span className="text-red-600">{errors.email}</span>
-                )}
+                {errors.email && <span className="error">{errors.email}</span>}
               </div>
               <div>
-                <label
-                  htmlFor="password"
-                  className="block mb-2 text-sm font-medium text-gray-900 "
-                >
+                <label htmlFor="password" className="label ">
                   Password
                 </label>
                 <input
+                  className="inputBox"
                   type="password"
                   name="password"
                   id="password"
                   placeholder="••••••••"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-200 dark:placeholder-gray-400sddd dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   onChange={handleInput}
                   autoComplete="off"
                 />
                 {errors.password && (
-                  <span className="text-red-600">{errors.password}</span>
+                  <span className="error">{errors.password}</span>
                 )}
               </div>
-              {/* <div>
-                <label
-                  htmlFor="confirm-password"
-                  className="block mb-2 text-sm font-medium text-gray-900 "
-                >
-                  Confirm password
-                </label>
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  id="confirmPassword"
-                  placeholder="••••••••"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-200 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  onChange={handleInput}
-                />
-                {errors.confirmPassword && (
-                  <span className="text-red-600">{errors.confirmPassword}</span>
-                )}
-              </div> 
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-gray-900 "
-                >
-                  Role
-                </label>
-                <div className="flex gap-8">
-                  {" "}
-                  <div className="flex items-center ">
-                    <input
-                      name="role"
-                      checked
-                      id="checkForUser"
-                      type="checkbox"
-                      value=""
-                      onChange={handleInput}
-                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                    />
-                    <label
-                      htmlFor="default-checkbox"
-                      className="ms-2 text-sm font-medium text-gray-400 "
-                    >
-                      User
-                    </label>
-                  </div>
-                  <div className="flex items-center">
-                    <input
-                      id="checkForAdmin"
-                      type="checkbox"
-                      value=""
-                      disabled
-                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                    />
-                    <label
-                      htmlFor="checked-checkbox"
-                      value=""
-                      className="ms-2 text-sm font-medium text-gray-400 "
-                    >
-                      Admin
-                    </label>
-                  </div>{" "}
-                  <div className="flex items-center">
-                    <input
-                      id="checkForShopkeeper"
-                      type="checkbox"
-                      value=""
-                      disabled
-                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                    />
-                    <label
-                      htmlFor="checked-checkbox"
-                      value=""
-                      className="ms-2 text-sm font-medium text-gray-400 "
-                    >
-                      Shopkeeper
-                    </label>
-                  </div>{" "}
-                </div>
-              </div>*/}
               <div className="flex items-center justify-between">
                 <div className="flex items-start">
                   <div className="flex items-center h-5">
                     <input
+                      className="inputBox"
                       id="remember"
                       aria-describedby="remember"
                       type="checkbox"
-                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                      required=""
                     />
                   </div>
                   <div className="ml-3 text-sm">
@@ -209,10 +116,7 @@ export default function UserRegistration() {
                   </div>
                 </div>
               </div>
-              <button
-                type="submit"
-                className="w-full text-white bg-gray-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-              >
+              <button className="btn" type="submit">
                 Sign in
               </button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
