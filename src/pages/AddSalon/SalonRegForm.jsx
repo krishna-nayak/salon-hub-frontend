@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { ValidationSalReg } from "../../utility/validation/ValSalonReg";
 import SalonRegister from "./SalonRegistration";
 import SalonServices from "./SalonServices";
-
+import Buttons from "../../components/ui/Buttons";
 import axios from "axios";
 
 function SalonRegForm() {
@@ -21,7 +21,7 @@ function SalonRegForm() {
   });
 
   const [styles, setStyles] = useState([]);
-
+  const [errors, setErrors] = useState({});
   const FTitles = [" Register Salon", " Service Provided"];
   const PageDisplay = () => {
     if (page === 0) {
@@ -30,6 +30,8 @@ function SalonRegForm() {
           salonData={salonData}
           setSalonData={setSalonData}
           setFile={setFile}
+          setErrors={setErrors}
+          errors={errors}
         />
       );
     } else if (page === 1) {
@@ -41,43 +43,53 @@ function SalonRegForm() {
     event.preventDefault();
     console.log("submit", salonData);
     if (page !== 2) return;
+    const error = ValidationSalReg(salonData);
+    setErrors((prev) => ({ ...prev, ...ValidationSalReg(salonData) }));
+    if (
+      error.name == "" &&
+      error.email == "" &&
+      error.description == "" &&
+      error.city == "" &&
+      error.openinghourstart == "" &&
+      error.closeingHour == ""
+    ) {
+      try {
+        const formData = new FormData();
 
-    try {
-      const formData = new FormData();
+        formData.append("name", salonData.name);
+        formData.append("description", salonData.description);
+        formData.append("address", salonData.address);
+        formData.append("city", salonData.city);
+        formData.append("openingHourStart", salonData.openinghourstart);
+        formData.append("closeingHour", salonData.closeingHour);
+        formData.append("files", file);
+        formData.append("email", salonData.email);
 
-      formData.append("name", salonData.name);
-      formData.append("description", salonData.description);
-      formData.append("address", salonData.address);
-      formData.append("city", salonData.city);
-      formData.append("openingHourStart", salonData.openinghourstart);
-      formData.append("closeingHour", salonData.closeingHour);
-      formData.append("files", file);
-      formData.append("email", salonData.email);
+        console.log("loading");
+        const salon_response = await axios.post(
+          `http://localhost:3000/salon`,
+          formData
+        );
 
-      console.log("loading");
-      const salon_response = await axios.post(
-        `http://localhost:3000/salon`,
-        formData
-      );
+        console.log("complete", salon_response.data.salonId);
 
-      console.log("complete", salon_response.data.salonId);
+        console.log(styles);
+        setPage((currPage) => currPage - 1);
 
-      console.log(styles);
-      setPage((currPage) => currPage - 1);
+        const service_id = salon_response.data?.salonId;
 
-      const service_id = salon_response.data?.salonId;
+        const service_response = await axios.post(
+          `http://localhost:3000/salon/${service_id}/services`,
+          { services: styles }
+        );
 
-      const service_response = await axios.post(
-        `http://localhost:3000/salon/${service_id}/services`,
-        { services: styles }
-      );
+        console.log("Salon Registered:", service_response.data);
 
-      console.log("Salon Registered:", service_response.data);
-
-      navigator("/");
-    } catch (error) {
-      console.error(error.response.data.message || "Error");
-      setPage((currPage) => currPage - 1);
+        navigator("/");
+      } catch (error) {
+        console.error(error.response.data.message || "Error");
+        setPage((currPage) => currPage - 1);
+      }
     }
   };
 
@@ -98,21 +110,17 @@ function SalonRegForm() {
           encType="multipart/form-data"
         >
           {PageDisplay()}
-          <div className="flex w-full gap-2">
-            <button
+          <div className="flex w-full items-center justify-center gap-2">
+            <Buttons
               disabled={page == 0}
               onClick={() => setPage((currPage) => currPage - 1)}
-              className="w-full  text-white bg-neutral-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center-600 primary-700 -primary-800"
             >
               Previous
-            </button>
-            <button
-              type={page == 0 ? "" : "submit"}
-              onClick={handleFilter}
-              className="w-full text-white bg-neutral-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center -600 rimary-700 -primary-800"
-            >
+            </Buttons>
+
+            <Buttons type={page == 0 ? "" : "submit"} onClick={handleFilter}>
               {page === FTitles.length - 1 ? "Create" : "Next"}
-            </button>
+            </Buttons>
           </div>
         </form>
       </div>
