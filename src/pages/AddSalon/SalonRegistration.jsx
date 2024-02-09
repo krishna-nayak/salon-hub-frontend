@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 //import axios from "axios";
 //import { useNavigate } from "react-router-dom";
-import InputBox from "../../components/ui/InputBox";
+
 function SalonRegister({ salonData, setSalonData, setFile, errors }) {
   const handleChange = (e) => {
     setSalonData((prev) => ({
@@ -20,14 +20,11 @@ function SalonRegister({ salonData, setSalonData, setFile, errors }) {
       <div className="max-sm:w-80">
         <div className="w-full bg-slate-100 rounded-lg shadow mt-0  xl:p-0 ">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
-              Register Salon
-            </h1>
+            <h1>Register Salon</h1>
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-900 ">
-                Name
-              </label>
-              <InputBox
+              <label className="label ">Name</label>
+              <input
+                className="inputBox"
                 type="text"
                 name="name"
                 id="name"
@@ -35,32 +32,26 @@ function SalonRegister({ salonData, setSalonData, setFile, errors }) {
                 value={salonData.name}
                 onChange={handleChange}
               />
-              {errors.name && (
-                <span className="text-red-600">{errors.name}</span>
-              )}
+              {errors.name && <span className="error">{errors.name}</span>}
             </div>
 
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-900 ">
-                Email
-              </label>
-              <InputBox
+              <label className="label ">Email</label>
+              <input
+                className="inputBox"
                 type="email"
                 name="email"
                 id="email"
-                placeholder="name@salon"
+                placeholder="email@salon"
                 value={salonData.email}
                 onChange={handleChange}
               />
-              {errors.email && (
-                <span className="text-red-600">{errors.email}</span>
-              )}
+              {errors.email && <span className="error">{errors.email}</span>}
             </div>
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-900 ">
-                Address
-              </label>
-              <InputBox
+              <label className="label ">Address</label>
+              <input
+                className="inputBox"
                 type="text"
                 name="address"
                 id="address"
@@ -69,14 +60,13 @@ function SalonRegister({ salonData, setSalonData, setFile, errors }) {
                 onChange={handleChange}
               />
               {errors.address && (
-                <span className="text-red-600">{errors.address}</span>
+                <span className="error">{errors.address}</span>
               )}
             </div>
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-900 ">
-                City
-              </label>
-              <InputBox
+              <label className="label ">City</label>
+              <input
+                className="inputBox"
                 type="text"
                 name="city"
                 id="city"
@@ -84,18 +74,14 @@ function SalonRegister({ salonData, setSalonData, setFile, errors }) {
                 value={salonData.city}
                 onChange={handleChange}
               />
-              {errors.city && (
-                <span className="text-red-600">{errors.city}</span>
-              )}
+              {errors.city && <span className="error">{errors.city}</span>}
             </div>
             <div>
-              <label
-                htmlFor="openinghourstart"
-                className="block mb-2 text-sm font-medium text-gray-900 "
-              >
+              <label htmlFor="openinghourstart" className="label ">
                 Opening Hour
               </label>
-              <InputBox
+              <input
+                className="inputBox"
                 type="text"
                 name="openinghourstart"
                 id="openinghourstart"
@@ -104,14 +90,13 @@ function SalonRegister({ salonData, setSalonData, setFile, errors }) {
                 onChange={handleChange}
               />
               {errors.openinghourstart && (
-                <span className="text-red-600">{errors.openinghourstart}</span>
+                <span className="error">{errors.openinghourstart}</span>
               )}
             </div>
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-900 ">
-                Closing Hour
-              </label>
-              <InputBox
+              <label className="label ">Closing Hour</label>
+              <input
+                className="inputBox"
                 type="text"
                 name="closeingHour"
                 id="closeingHour"
@@ -120,18 +105,15 @@ function SalonRegister({ salonData, setSalonData, setFile, errors }) {
                 onChange={handleChange}
               />
               {errors.closeingHour && (
-                <span className="text-red-600">{errors.closeingHour}</span>
+                <span className="error">{errors.closeingHour}</span>
               )}
             </div>
             <div className="mb-3 w-96">
-              <label
-                htmlFor="formFileMultiple"
-                className="mb-2 text-sm font-medium inline-block text-gray-900 "
-              >
+              <label htmlFor="formFileMultiple" className="label ">
                 Upload images of salon
               </label>
               <input
-                className=" border-neutral-600 relative block w-auto flex-auto rounded border border-solid  bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-500  file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-700 file:px-3 file:py-[0.32rem] file:text-neutral-100 file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem]  max-sm:w-60"
+                className="inputFile"
                 type="file"
                 id="formFileMultiple"
                 name="image"
@@ -141,7 +123,12 @@ function SalonRegister({ salonData, setSalonData, setFile, errors }) {
             </div>
             <div className="flex items-start">
               <div className="flex items-center h-5">
-                <InputBox id="terms" aria-describedby="terms" type="checkbox" />
+                <input
+                  className="inputBox"
+                  id="terms"
+                  aria-describedby="terms"
+                  type="checkbox"
+                />
               </div>
 
               <div className="ml-3 text-sm">

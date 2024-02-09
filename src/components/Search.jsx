@@ -4,8 +4,7 @@ import { FaMicrophoneAlt } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
 import { FaRegStopCircle } from "react-icons/fa";
 //import { useNavigate } from "react-router-dom";
-import InputBox from "./ui/InputBox";
-import Buttons from "./ui/Buttons";
+
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
@@ -28,7 +27,8 @@ export default function () {
           {/* <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none ">
             <HiMiniScissors className="fill-slate-400" />
           </div> */}
-          <InputBox
+          <input
+            className="inputBox"
             value={transcript}
             onChange={() => nul}
             type="text"
@@ -54,13 +54,14 @@ export default function () {
             <FaMicrophoneAlt className="fill-slate-400" />
           </button>
         </div>
-        <Buttons
+        <buttons
+          className="btn w-20"
           type="submit"
           //onClick={navigate("/salons")}
         >
           {/* <FaSearch className="fill-white" /> */}
           Search
-        </Buttons>
+        </buttons>
       </form>
     </div>
   );

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ValidationSalReg } from "../../utility/validation/ValSalonReg";
 import SalonRegister from "./SalonRegistration";
 import SalonServices from "./SalonServices";
-import Buttons from "../../components/ui/Buttons";
+
 import axios from "axios";
 
 function SalonRegForm() {
@@ -111,16 +111,21 @@ function SalonRegForm() {
         >
           {PageDisplay()}
           <div className="flex w-full items-center justify-center gap-2">
-            <Buttons
+            <button
+              className="btn"
               disabled={page == 0}
               onClick={() => setPage((currPage) => currPage - 1)}
             >
               Previous
-            </Buttons>
+            </button>
 
-            <Buttons type={page == 0 ? "" : "submit"} onClick={handleFilter}>
+            <button
+              className="btn"
+              type={page == 0 ? "" : "submit"}
+              onClick={handleFilter}
+            >
               {page === FTitles.length - 1 ? "Create" : "Next"}
-            </Buttons>
+            </button>
           </div>
         </form>
       </div>

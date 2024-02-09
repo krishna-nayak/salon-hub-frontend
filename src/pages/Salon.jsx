@@ -1,7 +1,6 @@
 import React from "react";
 import { CiLocationOn } from "react-icons/ci";
-import Tags from "../components/ui/Tags";
-import Buttons from "../components/ui/Buttons";
+
 export default function Salon() {
   return (
     <div className="p-3 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -33,13 +32,21 @@ export default function Salon() {
 
       <p className="text-white">Services:</p>
       <div className="mt-2 flex flex-wrap">
-        <Tags href="#">Hair Cut</Tags>
-        <Tags href="#">Hair Color</Tags>
-        <Tags href="#">Beard Shaving</Tags>
-        <Tags href="#">Pedicure</Tags>
+        <a href="#" className="tags">
+          Hair Cut
+        </a>
+        <a href="#" className="tags">
+          Hair Color
+        </a>
+        <a href="#" className="tags">
+          Beard Shaving
+        </a>
+        <a href="#" className="tags">
+          Pedicure
+        </a>
       </div>
       <div className="mt-4 flex justify-between">
-        <Buttons>Book Now</Buttons>
+        <button className="btn w-28">Book Now</button>
         <p className="text-blue-500 mt-2">Queue: 4</p>
       </div>
     </div>
