@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MultiSelectOption from "../../components/ui/Dropdown/MultiSelectOption";
-import axios from "axios";
+
+import endpoint from "../../utility/axios";
 
 let Options = [
   { value: "Hair Cut", label: "Hair Cut", price: 0 },
@@ -13,10 +14,11 @@ let Options = [
 
 export default function SalonServices({ setStyles }) {
   const [options, setOptions] = useState(Options);
+
   useEffect(() => {
     fetchServices();
     async function fetchServices() {
-      const service_json = await axios.get("http://localhost:3000/services");
+      const service_json = await endpoint.get(`/services`);
       console.log(service_json.data);
       const results = service_json.data;
       let service_opt = [];
@@ -36,5 +38,6 @@ export default function SalonServices({ setStyles }) {
       setOptions(service_opt);
     }
   }, []);
+
   return <MultiSelectOption Options={options} setStyles={setStyles} />;
 }

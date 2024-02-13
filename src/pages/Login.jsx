@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Validation } from "../utility/validation/ValLogin.js";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-import axios from "axios";
+import { Validation } from "../utility/validation/ValLogin.js";
+import endpoint from "../utility/axios/index.js";
 
 export default function UserLogin() {
   const [values, setValues] = useState({
@@ -12,21 +12,20 @@ export default function UserLogin() {
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const error = Validation(values);
     setErrors((prev) => ({ ...prev, ...Validation(values) }));
     if (error.email == "" && error.password == "") {
-      axios
-        .post("http://localhost:3000/login", values)
-        .then((res) => {
+      try {
+        const res = await endpoint.post("/login", values);
+        console.log(res);
           navigate("/");
-          console.log(res);
-        })
-        .catch((err) => console.log(err));
+      } catch (err) {
+        console.log(err);
+      }
     } else {
       console.log(Validation(values));
-      //console.log("Validation not atching");
     }
   };
   const handleInput = (e) => {

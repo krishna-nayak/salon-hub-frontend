@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ValidationSalReg } from "../../utility/validation/ValSalonReg";
 import SalonRegister from "./SalonRegistration";
 import SalonServices from "./SalonServices";
-
-import axios from "axios";
+import endpoint from "../../utility/axios";
 
 function SalonRegForm() {
   const navigator = useNavigate();
@@ -22,7 +21,9 @@ function SalonRegForm() {
 
   const [styles, setStyles] = useState([]);
   const [errors, setErrors] = useState({});
+
   const FTitles = [" Register Salon", " Service Provided"];
+
   const PageDisplay = () => {
     if (page === 0) {
       return (
@@ -66,25 +67,17 @@ function SalonRegForm() {
         formData.append("email", salonData.email);
 
         console.log("loading");
-        const salon_response = await axios.post(
-          `http://localhost:3000/salon`,
-          formData
-        );
+      handlePrevious();
 
-        console.log("complete", salon_response.data.salonId);
-
-        console.log(styles);
-        setPage((currPage) => currPage - 1);
+      const salon_response = await endpoint.post(`/salon`, formData);
 
         const service_id = salon_response.data?.salonId;
-
-        const service_response = await axios.post(
-          `http://localhost:3000/salon/${service_id}/services`,
+      const service_response = await endpoint.post(
+        `/salon/${service_id}/services`,
           { services: styles }
         );
 
-        console.log("Salon Registered:", service_response.data);
-
+      console.log("complete", service_response);
         navigator("/");
       } catch (error) {
         console.error(error.response.data.message || "Error");
@@ -101,6 +94,8 @@ function SalonRegForm() {
       setPage((currPage) => currPage + 1);
     }
   };
+
+  const handlePrevious = () => setPage((currPage) => currPage - 1);
   return (
     <div>
       <div className="mt-16 flex items-center justify-center ">
@@ -114,7 +109,7 @@ function SalonRegForm() {
             <button
               className="btn"
               disabled={page == 0}
-              onClick={() => setPage((currPage) => currPage - 1)}
+              onClick={handlePrevious}
             >
               Previous
             </button>

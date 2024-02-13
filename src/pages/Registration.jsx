@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Validation } from "../utility/validation/ValReg";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+
+import { Validation } from "../utility/validation/ValReg";
+import endpoint from "../utility/axios";
 
 export default function UserRegistration() {
   const [values, setValues] = useState({
@@ -9,24 +10,25 @@ export default function UserRegistration() {
     email: "",
     password: "",
   });
+
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     const error = Validation(values);
     setErrors((prev) => ({ ...prev, ...Validation(values) }));
     if (error.fullName == "" && error.email == "" && error.password == "") {
-      axios
-        .post("http://localhost:3000/users", values)
-        .then((res) => {
+      try {
+        const res = await endpoint.post("/users", values);
+        console.log(res);
           navigate("/userLogin");
-          console.log(res);
-        })
-
-        .catch((err) => console.log(err));
+      } catch (err) {
+        console.log(err);
+      }
     } else {
       console.log(Validation(values));
-      //console.log("Validation not atching");
     }
   };
   const handleInput = (e) => {
