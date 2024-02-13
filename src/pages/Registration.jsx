@@ -18,12 +18,13 @@ export default function UserRegistration() {
     e.preventDefault();
 
     const error = Validation(values);
-    setErrors((prev) => ({ ...prev, ...Validation(values) }));
+    setErrors((prev) => ({ ...prev, ...error }));
+
     if (error.fullName == "" && error.email == "" && error.password == "") {
       try {
         const res = await endpoint.post("/users", values);
         console.log(res);
-          navigate("/userLogin");
+        navigate("/userLogin");
       } catch (err) {
         console.log(err);
       }

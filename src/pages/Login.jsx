@@ -20,7 +20,7 @@ export default function UserLogin() {
       try {
         const res = await endpoint.post("/login", values);
         console.log(res);
-          navigate("/");
+        navigate("/");
       } catch (err) {
         console.log(err);
       }
@@ -103,12 +103,12 @@ export default function UserLogin() {
               </button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don’t have an account yet?{" "}
-                <a
-                  href="#"
+                <Link
+                  to={"/userRegistration"}
                   className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                 >
                   Sign up
-                </a>
+                </Link>
               </p>
             </form>
           </div>

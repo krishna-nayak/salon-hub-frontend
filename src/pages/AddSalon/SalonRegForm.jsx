@@ -43,47 +43,50 @@ function SalonRegForm() {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     console.log("submit", salonData);
-    if (page !== 2) return;
     const error = ValidationSalReg(salonData);
-    setErrors((prev) => ({ ...prev, ...ValidationSalReg(salonData) }));
-    if (
-      error.name == "" &&
-      error.email == "" &&
-      error.description == "" &&
-      error.city == "" &&
-      error.openinghourstart == "" &&
-      error.closeingHour == ""
-    ) {
-      try {
-        const formData = new FormData();
+    // setErrors((prev) => ({ ...prev, ...error }));
+    if (page !== 2) return;
+    // if (
+    //   error.name == "" &&
+    //   error.email == "" &&
+    //   error.description == "" &&
+    //   error.city == "" &&
+    //   error.openinghourstart == "" &&
+    //   error.closeingHour == ""
+    // ) {
+    try {
+      const formData = new FormData();
 
-        formData.append("name", salonData.name);
-        formData.append("description", salonData.description);
-        formData.append("address", salonData.address);
-        formData.append("city", salonData.city);
-        formData.append("openingHourStart", salonData.openinghourstart);
-        formData.append("closeingHour", salonData.closeingHour);
-        formData.append("files", file);
-        formData.append("email", salonData.email);
+      formData.append("name", salonData.name);
+      formData.append("description", salonData.description);
+      formData.append("address", salonData.address);
+      formData.append("city", salonData.city);
+      formData.append("openingHourStart", salonData.openinghourstart);
+      formData.append("closeingHour", salonData.closeingHour);
+      formData.append("files", file);
+      formData.append("email", salonData.email);
 
-        console.log("loading");
+      console.log("loading");
       handlePrevious();
 
       const salon_response = await endpoint.post(`/salon`, formData);
 
-        const service_id = salon_response.data?.salonId;
+      const service_id = salon_response.data?.salonId;
       const service_response = await endpoint.post(
         `/salon/${service_id}/services`,
-          { services: styles }
-        );
+        { services: styles }
+      );
 
       console.log("complete", service_response);
-        navigator("/");
-      } catch (error) {
-        console.error(error.response.data.message || "Error");
-        setPage((currPage) => currPage - 1);
-      }
+      navigator("/");
+    } catch (error) {
+      console.error(error.response.data.message || "Error");
+      setPage((currPage) => currPage - 1);
     }
+    // }
+    //  else {
+    //   console.log("Error", error);
+    // }
   };
 
   const handleFilter = () => {
