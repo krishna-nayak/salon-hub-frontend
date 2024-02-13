@@ -26,10 +26,10 @@ export default function SalonServices({ setStyles }) {
         let renamedObject = Object.assign(
           {},
           {
-            value: result.service_type.toUpperCase(),
-            label: result.service_type.toUpperCase(),
-            price: null,
+            value: result.service_type.replace(/\b\w/g, (c) => c.toUpperCase()),
+            label: result.service_type.replace(/\b\w/g, (c) => c.toUpperCase()),
             serviceId: result.serviceId,
+            price: null,
           }
         );
         service_opt.push(renamedObject);
