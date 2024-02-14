@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import axios from "axios";
+
+import endpoint from "../utility/axios";
+
 export default function Modal() {
   const [showModal, setShowModal] = useState(false);
   const { salonId } = useParams();
@@ -9,9 +11,7 @@ export default function Modal() {
   useEffect(() => {
     const fetchSalonDetails = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3000/salon/${salonId}`
-        );
+        const response = await endpoint.get(`/salon/${salonId}`);
         setSalonDetails(response.data);
       } catch (error) {
         console.error("Error fetching salon details:", error);
@@ -62,7 +62,7 @@ export default function Modal() {
                   <div className="flex gap-10 ">
                     <div>
                       <div>
-                        <label className="label ">Name</label>
+                        <label className="label">Name</label>
                         <input
                           className="inputBox"
                           type="text"
@@ -95,14 +95,22 @@ export default function Modal() {
                       <div className="">
                         <label className="label ">Choose a service</label>
                         <div className=" relative w-full">
-                          <select id="city-dropdown" className="inputBox">
-                            <option value="">Services</option>
-                            <option value="">Hair Cut</option>
-                            <option value="">Pedicare</option>
-                            <option value="">Manicure</option>
-                            <option value="">Hair Color</option>
-                            <option value="">Facial</option>
-                            <option value="">Massage</option>
+                          <select
+                            id="city-dropdown"
+                            className="inputBox"
+                            defaultValue={""}
+                          >
+                            <option disabled value={""}>
+                              -- select an option --
+                            </option>
+                            {salonDetails?.Services?.map((service) => (
+                              <option
+                                key={service.serviceId}
+                                value={service.service_type}
+                              >
+                                {service.service_type}
+                              </option>
+                            ))}
                           </select>
                         </div>
                       </div>
