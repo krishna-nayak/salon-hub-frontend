@@ -13,6 +13,7 @@ import Home from "./pages/Home";
 import NotFound from "./pages/NotFound404";
 import Salon from "./pages/Salon";
 import SalonDetails from "./pages/SalonDetails";
+import SalonProfile from "./pages/profile/SalonProfile";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -24,6 +25,7 @@ function App() {
         <Route path="/notFound404" element={<NotFound />} />
         <Route path="/salon" element={<Salon />} />
         <Route path="/salonDetails/:salonId" element={<SalonDetails />} />
+        <Route path="/salonProfile" element={<SalonProfile />} />
       </Route>
     )
   );
@@ -42,7 +44,7 @@ const Root = () => {
         <Link to="/userLogin">UserLogin</Link>
         <Link to="/userRegistration">UserRegistration</Link>
         <Link to="/salon">salon</Link>
-        <Link to="/salonDetails">salonDetails</Link>
+        <Link to="/salonProfile">SalonProfile</Link>
       </div>
       <div>
         <Outlet />
