@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+
 import { CiLocationOn } from "react-icons/ci";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+
+import endpoint from "../utility/axios";
 export default function Salon() {
   const [salonDatas, setSalonData] = useState(null);
   const location = useLocation();
@@ -13,9 +14,8 @@ export default function Salon() {
   useEffect(() => {
     const fetchSalonData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3000/salon?city=${selectedCity}`
-        );
+        const response = await endpoint.get(`/salon?city=${selectedCity}`);
+        console.log("salon data", response);
         setSalonData(response.data.result);
       } catch (error) {
         console.error("Error fetching salon data:", error);
@@ -28,10 +28,6 @@ export default function Salon() {
   if (!salonDatas) {
     return <div>Loading...</div>;
   }
-  //useing filter to filter or show particular city details through city nae
-  //const filteredSalonData = selectedCity
-  // ? salonData.filter((salon) => salon.city === selectedCity)
-  //  : salonData;
 
   const handleBookNow = (salonid) => {
     console.log("Salon ID:", salonid);
@@ -44,7 +40,10 @@ export default function Salon() {
   return (
     <div className="flex flex-wrap">
       {salonDatas?.map((salonData, index) => (
-        <div className=" p-3 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <div
+          key={index}
+          className=" p-3 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+        >
           <a href="#">
             <img
               className="rounded-xl w-full"
@@ -73,15 +72,17 @@ export default function Salon() {
 
           <p className="text-white">Services:</p>
           <div className="mt-2 flex flex-wrap">
-            {/* {salonData.service_type && salonData.service_type.length > 0 ? (
-              salonData.service_type.map((service, index) => (
+            {salonData?.Services && salonData?.Services.length > 0 ? (
+              salonData?.Services?.map((service, index) => (
                 <a href="#" key={index} className="tags">
-                  {service}
+                  {service.service_type.replace(/\b\w/g, (c) =>
+                    c.toUpperCase()
+                  )}
                 </a>
               ))
             ) : (
               <p>No services available</p>
-            )} */}
+            )}
           </div>
           <div className="mt-4 flex justify-between">
             <button
