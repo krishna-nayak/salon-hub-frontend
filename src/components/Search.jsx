@@ -3,65 +3,67 @@ import { HiMiniScissors } from "react-icons/hi2";
 import { FaMicrophoneAlt } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
 import { FaRegStopCircle } from "react-icons/fa";
-//import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import endpoint from "../utility/axios";
 
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from "react-speech-recognition";
 export default function () {
-  const { transcript, resetTranscript } = useSpeechRecognition();
+  const [searchInput, setSearchInput] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const navigateTo = useNavigate();
   useEffect(() => {
-    SpeechRecognition.startListening({ continuous: true });
-    console.log("listening starts");
-  });
-  //const navigate = useNavigate();
+    const fetchCities = async () => {
+      try {
+        const response = await endpoint.get(`/salon`);
+        console.log(response);
+        const cities = response.data.result.map((salon) => salon.city);
+        setSearchResults(cities);
+      } catch (error) {
+        console.error("Error fetching cities:", error);
+      }
+    };
 
+    fetchCities();
+  }, []);
+
+  const handleInputChange = (event) => {
+    setSearchInput(event.target.value);
+  };
+
+  const handleSearch = async (event) => {
+    event.preventDefault();
+    navigateTo(`/salon?city=${searchInput}`); // Redirect to '/salons' with the selected city as a URL parameter
+  };
   return (
     <div>
       {" "}
-      <form className="flex items-center">
+      <form className="flex items-center" onSubmit={handleSearch}>
         <label htmlFor="voice-search" className="sr-only">
           Search
         </label>
         <div className="relative w-full">
-          {/* <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none ">
-            <HiMiniScissors className="fill-slate-400" />
-          </div> */}
-          <input
+          <select
+            id="city-dropdown"
+            value={searchInput}
+            onChange={handleInputChange}
             className="inputBox"
-            value={transcript}
-            onChange={() => nul}
-            type="text"
-            id="voice-search"
-            placeholder="Search by city"
-          />
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              SpeechRecognition.stopListening();
-              console.log("stop listening");
-            }}
-            className="absolute inset-y-0 end-0 flex items-center pe-11"
           >
-            <FaRegStopCircle className="fill-slate-400" />
-          </button>
-          <button
-            onClick={resetTranscript}
-            type="button"
-            className="absolute inset-y-0 end-0 flex items-center pe-3"
-          >
-            <FaMicrophoneAlt className="fill-slate-400" />
-          </button>
+            <option value="">Select a city</option>
+            {searchResults.map((city, index) => (
+              <option key={index} value={city}>
+                {city}
+              </option>
+            ))}
+          </select>
         </div>
-        <buttons
+        <button
           className="btn w-20"
           type="submit"
           //onClick={navigate("/salons")}
         >
           {/* <FaSearch className="fill-white" /> */}
           Search
-        </buttons>
+        </button>
       </form>
     </div>
   );
