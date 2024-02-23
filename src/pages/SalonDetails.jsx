@@ -15,7 +15,6 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 export default function Modal() {
-  const [goal, setGoal] = React.useState(350);
 
   const { salonId } = useParams();
   const [showModal, setShowModal] = useState(false);
@@ -85,6 +84,7 @@ export default function Modal() {
           <p>Closes at:{salonDetails.closeingHour}</p>
         </div>
       </div>
+
       <form onSubmit={handleSubmit}>
         <Drawer>
           <DrawerTrigger asChild>
