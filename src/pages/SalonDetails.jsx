@@ -15,7 +15,6 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 export default function Modal() {
-
   const { salonId } = useParams();
   const [showModal, setShowModal] = useState(false);
   const [salonDetails, setSalonDetails] = useState(null);
@@ -115,7 +114,7 @@ export default function Modal() {
                     <div className="mt-4">
                       <Label htmlFor="date">Date</Label>
                       <Input
-                        className="InputBox"
+                        className=""
                         type="date"
                         name="date"
                         id="date"
@@ -129,7 +128,7 @@ export default function Modal() {
                         Day
                       </Label>
                       <Input
-                        className="InputBox"
+                        className=""
                         type="time"
                         name="time"
                         id="time"
@@ -143,7 +142,7 @@ export default function Modal() {
                       <div className=" relative w-full">
                         <select
                           id="service-dropdown"
-                          className="InputBox"
+                          className=""
                           defaultValue={""}
                           name="selectedService"
                           onChange={(e) =>
