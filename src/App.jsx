@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import SalonRegForm from "./pages/AddSalon/SalonRegForm";
 import UserLogin from "./pages/Login";
-import UserRegistration from "./pages/Registration";
+import UserRegistration from "./pages/UserRegistration";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound404";
 import Salon from "./pages/Salon";
