@@ -104,7 +104,7 @@ export default function Modal() {
                     <div>
                       <Label>Name</Label>
                       <Input
-                        className="w-82"
+                        className=""
                         type="text"
                         name="name"
                         id="name"
