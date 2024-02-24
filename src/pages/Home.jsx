@@ -6,7 +6,6 @@ export default function Home() {
   return (
     <div>
       <Search />
-      <Button>Click me</Button>
     </div>
   );
 }

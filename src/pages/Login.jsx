@@ -1,119 +1,128 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
 import { Validation } from "../utility/validation/ValLogin.js";
 import endpoint from "../utility/axios/index.js";
-
+import { CiCircleAlert } from "react-icons/ci";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useForm } from "react-hook-form";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 export default function UserLogin() {
-  const [values, setValues] = useState({
-    email: "",
-    password: "",
-  });
-  const navigate = useNavigate();
-  const [errors, setErrors] = useState({});
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const error = Validation(values);
-    setErrors((prev) => ({ ...prev, ...Validation(values) }));
-    if (error.email == "" && error.password == "") {
-      try {
-        const res = await endpoint.post("/login", values);
-        console.log(res);
-        navigate("/");
-      } catch (err) {
-        console.log(err);
-      }
-    } else {
-      console.log(Validation(values));
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
+  const onSubmit = async (data) => {
+    try {
+      console.log(data);
+      const res = await endpoint.post("/login", data);
+      console.log(res.data);
+      navigate("/");
+    } catch (err) {
+      console.log(err);
     }
   };
-  const handleInput = (e) => {
-    setValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+
+  const navigate = useNavigate();
   return (
-    <section className="bg-gray-100 ">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:border-gray-300">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1>Sign in to your account</h1>
-            <form
-              className="space-y-4 md:space-y-6"
-              onSubmit={handleSubmit}
-              action="#"
-            >
-              <div>
-                <label htmlFor="email" className=" label">
-                  Your email
-                </label>
-                <input
-                  className="inputBox"
+    <div className="flex  h-screen justify-center items-center">
+      <form className="" onSubmit={handleSubmit(onSubmit)} action="#">
+        <Card className="w-[350px]">
+          <CardHeader>
+            <CardTitle>Sign in to your account</CardTitle>
+            <CardDescription>
+              Signin to book an appointment now !!
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid w-full items-center gap-6">
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="name">Your email</Label>
+                <Input
                   type="email"
                   name="email"
                   id="email"
                   placeholder="name@company.com"
-                  onChange={handleInput}
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: "Invalid email address",
+                    },
+                  })}
+                  aria-invalid={errors.email ? "true" : "false"}
                 />
                 {errors.email && (
-                  <span className="text-red-600">{errors.email}</span>
+                  <Alert variant="destructive">
+                    <CiCircleAlert />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>{errors.email.message}</AlertDescription>
+                  </Alert>
                 )}
               </div>
-              <div>
-                <label htmlFor="password" className="label">
-                  Password
-                </label>
-                <input
-                  className="inputBox"
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="name">Password</Label>
+                <Input
                   type="password"
                   name="password"
                   id="password"
                   placeholder="••••••••"
                   autoComplete="off"
-                  onChange={handleInput}
+                  {...register("password", {
+                    required: "Password is required",
+                    pattern: {
+                      value:
+                        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                      message:
+                        "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
+                    },
+                  })}
                 />
                 {errors.password && (
-                  <span className="text-red-600">{errors.password}</span>
+                  <Alert variant="destructive">
+                    <CiCircleAlert />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>
+                      {errors.password.message}
+                    </AlertDescription>
+                  </Alert>
                 )}
               </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-start">
-                  <div className="flex items-center h-5">
-                    <input
-                      className="inputBox"
-                      id="remember"
-                      aria-describedby="remember"
-                      type="checkbox"
-                    />
-                  </div>
-                  <div className="ml-3 text-sm">
-                    <label htmlFor="remember" className="text-gray-500 ">
-                      Remember me
-                    </label>
-                  </div>
-                </div>
-                <a
-                  href="#"
-                  className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >
-                  Forgot password?
-                </a>
-              </div>
-              <button type="submit" className="btn">
-                Sign in
-              </button>
-              <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                Don’t have an account yet?{" "}
-                <Link
-                  to={"/userRegistration"}
-                  className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >
-                  Sign up
-                </Link>
-              </p>
-            </form>
+            </div>
+          </CardContent>
+          <div className="flex items-center justify-between px-4">
+            <div className="flex items-center space-x-4 px-2">
+              <Checkbox id="terms2" />
+
+              <CardDescription> Accept terms and conditions</CardDescription>
+            </div>
           </div>
-        </div>
-      </div>
-    </section>
+          <CardFooter className="mt-4 flex justify-center">
+            <Button className="w-full">Sign In</Button>
+          </CardFooter>
+
+          <p className="text-sm px-4 justify-center font-light text-gray-500 dark:text-gray-400">
+            Don’t have an account yet?{" "}
+            <Link
+              to={"/userRegistration"}
+              className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+            >
+              Sign up
+            </Link>
+          </p>
+        </Card>
+      </form>
+    </div>
   );
 }
