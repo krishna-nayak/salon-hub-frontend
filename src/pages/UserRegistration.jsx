@@ -19,6 +19,7 @@ import { useForm } from "react-hook-form";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 import endpoint from "../utility/axios";
+import { toast } from "sonner";
 
 export default function UserRegistration() {
   const {
@@ -31,9 +32,11 @@ export default function UserRegistration() {
       console.log(data);
       const res = await endpoint.post("/users", data);
       console.log(res.data);
+      toast("You are now registered 😄");
       navigate("/userLogin");
     } catch (err) {
       console.log(err);
+      toast("Error occured while registering 😳");
     }
   };
 

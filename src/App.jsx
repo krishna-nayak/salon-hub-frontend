@@ -14,6 +14,7 @@ import NotFound from "./pages/NotFound404";
 import Salon from "./pages/Salon";
 import SalonDetails from "./pages/SalonDetails";
 import SalonProfile from "./pages/profile/SalonProfile";
+import { Toaster } from "@/components/ui/sonner";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -32,13 +33,14 @@ function App() {
   return (
     <div className="App">
       <RouterProvider router={router} />
+      <Toaster />
     </div>
   );
 }
 const Root = () => {
   return (
     <>
-      <div className="space-x-5">
+      <div className="space-x-5 ">
         <Link to="/">Home</Link>
         <Link to="/salonRegForm">SalonRegForm</Link>
         <Link to="/userLogin">UserLogin</Link>
