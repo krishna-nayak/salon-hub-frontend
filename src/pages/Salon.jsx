@@ -22,6 +22,7 @@ export default function Salon() {
       try {
         const response = await endpoint.get(`/salon?city=${selectedCity}`);
         console.log("salon data", response);
+        toast(`You are viewing all salon in ${selectedCity} 😄`);
         const salonDataResult = response.data.result;
         setSalonData(salonDataResult);
         setFilteredSalons(salonDataResult);
