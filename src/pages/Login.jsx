@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useForm } from "react-hook-form";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { toast } from "sonner";
 export default function UserLogin() {
   const {
     register,
@@ -27,10 +28,12 @@ export default function UserLogin() {
     try {
       console.log(data);
       const res = await endpoint.post("/login", data);
+      toast("Welcome to SALON_HUB 🙏");
       console.log(res.data);
       navigate("/");
     } catch (err) {
       console.log(err);
+      toast("Error occured while logging 😳");
     }
   };
 
