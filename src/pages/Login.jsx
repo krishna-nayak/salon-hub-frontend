@@ -56,7 +56,7 @@ export default function UserLogin() {
                   type="email"
                   name="email"
                   id="email"
-                  placeholder="name@company.com"
+                  placeholder="name@email.com"
                   {...register("email", {
                     required: "Email is required",
                     pattern: {
