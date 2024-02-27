@@ -19,6 +19,9 @@ import {
 import { TiStarFullOutline } from "react-icons/ti";
 import { FaRegClock } from "react-icons/fa";
 import TableS from "@/components/TableS";
+import { cn } from "@/lib/utils";
+import { DatePickerWithPresets } from "@/components/ui/DatePicker/DatePickerWithPresets";
+import { set } from "date-fns";
 
 export default function SalonDetails() {
   const { salonId } = useParams();
@@ -40,36 +43,12 @@ export default function SalonDetails() {
     fetchSalonDetails();
   }, [salonId]);
 
+  const [open, setOpen] = React.useState(false);
+  const [date, setDate] = React.useState();
+
   if (!salonDetails) {
     return <div>Loading...</div>;
   }
-
-  const handleClickChange = (e) => {
-    console.log(e.target);
-    if (e.target.id === "default-radio-1") setservice(false);
-    else setservice(true);
-  };
-
-  const handleChange = (e) =>
-    setAppointmentDetails((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const body = { ...appointmentDetails, ...selectService, note: "0932" };
-    const userId = "f57ba5ea-3dbe-4f88-aab6-95ef83b6b7d8";
-
-    console.log("print", body);
-    const response = await endpoint.post(
-      `/appointment/${userId}/salonService`,
-      body
-    );
-
-    console.log(response);
-  };
 
   return (
     <div className="p-20 mt-10 bg-black">
@@ -120,161 +99,49 @@ export default function SalonDetails() {
               </p>
             </div>
           </div>
-          <form onSubmit={handleSubmit}>
-            <Drawer>
-              <DrawerTrigger asChild>
-                <Button className="mt-10 bg-yellow-400 font-semibold text-black">
-                  Take an appointment{" "}
-                </Button>
-              </DrawerTrigger>
-              <DrawerContent className="bg-yellow-400">
-                <div className="mx-auto bg-black rounded-3xl w-full max-w-sm">
-                  <DrawerHeader>
-                    <DrawerTitle className="text-white">
-                      Appointment
-                    </DrawerTitle>
-                    <DrawerDescription>
-                      Reduce the hustel and take appointment!
-                    </DrawerDescription>
-                  </DrawerHeader>
-
-                  <div className="flex p-4 gap-6 max-sm:flex-wrap">
-                    <div>
-                      <div>
-                        <Label className="text-white">Name</Label>
-                        <Input
-                          className=""
-                          type="text"
-                          name="name"
-                          id="name"
-                          placeholder="Your name"
-                        />
-                      </div>
-
-                      <div className="mt-4">
-                        <Label htmlFor="date" className="text-white">
-                          Date
-                        </Label>
-                        <Input
-                          className=""
-                          type="date"
-                          name="date"
-                          id="date"
-                          placeholder="Date"
-                          onChange={handleChange}
-                          value={appointmentDetails?.date || ""}
-                        />
-                      </div>
-                      <div className="mt-4">
-                        <Label htmlFor="time" className="text-white">
-                          Day
-                        </Label>
-                        <Input
-                          className=""
-                          type="time"
-                          name="time"
-                          id="time"
-                          placeholder="Day"
-                          onChange={handleChange}
-                          value={appointmentDetails?.time || ""}
-                        />
-                      </div>
-                      <div className="mt-4">
-                        <Label className="text-white">Choose a service</Label>
-                        <div className=" relative w-full">
-                          <select
-                            id="service-dropdown"
-                            className=""
-                            defaultValue={""}
-                            name="selectedService"
-                            onChange={(e) =>
-                              setSelectService({
-                                [e.target.name]: JSON.parse(e.target.value)
-                                  .service_type,
-                                price: JSON.parse(e.target.value).SalonService
-                                  .price,
-                                salonServiceIdArr: JSON.parse(
-                                  e.target.value
-                                )?.SalonService.salonServiceId.split(","),
-                              })
-                            }
-                          >
-                            <option disabled value={""}>
-                              -- select an option --
-                            </option>
-                            {salonDetails?.Services?.map((service) => (
-                              <option
-                                key={service.serviceId}
-                                value={JSON.stringify(service)}
-                              >
-                                {service.service_type}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      </div>
-
-                      <div className="mt-4">
-                        <Label className="text-white">Choose how to pay</Label>
-                        <div className="flex flex-wrap gap-16">
-                          <div className="flex items-center">
-                            <Input
-                              id="default-radio-1"
-                              type="radio"
-                              name="default-radio"
-                              className="radiobox"
-                              onClick={handleClickChange}
-                            />
-                            <Label
-                              htmlFor="default-radio-1"
-                              className="ms-2 text-sm font-medium text-gray-300"
-                            >
-                              Partial
-                            </Label>
-                          </div>
-                          <div className="flex items-center">
-                            <Input
-                              id="default-radio-2"
-                              type="radio"
-                              name="default-radio"
-                              className="radiobox"
-                              onClick={handleClickChange}
-                            />
-                            <Label
-                              htmlFor="default-radio-2"
-                              className="ms-2 text-sm font-medium text-gray-300"
-                            >
-                              Full
-                            </Label>
-                          </div>
-                          <Input
-                            className="w-28 "
-                            type="text"
-                            name="day"
-                            id="day"
-                            placeholder="₹"
-                            disabled={service}
-                            value={service ? selectService?.price : 0}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <DrawerFooter>
-                    <div className="flex  justify-center gap-5 ">
-                      <DrawerClose asChild>
-                        <Button className="w-full" variant="outline">
-                          Cancel
-                        </Button>
-                      </DrawerClose>
-                      <Button className="w-full">Book</Button>
-                    </div>
-                  </DrawerFooter>
+          {/* Drawer */}
+          <Drawer open={open} onOpenChange={setOpen}>
+            <DrawerTrigger asChild>
+              <Button variant="outline">Appointment</Button>
+            </DrawerTrigger>
+            <DrawerContent>
+              <DrawerHeader className="text-left">
+                <DrawerTitle>Edit profile</DrawerTitle>
+                <DrawerDescription>
+                  Make changes to your profile here. Click save when you're
+                  done.
+                </DrawerDescription>
+              </DrawerHeader>
+              {/* <ProfileForm className="px-4" /> */}
+              {/* <form></form> */}
+              <form className={cn("grid items-start gap-4 w-[80%] mx-auto")}>
+                <div className="grid gap-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    type="email"
+                    id="email"
+                    defaultValue="shadcn@example.com"
+                  />
                 </div>
-              </DrawerContent>
-            </Drawer>
-          </form>
+                <div className="grid gap-2">
+                  <Label htmlFor="username">Username</Label>
+                  <Input id="username" defaultValue="@shadcn" />
+                  <DatePickerWithPresets setDate={setDate} date={date} />
+                </div>
+
+                <div className="grid gap-2">
+                  <Label htmlFor="time">time</Label>
+                  <Input type="time" />
+                </div>
+              </form>
+              <DrawerFooter className="pt-2">
+                <Button type="submit">Save changes</Button>
+                <DrawerClose asChild>
+                  <Button variant="outline">Cancel</Button>
+                </DrawerClose>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
         </div>
       </div>
       <TableS salonDetails={salonDetails} />
