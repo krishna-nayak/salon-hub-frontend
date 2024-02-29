@@ -21,6 +21,10 @@ import {
 } from "@/components/ui/select";
 
 export function DatePickerWithPresets({ date, setDate }) {
+  const handleDate = (value) => {
+    if (value < new Date()) return setDate(new Date());
+    setDate(value);
+  };
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -37,9 +41,9 @@ export function DatePickerWithPresets({ date, setDate }) {
       </PopoverTrigger>
       <PopoverContent className="flex w-auto flex-col space-y-2 p-2">
         <Select
-          onValueChange={(value) =>
-            setDate(addDays(new Date(), parseInt(value)))
-          }
+          onValueChange={(value) => {
+            setDate(addDays(new Date(), parseInt(value)));
+          }}
         >
           <SelectTrigger>
             <SelectValue placeholder="Select" />
@@ -52,7 +56,7 @@ export function DatePickerWithPresets({ date, setDate }) {
           </SelectContent>
         </Select>
         <div className="rounded-md border">
-          <Calendar mode="single" selected={date} onSelect={setDate} />
+          <Calendar mode="single" selected={date} onSelect={handleDate} />
         </div>
       </PopoverContent>
     </Popover>

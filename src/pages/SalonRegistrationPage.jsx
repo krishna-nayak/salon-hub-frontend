@@ -33,13 +33,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
+import UseGet from "@/hooks/fetch/useGet";
 import { cn } from "@/lib/utils";
+import endpoint from "@/utility/axios";
 
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { MdEdit } from "react-icons/md";
-import { MdDelete } from "react-icons/md";
+// import { MdEdit } from "react-icons/md";
+// import { MdDelete } from "react-icons/md";
 const FRAMEWORKS = [
   { id: "1", value: "hair cut", label: "Hair Cut" },
   { id: "2", value: "hair color", label: "Hair Color" },
@@ -60,20 +62,46 @@ const CITY = [
 
 const SalonRegistrationPage = () => {
   const [selectedService, setSelectedService] = useState([]);
+  const [city, setCity] = useState("");
+
+  const SERVICE_DATA = UseGet();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const hasPriceAndDuration = selectedService.every(
       (object) => object.price && object.duration
     );
+    console.log({ ...data, selectedService, city });
     if (hasPriceAndDuration) {
-      console.log({ ...data, selectedService });
+      const gatherData = { ...data, city };
+      const services = { services: selectedService };
+
+      const formData = new FormData();
+
+      formData.append("name", gatherData.name);
+      formData.append("description", gatherData.description);
+      formData.append("address", gatherData.address);
+      formData.append("city", gatherData.city);
+      formData.append("openingHourStart", gatherData.openingHourStart);
+      formData.append("closeingHour", gatherData.closingHour);
+      // formData.append("files", file);
+      formData.append("email", gatherData.email);
+
+      const salon_response = await endpoint.post(`/salon`, formData);
+      const service_id = salon_response.data?.salonId;
+      const service_response = await endpoint.post(
+        `/salon/${service_id}/services`,
+        services
+      );
+
+      console.log("complete", service_response);
+      // navigator("/");
     } else {
-      alert("service needs to be updated");
+      // alert("service needs to be updated");
     }
   };
   return (
@@ -119,11 +147,11 @@ const SalonRegistrationPage = () => {
         <div className="flex gap-5 flex-col sm:flex-row sm:h-16 xs:space-x-4 text-sm justify-between">
           <div className="basis-full">
             <Label htmlFor="city">City</Label>
-            <Select {...register("city")}>
+            <Select onValueChange={(v) => setCity(v)}>
               <SelectTrigger className="">
                 <SelectValue placeholder="Select a city" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent {...register("city")}>
                 <SelectGroup>
                   <SelectLabel>City</SelectLabel>
                   {CITY.map((city, idx) => (
@@ -140,7 +168,7 @@ const SalonRegistrationPage = () => {
           <div className="basis-full">
             <Label htmlFor="date">Opening Hour</Label>
             {/* <DatePickerDemo /> */}
-            <Input type="time" {...register("openingHour")} />
+            <Input type="time" {...register("openingHourStart")} />
           </div>
           <Separator orientation="vertical" />
           <div className="basis-full">
@@ -157,7 +185,7 @@ const SalonRegistrationPage = () => {
           <FancyMultiSelect
             selected={selectedService}
             setSelected={setSelectedService}
-            options={FRAMEWORKS}
+            options={SERVICE_DATA}
           />
           <Table className="mt-4">
             <TableCaption>A list of your services.</TableCaption>
