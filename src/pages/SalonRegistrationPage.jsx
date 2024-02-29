@@ -1,4 +1,5 @@
 import FancyMultiSelect from "@/components/ui/Dropdown/FancyMultiSelect";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -39,6 +40,7 @@ import endpoint from "@/utility/axios";
 
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { CiCircleAlert } from "react-icons/ci";
 
 // import { MdEdit } from "react-icons/md";
 // import { MdDelete } from "react-icons/md";
@@ -75,7 +77,10 @@ const SalonRegistrationPage = () => {
     const hasPriceAndDuration = selectedService.every(
       (object) => object.price && object.duration
     );
-    console.log({ ...data, selectedService, city });
+    if (selectedService.length === 0) {
+      alert("Please select at least one service");
+      return; // Stop submission
+    }
     if (hasPriceAndDuration) {
       const gatherData = { ...data, city };
       const services = { services: selectedService };
@@ -120,9 +125,22 @@ const SalonRegistrationPage = () => {
           <Input
             id="name"
             placeholder="Shop Name"
-            {...register("name", { required: true })}
-            aria-invalid={errors?.name ? "true" : "false"}
+            {...register("name", {
+              required: "Name is required",
+              pattern: {
+                value: /^[A-Za-z\s]+$/,
+                message: "Enter only alphabets",
+              },
+            })}
+            aria-invalid={errors.name ? "true" : "false"}
           />
+          {errors.name && (
+            <Alert variant="destructive">
+              <CiCircleAlert />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>{errors.name.message}</AlertDescription>
+            </Alert>
+          )}
         </div>
 
         <div className="flex flex-col space-y-1.5">
@@ -130,9 +148,22 @@ const SalonRegistrationPage = () => {
           <Input
             id="email"
             placeholder="user@gmail.com"
-            {...register("email", { required: true })}
-            aria-invalid={errors?.email ? "true" : "false"}
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "Invalid email address",
+              },
+            })}
+            aria-invalid={errors.email ? "true" : "false"}
           />
+          {errors.email && (
+            <Alert variant="destructive">
+              <CiCircleAlert />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>{errors.email.message}</AlertDescription>
+            </Alert>
+          )}
         </div>
 
         <div className="flex flex-col space-y-1.5">
@@ -140,9 +171,22 @@ const SalonRegistrationPage = () => {
           <Textarea
             placeholder="Type your message here."
             id="address"
-            {...register("address", { required: true })}
-            aria-invalid={errors?.address ? "true" : "false"}
+            {...register("address", {
+              required: "Address is required",
+              maxlength: {
+                value: 100,
+                message: "Address should not exceed 100 characters",
+              },
+            })}
+            aria-invalid={errors.address ? "true" : "false"}
           />
+          {errors.address && (
+            <Alert variant="destructive">
+              <CiCircleAlert />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>{errors.address.message}</AlertDescription>
+            </Alert>
+          )}
         </div>
         <div className="flex gap-5 flex-col sm:flex-row sm:h-16 xs:space-x-4 text-sm justify-between">
           <div className="basis-full">
@@ -168,12 +212,20 @@ const SalonRegistrationPage = () => {
           <div className="basis-full">
             <Label htmlFor="date">Opening Hour</Label>
             {/* <DatePickerDemo /> */}
-            <Input type="time" {...register("openingHourStart")} />
+            <Input
+              type="time"
+              className={errors.openingHour ? "border-red-400" : ""}
+              {...register("openingHour", { required: true })}
+            />
           </div>
           <Separator orientation="vertical" />
           <div className="basis-full">
             <Label htmlFor="date">Closing Hour</Label>
-            <Input type="time" {...register("closingHour")} />
+            <Input
+              type="time"
+              className={errors.closingHour ? "border-red-400" : ""}
+              {...register("closingHour", { required: true })}
+            />
           </div>
         </div>
 

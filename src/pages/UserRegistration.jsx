@@ -76,8 +76,22 @@ export default function UserRegistration() {
                   type={"email"}
                   id="email"
                   placeholder="hello@email.com"
-                  {...register("email")}
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: "Invalid email address",
+                    },
+                  })}
+                  aria-invalid={errors.email ? "true" : "false"}
                 />
+                {errors.email && (
+                  <Alert variant="destructive">
+                    <CiCircleAlert />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>{errors.email.message}</AlertDescription>
+                  </Alert>
+                )}
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="password">Password</Label>
@@ -85,9 +99,26 @@ export default function UserRegistration() {
                   type="password"
                   id="password"
                   placeholder="*********"
-                  {...register("password")}
                   autoComplete="off"
+                  {...register("password", {
+                    required: "Password is required",
+                    pattern: {
+                      value:
+                        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                      message:
+                        "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
+                    },
+                  })}
                 />
+                {errors.password && (
+                  <Alert variant="destructive">
+                    <CiCircleAlert />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>
+                      {errors.password.message}
+                    </AlertDescription>
+                  </Alert>
+                )}
               </div>
             </div>
           </form>
