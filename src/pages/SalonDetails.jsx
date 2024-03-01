@@ -112,7 +112,9 @@ export default function SalonDetails() {
                 </DrawerHeader>
                 <Appointment salonDetails={salonDetails} />
                 <DrawerFooter className="pt-2">
-                  <Button type="submit">Save changes</Button>
+                  <Button type="submit" form="appoint">
+                    Save changes
+                  </Button>
                   <DrawerClose asChild>
                     <Button variant="outline">Cancel</Button>
                   </DrawerClose>

@@ -8,7 +8,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { capitalizeAllWords } from "@/utility/convert";
+import {
+  capitalizeAllWords,
+  createDateFormat,
+  createDateFromTime,
+} from "@/utility/convert";
 import {
   Dialog,
   DialogContent,
@@ -37,6 +41,11 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DialogClose } from "@radix-ui/react-dialog";
+import UseFetchAppointments from "@/hooks/fetch/useFetchAppointments";
+import { useForm } from "react-hook-form";
+import endpoint from "@/utility/axios";
+
+import { useNavigate } from "react-router-dom";
 
 function SelectButton({ children, onHandleSelectChange }) {
   return (
@@ -92,41 +101,17 @@ function TimeSlotHandler({ children }) {
 
 const CardHander = React.memo(({ name, date, duration, salonDetails }) => {
   console.count("Render - CardHander");
-  const createDateFromTime = (timeString) => {
-    const [hours, minutes] = timeString.split(":").map(Number);
-    let newHours = hours;
-    let newMinutes = minutes;
-
-    if (minutes > 30) {
-      newMinutes = 0;
-      newHours += 1;
-    } else if (minutes > 0) {
-      newMinutes = 30;
-    }
-    const newDate = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-      newHours,
-      newMinutes
-    );
-
-    return newDate;
-  };
 
   const getBookTime = () => {
-    const bookTimes = [
-      { time: createDateFromTime("10:00"), totalDuration: 60 },
-    ];
-
     const timeIntervals = [];
+    const bookTimes = UseFetchAppointments(salonDetails?.salonId, date);
 
     for (let i = 0; i < bookTimes.length; i++) {
       const obj = bookTimes[i];
       let startTime = new Date(obj.time);
       let interval = obj.totalDuration;
 
-      let endTime = add(startTime, { minutes: interval });
+      let endTime = addMinutes(startTime, interval);
 
       while (isAfter(endTime, startTime)) {
         timeIntervals.push(format(startTime, "hh:mm"));
@@ -143,6 +128,7 @@ const CardHander = React.memo(({ name, date, duration, salonDetails }) => {
     switch (name) {
       case "Morning":
         startTime = createDateFromTime(salonDetails?.openingHourStart);
+        // console.log("startTime", startTime);
         endTime = new Date();
         endTime.setHours(12, 0, 0); // 12:00 PM
         break;
@@ -156,6 +142,8 @@ const CardHander = React.memo(({ name, date, duration, salonDetails }) => {
         startTime = new Date();
         startTime.setHours(18, 0, 0); // 6:00 PM
         endTime = createDateFromTime(salonDetails?.closeingHour);
+        // console.log("endTime", endTime);
+
         break;
       default:
         break;
@@ -239,7 +227,10 @@ const CardHander = React.memo(({ name, date, duration, salonDetails }) => {
 });
 
 function Appointment({ salonDetails }) {
-  console.count("Render - Appointment");
+  // console.count("Render - Appointment");
+
+  const navigate = useNavigate();
+
   const { time, setTime } = useTime();
   const [date, setDate] = React.useState(new Date());
   const [selectService, setService] = React.useState(null);
@@ -255,11 +246,46 @@ function Appointment({ salonDetails }) {
     }
   };
 
+  const { register, handleSubmit } = useForm();
+  const onSubmit = async (data) => {
+    if (time == "") return;
+    const time_in = time?.split(" ")[0];
+
+    const responde_date = {
+      ...data,
+      time: time_in,
+      date: createDateFormat(date),
+      salonServiceIdArr: [selectService?.salonServiceId],
+      duration: selectService.duration,
+      notes: "",
+    };
+
+    const userId = localStorage.getItem("userId");
+
+    if (!userId)
+      return console.error("USER ID is not set. PLEASE TRY TO LOGIN FIRST");
+
+    const result = await endpoint.post(
+      `/appointment/${userId}/salonService`,
+      responde_date
+    );
+    console.log("result: ", result);
+    navigate("/");
+  };
   return (
-    <form className={cn("grid items-start gap-4 p-4")}>
+    <form
+      className={cn("grid items-start gap-4 p-4")}
+      onSubmit={handleSubmit(onSubmit)}
+      id="appoint"
+    >
       <div className="grid gap-2">
         <Label htmlFor="email">Name</Label>
-        <Input type="text" id="name" placeholder="shadcn" />
+        <Input
+          type="text"
+          id="name"
+          placeholder="shadcn"
+          {...register("name")}
+        />
       </div>
       <div className="grid gap-2">
         <div>Gender</div>
@@ -270,6 +296,7 @@ function Appointment({ salonDetails }) {
               id="male"
               name="gender"
               className="peer sr-only"
+              {...register("gender")}
             />
             <Button
               variant="outline"
@@ -285,6 +312,7 @@ function Appointment({ salonDetails }) {
               id="female"
               name="gender"
               className="peer sr-only"
+              {...register("gender")}
             />
             <Button
               variant="outline"

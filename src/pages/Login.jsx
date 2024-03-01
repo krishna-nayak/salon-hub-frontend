@@ -30,6 +30,7 @@ export default function UserLogin() {
       const res = await endpoint.post("/login", data);
       toast("Welcome to SALON_HUB 🙏");
       console.log(res.data);
+      localStorage.setItem("userId", res?.data?.userId);
       navigate("/");
     } catch (err) {
       console.log(err);
