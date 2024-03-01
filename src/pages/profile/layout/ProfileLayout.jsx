@@ -3,14 +3,17 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import React, { Children, useState } from "react";
+import React, { useState } from "react";
+
 import Nav from "./Nav";
 
-import { Outlet } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
 
-const ProfileLayout = ({ children }) => {
+const ProfileLayout = () => {
+  const userId = localStorage.getItem("userId");
   const [isCollapsed, setIsCollapsed] = useState(false);
-  return (
+  console.log(userId);
+  return userId ? (
     <section>
       <ResizablePanelGroup
         direction="horizontal"
@@ -44,7 +47,6 @@ const ProfileLayout = ({ children }) => {
         <ResizableHandle withHandle />
         <ResizablePanel>
           <div className="flex-col h-full p-6">
-            <span className="font-semibold">Content</span>
             <div>
               <Outlet />
             </div>
@@ -52,6 +54,8 @@ const ProfileLayout = ({ children }) => {
         </ResizablePanel>
       </ResizablePanelGroup>
     </section>
+  ) : (
+    <Navigate to="/login" />
   );
 };
 
