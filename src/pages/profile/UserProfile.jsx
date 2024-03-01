@@ -6,11 +6,13 @@ const UserProfile = () => {
   // console.log(userData);
   return (
     <section>
-      <div>name: {userData?.name}</div>
-      <div>email: {userData?.email}</div>
+      <h3 className="font-bold my-3 text-3xl">My Profile</h3>
+      <div>Name: {userData?.name}</div>
+      <div>Email: {userData?.email}</div>
       <div>
-        role:{" "}
-        {userData?.role?.charAt(0).toUpperCase() + userData?.role.slice(1)}
+        Role:{" "}
+        {userData?.role?.charAt(0).toUpperCase() +
+          userData?.role.slice(1).toLowerCase()}
       </div>
     </section>
   );

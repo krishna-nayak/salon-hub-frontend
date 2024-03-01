@@ -14,19 +14,19 @@ const MyAppointment = React.memo(() => {
   // console.log("heelo/");
   return (
     <div>
-      Appointment
+      <h3 className="text-2xl font-bold my-3">Appointment</h3>
       <div>
+        <div className="flex gap-10 justify-between">
+          <span className="font-medium">Name</span>
+          <span className="font-medium">Service</span>
+          <span className="font-medium">Salon name</span>
+          <span className="font-medium">date</span>
+          <span className="font-medium">time</span>
+          <span className="font-medium">price</span>
+          <span className="font-medium">city</span>
+        </div>
         {myAppointment.map((appoint, idx) => (
           <div key={idx} className="">
-            <div className="flex gap-10 justify-between">
-              <span className="font-medium">Name</span>
-              <span className="font-medium">Service</span>
-              <span className="font-medium">Salon name</span>
-              <span className="font-medium">date</span>
-              <span className="font-medium">time</span>
-              <span className="font-medium">price</span>
-              <span className="font-medium">city</span>
-            </div>
             <div className="flex gap-10 justify-between">
               <span className="font-medium">{appoint.username}</span>
               <span className="font-medium">{appoint.service_name}</span>

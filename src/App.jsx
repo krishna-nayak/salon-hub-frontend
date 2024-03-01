@@ -55,7 +55,7 @@ const Root = () => {
       <div className="space-x-5 ">
         <Link to="/">Home</Link>
         <Link to="/SalonRegistration">SalonRegForm</Link>
-        <Link to="/userLogin">UserLogin</Link>
+        <Link to="/login">UserLogin</Link>
         <Link to="/userRegistration">UserRegistration</Link>
         <Link to="/salon">salon</Link>
         <Link to="/profile/user">user</Link>
