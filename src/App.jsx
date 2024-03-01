@@ -28,10 +28,7 @@ function App() {
       <Route path="/" element={<Root />}>
         <Route index element={<Home />} />
         <Route path="/salonRegForm" element={<SalonRegForm />} />
-        <Route
-          path="/SalonRegistrationPage"
-          element={<SalonRegistrationPage />}
-        />
+        <Route path="/SalonRegistration" element={<SalonRegistrationPage />} />
         <Route path="/login" element={<UserLogin />} />
         <Route path="/userRegistration" element={<UserRegistration />} />
         <Route path="/notFound404" element={<NotFound />} />
@@ -57,7 +54,7 @@ const Root = () => {
     <>
       <div className="space-x-5 ">
         <Link to="/">Home</Link>
-        <Link to="/salonRegForm">SalonRegForm</Link>
+        <Link to="/SalonRegistration">SalonRegForm</Link>
         <Link to="/userLogin">UserLogin</Link>
         <Link to="/userRegistration">UserRegistration</Link>
         <Link to="/salon">salon</Link>
