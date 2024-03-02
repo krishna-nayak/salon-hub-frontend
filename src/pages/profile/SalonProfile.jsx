@@ -25,7 +25,7 @@ export default function () {
   }
   return (
     <div>
-      <h1> {user.fullName}</h1>
+      <h1>{user.fullName}</h1>
       <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-3">
         <div class="bg-gray-100 ">
           <div className="text-center mt-12">

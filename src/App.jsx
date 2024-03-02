@@ -18,23 +18,30 @@ import SalonProfile from "./pages/profile/SalonProfile";
 import { Toaster } from "@/components/ui/sonner";
 
 import SalonRegistrationPage from "./pages/SalonRegistrationPage";
+import UserProfile from "./pages/profile/UserProfile";
+import ProfileLayout from "./pages/profile/layout/ProfileLayout";
+import MyAppointment from "./pages/profile/MyAppointment";
 
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<Root />}>
-        <Route index element={<Home />}></Route>
+        <Route index element={<Home />} />
         <Route path="/salonRegForm" element={<SalonRegForm />} />
         <Route
           path="/SalonRegistrationPage"
           element={<SalonRegistrationPage />}
         />
-        <Route path="/userLogin" element={<UserLogin />} />
+        <Route path="/login" element={<UserLogin />} />
         <Route path="/userRegistration" element={<UserRegistration />} />
         <Route path="/notFound404" element={<NotFound />} />
         <Route path="/salon" element={<Salon />} />
         <Route path="/salonDetails/:salonId" element={<SalonDetails />} />
-        <Route path="/salonProfile" element={<SalonProfile />} />
+        <Route path="/profile" element={<ProfileLayout />}>
+          <Route path="/profile/user" element={<UserProfile />} />
+          <Route path="/profile/my-appointment" element={<MyAppointment />} />
+          <Route path="/profile/salon" element={<SalonProfile />} />
+        </Route>
       </Route>
     )
   );
@@ -54,7 +61,7 @@ const Root = () => {
         <Link to="/userLogin">UserLogin</Link>
         <Link to="/userRegistration">UserRegistration</Link>
         <Link to="/salon">salon</Link>
-        <Link to="/salonProfile">SalonProfile</Link>
+        <Link to="/profile/user">user</Link>
       </div>
       <div>
         <Outlet />

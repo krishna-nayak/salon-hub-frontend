@@ -33,7 +33,7 @@ export default function UserRegistration() {
       const res = await endpoint.post("/users", data);
       console.log(res.data);
       toast("You are now registered 😄");
-      navigate("/userLogin");
+      navigate("/login");
     } catch (err) {
       console.log(err);
       toast("Error occured while registering 😳");
