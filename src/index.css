@@ -86,6 +86,9 @@
   body {
     @apply bg-background text-foreground;
   }
+  .input-dark {
+    color-scheme: dark;
+  }
 }
 
 .counter {

@@ -53,20 +53,22 @@ function App() {
 }
 const Root = () => {
   return (
-    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-      <div className="space-x-5 dark:text-white">
-        <Link to="/">Home</Link>
-        <Link to="/SalonRegistration">SalonRegForm</Link>
-        <Link to="/login">UserLogin</Link>
-        <Link to="/userRegistration">UserRegistration</Link>
-        <Link to="/salon">salon</Link>
-        <Link to="/profile/user">user</Link>
-        <ToggleTheme />
-      </div>
-      <div>
-        <Outlet />
-      </div>
-    </ThemeProvider>
+    <>
+      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+        <div className="space-x-5 dark:text-white">
+          <Link to="/">Home</Link>
+          <Link to="/SalonRegistration">SalonRegForm</Link>
+          <Link to="/login">UserLogin</Link>
+          <Link to="/userRegistration">UserRegistration</Link>
+          <Link to="/salon">salon</Link>
+          <Link to="/profile/user">user</Link>
+          <ToggleTheme />
+        </div>
+        <div>
+          <Outlet />
+        </div>
+      </ThemeProvider>
+    </>
   );
 };
 export default App;
