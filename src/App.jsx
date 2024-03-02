@@ -43,7 +43,7 @@ function App() {
     )
   );
   return (
-    <div className="App">
+    <div className="">
       <RouterProvider router={router} />
       <Toaster />
     </div>
@@ -52,7 +52,7 @@ function App() {
 const Root = () => {
   return (
     <>
-      <div className="space-x-5 ">
+      <div className="space-x-5 hidden">
         <Link to="/">Home</Link>
         <Link to="/SalonRegistration">SalonRegForm</Link>
         <Link to="/login">UserLogin</Link>

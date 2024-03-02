@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
+import { useNavigate } from "react-router-dom";
 import {
   Select,
   SelectContent,
@@ -65,7 +65,7 @@ const CITY = [
 const SalonRegistrationPage = () => {
   const [selectedService, setSelectedService] = useState([]);
   const [city, setCity] = useState("");
-
+  const navigateTo = useNavigate();
   const SERVICE_DATA = UseGet();
   const {
     register,
@@ -104,7 +104,7 @@ const SalonRegistrationPage = () => {
       );
 
       console.log("complete", service_response);
-      // navigator("/");
+      navigateTo("/");
     } else {
       // alert("service needs to be updated");
     }

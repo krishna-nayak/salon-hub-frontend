@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { HiMiniScissors } from "react-icons/hi2";
-import { FaMicrophoneAlt } from "react-icons/fa";
-import { FaSearch } from "react-icons/fa";
-import { FaRegStopCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import endpoint from "../utility/axios";
-
+import { IoStorefront } from "react-icons/io5";
+import { format } from "date-fns";
+import { RiCalculatorFill } from "react-icons/ri";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 export default function () {
   const [searchInput, setSearchInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const navigateTo = useNavigate();
+  const [date, setDate] = useState(null);
   useEffect(() => {
     const fetchCities = async () => {
       try {
@@ -32,39 +36,67 @@ export default function () {
 
   const handleSearch = async (event) => {
     event.preventDefault();
-    navigateTo(`/salon?city=${searchInput}`); // Redirect to '/salons' with the selected city as a URL parameter
+    navigateTo(`/salon?city=${searchInput}`);
   };
+  /*const CITY = [
+    "Bhubneswar",
+    "Delhi",
+    "Bangarulu",
+    "Hydrabad",
+    "Mumbai",
+    "Kolkata",
+  ];*/
   return (
-    <div>
-      {" "}
-      <form className="flex items-center" onSubmit={handleSearch}>
-        <label htmlFor="voice-search" className="sr-only">
-          Search
-        </label>
-        <div className="relative w-full">
+    <div className="flex  justify-between  ">
+      <div className="">
+        <div className="flex gap-2 mt-5  font-semibold cursor-pointer ">
+          <IoStorefront className="mt-1 ml-3" />
           <select
             id="city-dropdown"
             value={searchInput}
             onChange={handleInputChange}
-            className="inputBox"
+            className="custom-select appearance-none cursor-pointer -mt-1  h-8 w-40"
           >
-            <option value="">Select a city</option>
+            <option value="" className="bg-black ">
+              City
+            </option>
             {searchResults.map((city, index) => (
-              <option key={index} value={city}>
+              <option key={index} value={city} className="bg-black">
                 {city}
               </option>
             ))}
           </select>
         </div>
+      </div>
+      <div className="flex">
+        <div className="p-5">
+          {" "}
+          <Popover>
+            <PopoverTrigger asChild>
+              <div className="flex gap-2 font-semibold cursor-pointer">
+                <RiCalculatorFill className=" h-4 w-4 mt-1 " />
+                {date ? format(date, "PPP") : <span>Date</span>}
+              </div>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0 bg-black text-slate-400">
+              <Calendar
+                mode="single"
+                selected={date}
+                onSelect={setDate}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
+
         <button
-          className="btn w-20"
+          className=" w-32  top-0 end-0 h-full  text-xl font-semibold text-white  rounded-e-3xl border  hover:bg-yellow-400 border-yellow-400 focus:outline-none  bg-yellow-300"
           type="submit"
-          //onClick={navigate("/salons")}
+          onClick={handleSearch}
         >
-          {/* <FaSearch className="fill-white" /> */}
           Search
         </button>
-      </form>
+      </div>
     </div>
   );
 }
