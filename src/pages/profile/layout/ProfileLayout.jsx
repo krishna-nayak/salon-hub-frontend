@@ -15,7 +15,7 @@ const ProfileLayout = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   return userId ? (
-    <section>
+    <section className="bg-white">
       <ResizablePanelGroup
         direction="horizontal"
         className="h-full max-h-[800px] items-stretch rounded-lg border"

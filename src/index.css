@@ -116,13 +116,13 @@
   content: counter(step);
 }
 body {
-  background-color: black;
+  /* background-color: black; */
 }
 html {
   scroll-behavior: smooth;
 }
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 1px;
 }
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(transparent, #ffe100);
