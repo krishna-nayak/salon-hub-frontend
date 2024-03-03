@@ -1,16 +1,48 @@
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-const Nav = ({ links }) => {
+const Nav = ({ links, className }) => {
+  const location = useLocation();
+
   return (
-    <div>
-      {/* {console.log(links)} */}
+    <nav
+      className={cn(
+        "flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1",
+        className
+      )}
+    >
       {links.map((link, idx) => (
-        <nav key={idx}>
-          <Link to={link.to}>{link.title}</Link>
-        </nav>
+        <Link
+          key={idx}
+          to={link.to}
+          className={cn(
+            buttonVariants({ variant: "ghost" }),
+            location.pathname === link.to
+              ? "bg-muted hover:bg-muted"
+              : "hover:bg-transparent hover:underline",
+            "justify-start"
+          )}
+        >
+          {link.title}
+        </Link>
       ))}
-    </div>
+      <Link
+        to={"#"}
+        className={cn(
+          buttonVariants({ variant: "ghost" }),
+          "hover:bg-transparent hover:underline",
+          "justify-start"
+        )}
+        onClick={() => {
+          localStorage.removeItem("userId");
+          window.location = "/";
+        }}
+      >
+        Log out
+      </Link>
+    </nav>
   );
 };
 

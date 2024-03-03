@@ -40,7 +40,7 @@ export default function UserLogin() {
 
   const navigate = useNavigate();
   return (
-    <div className="flex  h-screen justify-center items-center">
+    <div className="flex h-screen justify-center items-center">
       <form className="" onSubmit={handleSubmit(onSubmit)} action="#">
         <Card className="w-[350px]">
           <CardHeader>

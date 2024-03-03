@@ -190,12 +190,12 @@ const SalonRegistrationPage = () => {
         </div>
         <div className="flex gap-5 flex-col sm:flex-row sm:h-16 xs:space-x-4 text-sm justify-between">
           <div className="basis-full">
-            <Label htmlFor="city">City</Label>
+            <Label>City</Label>
             <Select onValueChange={(v) => setCity(v)}>
               <SelectTrigger className="">
                 <SelectValue placeholder="Select a city" />
               </SelectTrigger>
-              <SelectContent {...register("city")}>
+              <SelectContent>
                 <SelectGroup>
                   <SelectLabel>City</SelectLabel>
                   {CITY.map((city, idx) => (
@@ -210,20 +210,28 @@ const SalonRegistrationPage = () => {
           <Separator orientation="vertical" />
 
           <div className="basis-full">
-            <Label htmlFor="date">Opening Hour</Label>
+            <Label htmlFor="op-time">Opening Hour</Label>
             {/* <DatePickerDemo /> */}
             <Input
               type="time"
-              className={errors.openingHour ? "border-red-400" : ""}
+              id="op-time"
+              className={cn(
+                "dark:input-dark",
+                errors.openingHour ? "border-red-400" : ""
+              )}
               {...register("openingHour", { required: true })}
             />
           </div>
           <Separator orientation="vertical" />
           <div className="basis-full">
-            <Label htmlFor="date">Closing Hour</Label>
+            <Label htmlFor="close-time">Closing Hour</Label>
             <Input
               type="time"
-              className={errors.closingHour ? "border-red-400" : ""}
+              id="close-time"
+              className={cn(
+                "dark:input-dark",
+                errors.closingHour ? "border-red-400" : ""
+              )}
               {...register("closingHour", { required: true })}
             />
           </div>
@@ -308,8 +316,13 @@ const SalonRegistrationPage = () => {
         <h3 className="font-heading mt-8 scroll-m-20 text-xl font-semibold tracking-tight">
           Upload image of Store (Optional)
           <div>
-            <Label htmlFor="date">Images</Label>
-            <Input type="file" {...register("fileInput")} />
+            <Label htmlFor="files">Images</Label>
+            <Input
+              type="file"
+              id="files"
+              className="dark:input-dark"
+              {...register("fileInput")}
+            />
           </div>
         </h3>
 
