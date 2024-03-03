@@ -48,7 +48,7 @@ export default function SalonDetails() {
 
   return (
     <TimeProvider>
-      <div className="p-20 mt-10 bg-black">
+      <div className="px-16 mt-10 bg-black">
         <div className="flex justify-center gap-28  max-lg:gap-10  max-lg:flex-wrap ">
           <img className="aspect-square h-96" src={salon2} alt="salon-pic" />
           <div className="">
@@ -62,11 +62,13 @@ export default function SalonDetails() {
                 <span className=" text-blue-800 h-7 text-sm font-semibold ">
                   5.0
                 </span>
-                <TiStarFullOutline className="fill-yellow-400 size-5" />{" "}
-                <TiStarFullOutline className="fill-yellow-400 size-5" />{" "}
-                <TiStarFullOutline className="fill-yellow-400 size-5" />{" "}
-                <TiStarFullOutline className="fill-yellow-400 size-5" />
-                <TiStarFullOutline className="fill-yellow-400 size-5" />
+                {[...Array(5)].map((star, index) => {
+                  return (
+                    <div key={index}>
+                      <TiStarFullOutline className="fill-yellow-400" />
+                    </div>
+                  );
+                })}
               </div>
               <p className="mt-4 text-slate-500 text-md font-semibold ">
                 A salon store is a specialized retail establishment dedicated to{" "}
@@ -123,8 +125,8 @@ export default function SalonDetails() {
             </Drawer>
           </div>
         </div>
-        <TableS salonDetails={salonDetails} />
       </div>
+      <TableS salonDetails={salonDetails} salonId={salonId} />
     </TimeProvider>
   );
 }
