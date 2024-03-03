@@ -42,9 +42,9 @@ export const createDateFromTimeAmPm = (timeString) => {
   let hours = parseInt(hoursStr);
   let minutes = parseInt(minutesStr);
 
-  if (minutes > 0 && minutes < 30) {
+  if (minutes > 0 && minutes <= 30) {
     minutes = 30;
-  } else if (minutes >= 30) {
+  } else if (minutes > 30) {
     minutes = 0;
     hours++;
   }
