@@ -1,7 +1,7 @@
 {
-  "name": "React-vite-app",
-  "short_name": "react-vite-app",
-  "description": "I am a simple vite app",
+  "name": "SalonHub",
+  "short_name": "Salon_Hub",
+  "description": "Advance appointment booking applicaton",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -24,12 +24,6 @@
     {
       "src": "/apple-touch-icon.png",
       "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/android-chrome-512x512.png",
-      "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     }

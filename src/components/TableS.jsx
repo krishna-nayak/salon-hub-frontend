@@ -45,6 +45,7 @@ export default function TableS({ salonDetails }) {
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[50px]">SERIAL</TableHead>
+                <TableHead></TableHead>
                 <TableHead>SERVICE</TableHead>
                 <TableHead>DURATION</TableHead>
                 <TableHead>AMOUNT</TableHead>
@@ -55,7 +56,7 @@ export default function TableS({ salonDetails }) {
               {salonDetails.Services.map((service, index) => (
                 <TableRow
                   key={index}
-                  className="bg-gradient-to-b from-black from-10% via-black via-30% to-gray-900 to-90% hover:scale-105"
+                  className="bg-gradient-to-b from-black from-10% via-black via-30% to-gray-900 to-90%  "
                 >
                   <TableCell className="font-medium">{index + 1}.</TableCell>
                   <TableCell>

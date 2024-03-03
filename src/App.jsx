@@ -54,55 +54,18 @@ function App() {
 const Root = () => {
   return (
     <>
-      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-        <div className="space-x-5 dark:text-white">
-          <Link to="/">Home</Link>
-          <Link to="/SalonRegistration">SalonRegForm</Link>
-          <Link to="/login">UserLogin</Link>
-          <Link to="/userRegistration">UserRegistration</Link>
-          <Link to="/salon">salon</Link>
-          <Link to="/profile/user">user</Link>
-          <ToggleTheme />
-        </div>
-        <div>
-          <Outlet />
-        </div>
-      </ThemeProvider>
+      <div className="space-x-5 dark:text-white hidden">
+        <Link to="/">Home</Link>
+        <Link to="/SalonRegistration">SalonRegForm</Link>
+        <Link to="/login">UserLogin</Link>
+        <Link to="/userRegistration">UserRegistration</Link>
+        <Link to="/salon">salon</Link>
+        <Link to="/profile/user">user</Link>
+      </div>
+      <div>
+        <Outlet />
+      </div>
     </>
   );
 };
 export default App;
-import { Sun, Moon } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "./components/ui/dropdown-menu";
-import { Button } from "./components/ui/button";
-
-function ToggleTheme() {
-  const { setTheme } = useTheme();
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
-          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Toggle theme</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
