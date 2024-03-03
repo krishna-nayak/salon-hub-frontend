@@ -131,8 +131,7 @@ const CardHander = React.memo(({ name, date, duration, salonDetails }) => {
     const isOpening = createDateFromTimeAmPm(opening);
     const isClosing = createDateFromTimeAmPm(closing);
     // console.log(isOpening, isClosing);
-    // const isOpening = 0; // index ["morning", "noon", "evening"]
-    // const isClosing = 0; // index ["morning", "noon", "evening"]
+
     switch (name) {
       case "Morning":
         if (isOpening.timeSlot === 0) {
