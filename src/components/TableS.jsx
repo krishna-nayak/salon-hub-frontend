@@ -9,60 +9,31 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import service1 from "../assets/service1.png";
+import service2 from "../assets/service2.png";
+import service3 from "../assets/service3.png";
+import service4 from "../assets/service4.png";
+import service5 from "../assets/service5.png";
+import service6 from "../assets/service6.png";
+const serviceImages = {
+  "hair cut": service6,
+  facial: service1,
+  Manicure: service3,
+  Massage: service2,
+  "hair color": service4,
+  pedicure: service5,
+};
 
-const invoices = [
-  {
-    invoice: "SR0001",
-    service: "Hair Color",
-    totalAmount: "₹250.00",
-    duration: "1-1.5 hour",
-    details: "Hair color with hair wash and drying with avialable colors.",
-  },
-  {
-    invoice: "SR0002",
-    service: "Hair Cut",
-    totalAmount: "₹150.00",
-    duration: "1 hour",
-    details:
-      "Diffrent hair cut avialable like U cut,V cut,French,Leaser,advance layer,etc ",
-  },
-  {
-    invoice: "SR0003",
-    service: "Manicure",
-    totalAmount: "₹350.00",
-    duration: "45-50 min",
-    details: "Cleansing risening with proper formulation.",
-  },
-  {
-    invoice: "SR0004",
-    service: "Pedicure",
-    totalAmount: "₹450.00",
-    duration: "1 hour",
-    details: "Fish treatment with procedure avialble but optional.",
-  },
-  {
-    invoice: "SR0005",
-    service: "Facial",
-    totalAmount: "₹550.00",
-    duration: "30-40 min",
-    details: "Deep clean, Charcoal wash,Papaya ,Fruit punch ,etc avialble ",
-  },
-  {
-    invoice: "SR0006",
-    service: "Massage",
-    totalAmount: "₹200.00",
-    duration: "1-2 hour",
-    details: "Steam and Ice Massage also avialble with full body treatment ",
-  },
-  {
-    invoice: "SR0007",
-    service: "Beard Shave",
-    totalAmount: "₹300.00",
-    duration: "30 min",
-    details: "Charcoal pack with shaving",
-  },
-];
 export default function TableS({ salonDetails }) {
+  if (
+    !salonDetails ||
+    !salonDetails.Services ||
+    !Array.isArray(salonDetails.Services)
+  ) {
+    return <div>No services available</div>;
+  }
+  console.log(salonDetails);
   return (
     <div className="mt-20 ">
       <div>
@@ -73,7 +44,7 @@ export default function TableS({ salonDetails }) {
           <Table className="w-[950px] mt-10 text-white">
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[50px]">SL NO.</TableHead>
+                <TableHead className="w-[50px]">SERIAL</TableHead>
                 <TableHead>SERVICE</TableHead>
                 <TableHead>DURATION</TableHead>
                 <TableHead>AMOUNT</TableHead>
@@ -81,15 +52,34 @@ export default function TableS({ salonDetails }) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {invoices.map((invoice) => (
-                <TableRow key={invoice.invoice}>
-                  <TableCell className="font-medium">
-                    {invoice.invoice}
+              {salonDetails.Services.map((service, index) => (
+                <TableRow
+                  key={index}
+                  className="bg-gradient-to-b from-black from-10% via-black via-30% to-gray-900 to-90% hover:scale-105"
+                >
+                  <TableCell className="font-medium">{index + 1}.</TableCell>
+                  <TableCell>
+                    <img
+                      src={serviceImages[service.service_type]}
+                      alt={service.service_type}
+                      className="h-20 w-20 object-cover rounded-full max-sm:max-w-10 max-sm:max-h-10"
+                    />
                   </TableCell>
-                  <TableCell>{invoice.service}</TableCell>
-                  <TableCell>{invoice.duration}</TableCell>
-                  <TableCell className="">{invoice.totalAmount}</TableCell>
-                  <TableCell>{invoice.details}</TableCell>
+                  <TableCell className="text-lg font-semibold max-sm:text-sm">
+                    {service.service_type}
+                  </TableCell>
+                  <TableCell>{service.SalonService.duration}</TableCell>
+                  <TableCell>
+                    <Badge
+                      variant="outline"
+                      className="text-yellow-400 text-md max-sm:text-sm "
+                    >
+                      ₹{service.SalonService.price}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-slate-300">
+                    {service.SalonService.description}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

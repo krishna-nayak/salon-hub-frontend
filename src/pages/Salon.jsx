@@ -10,8 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { IoSearchSharp } from "react-icons/io5";
 import Navbar from "../components/Navbar";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+
 export default function Salon() {
   const [salonDatas, setSalonData] = useState(null);
   const location = useLocation();
@@ -19,6 +18,8 @@ export default function Salon() {
   const selectedCity = searchParams.get("city");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredSalons, setFilteredSalons] = useState(null);
+  const [selectedService, setSelectedService] = useState(null);
+  const [rating, setRating] = useState(null);
   const navigateTo = useNavigate();
   useEffect(() => {
     const fetchSalonData = async () => {
@@ -41,6 +42,26 @@ export default function Salon() {
   if (!salonDatas) {
     return <div>Loading...</div>;
   }
+  const BADGE = [
+    {
+      serviceBadge: "Haircut",
+    },
+    {
+      serviceBadge: "Hair color",
+    },
+    {
+      serviceBadge: "Manicure",
+    },
+    {
+      serviceBadge: "Facial",
+    },
+    {
+      serviceBadge: "Massage",
+    },
+    {
+      serviceBadge: "Pedicure",
+    },
+  ];
 
   const handleBookNow = (salonid) => {
     console.log("Salon ID:", salonid);
@@ -65,15 +86,27 @@ export default function Salon() {
     setSearchQuery("");
     setFilteredSalons(salonDatas);
   };
+
+  const handleFilterByService = (service) => {
+    const filteredSalons = salonDatas.filter((salon) =>
+      salon.Services.some(
+        (s) => s.service_type.toLowerCase() === service.toLowerCase()
+      )
+    );
+    setFilteredSalons(filteredSalons);
+    if (filteredSalons.length === 0) {
+      toast(`No salons offer ${service} service in ${selectedCity} 😞`);
+    }
+  };
   return (
     <div>
       {/* <Navbar /> */}
       <div>
-        <div className="flex flex-wrap justify-evenly p-20">
-          <div className="flex justify-center items-center gap-2">
+        <div className="flex flex-wrap justify-evenly p-10 gap-y-6">
+          <div className="flex justify-center  items-center gap-2 ">
             {" "}
             <Input
-              className="w-80 h-12"
+              className="w-80 h-12 max-sm:w-44"
               placeholder="Search by salon"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -85,45 +118,25 @@ export default function Salon() {
               <IoSearchSharp className="fill-white" />
             </Button>
           </div>{" "}
-          <div className="flex text-slate-400 gap-4">
-            <Checkbox id="terms1" className="bg-slate-400" />
-            <Label>Male</Label>
-
-            <Checkbox id="terms1" className="bg-slate-400" />
-            <Label>Female</Label>
-          </div>
-          <div className="flex gap-4">
-            <Button
-              variant="outline"
-              className="bg-black h-10 rounded-md text-slate-500 hover:bg-black hover:border-yellow-400 hover:text-yellow-400"
-            >
-              Hair color
-            </Button>
-            <Button
-              variant="outline"
-              className="bg-black h-10 rounded-md text-slate-500 hover:bg-black hover:border-yellow-400 hover:text-yellow-400"
-            >
-              Beard
-            </Button>
-            <Button
-              variant="outline"
-              className="bg-black h-10 rounded-md text-slate-500 hover:bg-black hover:border-yellow-400 hover:text-yellow-400"
-            >
-              Shaving
-            </Button>{" "}
-            <Button
-              variant="outline"
-              className="bg-black h-10 rounded-md text-slate-500 hover:bg-black hover:border-yellow-400 hover:text-yellow-400"
-            >
-              Facial
-            </Button>
+          <div className="flex  flex-wrap gap-2">
+            {BADGE.map((badge, idx) => (
+              <Button
+                variant="outline"
+                className={`bg-black h-10 rounded-md text-slate-500 hover:bg-black hover:border-yellow-400 hover:text-yellow-400 ${
+                  selectedService === "Facial" ? "bg-yellow-400" : ""
+                }`}
+                onClick={() => handleFilterByService(badge.serviceBadge)}
+              >
+                {badge.serviceBadge}
+              </Button>
+            ))}
           </div>
         </div>
 
         {filteredSalons && filteredSalons.length === 0 && (
           <div>No salons found matching the search criteria.</div>
         )}
-        <div className="p-20 max-sm:p-10 ">
+        <div className="p-20 max-sm:p-8 ">
           <div className="flex justify-center gap-20 gap-y-10 items-center  flex-wrap ">
             {filteredSalons?.map((salonData, index) => (
               <div key={index} className="salonCard ">
@@ -140,11 +153,14 @@ export default function Salon() {
                       </h5>
                       <div className="flex gap-1 -ml-3 mt-3 max-sm:gap-0">
                         <span className="salonBadge">5.0</span>
-                        <TiStarFullOutline className="fill-yellow-400" />{" "}
-                        <TiStarFullOutline className="fill-yellow-400" />{" "}
-                        <TiStarFullOutline className="fill-yellow-400" />{" "}
-                        <TiStarFullOutline className="fill-yellow-400" />
-                        <TiStarFullOutline className="fill-yellow-400" />
+                        {[...Array(5)].map((star, index) => {
+                          const currentRate = index + 1;
+                          return (
+                            <div>
+                              <TiStarFullOutline className="fill-yellow-400" />
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                     <p className="mt-3 font-normal text-slate-500 ">
@@ -152,7 +168,9 @@ export default function Salon() {
                     </p>
                   </div>
                 </div>
-                <h1 className="text-slate-400 text-xl font-bold">Services:</h1>
+                <h1 className="text-slate-400 text-xl font-bold mt-2">
+                  Services:
+                </h1>
                 <div className="mt-2 gap-1 flex flex-wrap">
                   {salonData?.Services && salonData?.Services.length > 0 ? (
                     salonData?.Services?.map((service, index) => (

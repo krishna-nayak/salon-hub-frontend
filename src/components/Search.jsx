@@ -55,7 +55,7 @@ export default function () {
             id="city-dropdown"
             value={searchInput}
             onChange={handleInputChange}
-            className="custom-select appearance-none cursor-pointer -mt-1  h-8 w-40"
+            className="custom-select appearance-none cursor-pointer -mt-1  h-8 w-40 max-sm:w-20"
           >
             <option value="" className="bg-black ">
               City
