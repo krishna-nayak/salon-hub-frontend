@@ -3,15 +3,19 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import React, { Children, useState } from "react";
+import React, { useState } from "react";
+
 import Nav from "./Nav";
 
-import { Outlet } from "react-router-dom";
+import { Outlet, Navigate, useLocation } from "react-router-dom";
 
-const ProfileLayout = ({ children }) => {
+const ProfileLayout = () => {
+  const userId = localStorage.getItem("userId");
+
   const [isCollapsed, setIsCollapsed] = useState(false);
-  return (
-    <section>
+
+  return userId ? (
+    <section className="bg-white">
       <ResizablePanelGroup
         direction="horizontal"
         className="h-full max-h-[800px] items-stretch rounded-lg border"
@@ -32,7 +36,7 @@ const ProfileLayout = ({ children }) => {
           defaultSize={20}
           className="min-w-[100px]"
         >
-          <div className="flex-col h-full items-center justify-center p-6">
+          <div className="flex-col h-full items-center justify-center py-6">
             <Nav
               links={[
                 { title: "Profile", to: "/profile/user" },
@@ -44,7 +48,6 @@ const ProfileLayout = ({ children }) => {
         <ResizableHandle withHandle />
         <ResizablePanel>
           <div className="flex-col h-full p-6">
-            <span className="font-semibold">Content</span>
             <div>
               <Outlet />
             </div>
@@ -52,6 +55,8 @@ const ProfileLayout = ({ children }) => {
         </ResizablePanel>
       </ResizablePanelGroup>
     </section>
+  ) : (
+    <Navigate to="/login" />
   );
 };
 
