@@ -137,11 +137,14 @@ const CardHander = React.memo(({ name, date, duration, salonDetails }) => {
       case "Morning":
         if (isOpening.timeSlot === 0) {
           startTime = isOpening.date;
+          startTime.setSeconds(0);
           endTime = new Date();
           endTime.setHours(12, 0, 0);
         }
         if (isClosing.timeSlot === 0) {
-          endTime = isClosing.timeSlot;
+          endTime = isClosing.date;
+          console.log("endTime", endTime);
+          endTime.setSeconds(0);
         }
         break;
       case "Noon":
@@ -150,7 +153,7 @@ const CardHander = React.memo(({ name, date, duration, salonDetails }) => {
           endTime = new Date();
           endTime.setHours(17, 0, 0);
           console.log("noon-open");
-        } else if (isOpening.timeSlot === 2) {
+        } else if (isOpening.timeSlot === 2 || isClosing.timeSlot === 0) {
         } else {
           startTime = new Date();
           startTime.setHours(12, 0, 0);
@@ -169,6 +172,7 @@ const CardHander = React.memo(({ name, date, duration, salonDetails }) => {
           startTime = isOpening.date;
           endTime = new Date();
           endTime.setHours(8, 0, 0);
+        } else if (isClosing.timeSlot === 1 || isClosing.timeSlot === 0) {
         } else {
           startTime = new Date();
           startTime.setHours(17, 0, 0);
@@ -184,6 +188,8 @@ const CardHander = React.memo(({ name, date, duration, salonDetails }) => {
       default:
         break;
     }
+
+    // console.log(startTime, endTime);
     if (!startTime || !endTime) return [];
 
     const timeIntervals = [];
