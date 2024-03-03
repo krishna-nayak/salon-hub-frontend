@@ -12,6 +12,7 @@ import {
   capitalizeAllWords,
   createDateFormat,
   createDateFromTime,
+  createDateFromTimeAmPm,
 } from "@/utility/convert";
 import {
   Dialog,
@@ -100,12 +101,12 @@ function TimeSlotHandler({ children }) {
 }
 
 const CardHander = React.memo(({ name, date, duration, salonDetails }) => {
-  console.count("Render - CardHander");
+  // console.count("Render - CardHander");
 
   const getBookTime = () => {
     const timeIntervals = [];
     const bookTimes = UseFetchAppointments(salonDetails?.salonId, date);
-
+    // console.log(bookTimes);
     for (let i = 0; i < bookTimes.length; i++) {
       const obj = bookTimes[i];
       let startTime = new Date(obj.time);
@@ -125,29 +126,65 @@ const CardHander = React.memo(({ name, date, duration, salonDetails }) => {
   const getTimes = () => {
     let startTime;
     let endTime;
+    const opening = salonDetails?.openingHourStart || "";
+    const closing = salonDetails?.closeingHour || "";
+    const isOpening = createDateFromTimeAmPm(opening);
+    const isClosing = createDateFromTimeAmPm(closing);
+    // console.log(isOpening, isClosing);
+    // const isOpening = 0; // index ["morning", "noon", "evening"]
+    // const isClosing = 0; // index ["morning", "noon", "evening"]
     switch (name) {
       case "Morning":
-        startTime = createDateFromTime(salonDetails?.openingHourStart);
-        // console.log("startTime", startTime);
-        endTime = new Date();
-        endTime.setHours(12, 0, 0); // 12:00 PM
+        if (isOpening.timeSlot === 0) {
+          startTime = isOpening.date;
+          endTime = new Date();
+          endTime.setHours(12, 0, 0);
+        }
+        if (isClosing.timeSlot === 0) {
+          endTime = isClosing.timeSlot;
+        }
         break;
       case "Noon":
-        startTime = new Date();
-        startTime.setHours(12, 0, 0); // 12:00 PM
-        endTime = new Date();
-        endTime.setHours(17, 0, 0); // 5:00 PM
+        if (isOpening.timeSlot === 1 && isClosing.timeSlot > 0) {
+          startTime = isOpening.date;
+          endTime = new Date();
+          endTime.setHours(17, 0, 0);
+          console.log("noon-open");
+        } else if (isOpening.timeSlot === 2) {
+        } else {
+          startTime = new Date();
+          startTime.setHours(12, 0, 0);
+          endTime = new Date();
+          endTime.setHours(17, 0, 0);
+        }
+
+        if (isClosing.timeSlot === 1) {
+          endTime = isClosing.date;
+          endTime.setSeconds(0);
+        }
+
         break;
       case "Evening":
-        startTime = new Date();
-        startTime.setHours(18, 0, 0); // 6:00 PM
-        endTime = createDateFromTime(salonDetails?.closeingHour);
-        // console.log("endTime", endTime);
+        if (isOpening.timeSlot === 2 && isClosing.timeSlot > 1) {
+          startTime = isOpening.date;
+          endTime = new Date();
+          endTime.setHours(8, 0, 0);
+        } else {
+          startTime = new Date();
+          startTime.setHours(17, 0, 0);
+          endTime = new Date();
+          endTime.setHours(21, 0, 0);
+        }
+        if (isClosing.timeSlot === 2) {
+          endTime = isClosing.date;
+          endTime.setSeconds(0);
+        }
 
         break;
       default:
         break;
     }
+    if (!startTime || !endTime) return [];
 
     const timeIntervals = [];
     while (isAfter(endTime, startTime)) {
@@ -158,20 +195,22 @@ const CardHander = React.memo(({ name, date, duration, salonDetails }) => {
   };
   const times = getTimes();
   const bookedTime = getBookTime();
-
+  // console.log(times);
+  // console.log(bookedTime);
   const slotCanBeBook = (startTime) => {
-    return bookedTime?.includes(format(startTime, "hh:mm")) ? false : true;
+    return bookedTime?.includes(format(startTime, "hh:mm a")) ? false : true;
   };
 
   const { setTime, time } = useTime();
-  const [flag, setFlag] = React.useState(time ? time?.split(" ")[0] : "");
+  const [flag, setFlag] = React.useState(time);
 
   const onSubmit = (time) => {
+    console.log(time);
     const totalDuration = duration;
 
-    let startTime = createDateFromTime(time);
+    let startTime = createDateFromTimeAmPm(time).date;
     let endTime = addMinutes(startTime, totalDuration);
-
+    console.log(startTime);
     let result;
     const slotRequired = [];
     while (isAfter(endTime, startTime)) {
@@ -183,8 +222,8 @@ const CardHander = React.memo(({ name, date, duration, salonDetails }) => {
     console.log(result);
     if (!result) return alert("can't book as time slot is not feet");
 
-    setTime(format(createDateFromTime(time), "hh:mm b"));
-    setFlag(format(createDateFromTime(time), "hh:mm"));
+    setTime(time);
+    setFlag(time);
   };
 
   return (
@@ -199,20 +238,20 @@ const CardHander = React.memo(({ name, date, duration, salonDetails }) => {
             <div key={`time-${i}`}>
               <Badge
                 variant={
-                  format(time, "hh:mm") == flag &&
-                  !bookedTime?.includes(format(time, "hh:mm"))
+                  format(time, "hh:mm a") == flag &&
+                  !bookedTime?.includes(format(time, "hh:mm a"))
                     ? ""
                     : "secondary"
                 }
                 className={cn(
-                  bookedTime?.includes(format(time, "hh:mm"))
+                  bookedTime?.includes(format(time, "hh:mm a"))
                     ? "text-gray-300"
                     : ""
                 )}
                 onClick={() => {
-                  if (!slotCanBeBook(time)) return;
+                  // if (!slotCanBeBook(time)) return;
 
-                  onSubmit(format(time, "hh:mm"));
+                  onSubmit(format(time, "hh:mm a'"));
                 }}
               >
                 {format(time, "hh:mm")}
@@ -249,16 +288,17 @@ function Appointment({ salonDetails }) {
   const { register, handleSubmit } = useForm();
   const onSubmit = async (data) => {
     if (time == "") return;
-    const time_in = time?.split(" ")[0];
 
     const responde_date = {
       ...data,
-      time: time_in,
       date: createDateFormat(date),
+      time,
       salonServiceIdArr: [selectService?.salonServiceId],
       duration: selectService.duration,
       notes: "",
     };
+
+    // console.log(responde_date);
 
     const userId = localStorage.getItem("userId");
 
@@ -296,11 +336,12 @@ function Appointment({ salonDetails }) {
               id="male"
               name="gender"
               className="peer sr-only"
+              value="male"
               {...register("gender")}
             />
             <Button
               variant="outline"
-              className="peer-checked:text-white peer-checked:bg-black w-full"
+              className="peer-checked:text-white peer-checked:bg-black dark:peer-checked:text-black dark:peer-checked:bg-white w-full"
               asChild
             >
               <div>Male</div>
@@ -312,11 +353,12 @@ function Appointment({ salonDetails }) {
               id="female"
               name="gender"
               className="peer sr-only"
+              value="female"
               {...register("gender")}
             />
             <Button
               variant="outline"
-              className="peer-checked:text-white peer-checked:bg-black w-full"
+              className="peer-checked:text-white peer-checked:bg-black dark:peer-checked:text-black dark:peer-checked:bg-white w-full"
               asChild
             >
               <div>Female</div>
