@@ -25,7 +25,7 @@ const CARD = [
 export default function Card() {
   return (
     <div className="flex items-center justify-center">
-      <div className="text-center bg-white dark:bg-slate-900 rounded-3xl shadow-xl flex flex-wrap justify-center -mt-10 p-6 gap-10">
+      <div className="text-center bg-white dark:bg-gradient-to-b dark:from-black dark:from-10% dark:via-black dark:via-30% dark:to-gray-900 dark:to-90% rounded-3xl shadow-xl flex flex-wrap justify-center -mt-10 p-6 gap-10">
         {CARD.map((card, idx) => (
           <div
             key={idx}
