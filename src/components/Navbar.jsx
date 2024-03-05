@@ -15,9 +15,11 @@ export default function Navbar() {
 
           <div className="p-4 flex gap-2">
             <ToggleTheme className="" />
-            <Button className="bg-white text-black dark:bg-black dark:text-white ">
-              {" "}
-              ACCOUNT
+            <Button
+              className="bg-white text-black dark:bg-black dark:text-white "
+              asChild
+            >
+              <Link to={"/profile/user"}>ACCOUNT</Link>
             </Button>
           </div>
         </div>
@@ -32,6 +34,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Link } from "react-router-dom";
 
 function ToggleTheme() {
   const { setTheme } = useTheme();
