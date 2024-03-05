@@ -37,7 +37,7 @@ import {
 import { add } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { useTime } from "@/hooks/context/TimeContext";
-import React from "react";
+import React, { useEffect } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -102,6 +102,10 @@ function TimeSlotHandler({ children }) {
 
 const CardHander = React.memo(({ name, date, duration, salonDetails }) => {
   // console.count("Render - CardHander");
+  const { setTime, time } = useTime();
+  useEffect(() => {
+    setTime("");
+  }, [date]);
 
   const getBookTime = () => {
     const timeIntervals = [];
@@ -115,7 +119,7 @@ const CardHander = React.memo(({ name, date, duration, salonDetails }) => {
       let endTime = addMinutes(startTime, interval);
 
       while (isAfter(endTime, startTime)) {
-        timeIntervals.push(format(startTime, "hh:mm"));
+        timeIntervals.push(format(startTime, "hh:mm a"));
         startTime = addMinutes(startTime, 30);
       }
     }
@@ -200,13 +204,11 @@ const CardHander = React.memo(({ name, date, duration, salonDetails }) => {
   };
   const times = getTimes();
   const bookedTime = getBookTime();
-  // console.log(times);
-  // console.log(bookedTime);
+  console.log(bookedTime);
   const slotCanBeBook = (startTime) => {
     return bookedTime?.includes(format(startTime, "hh:mm a")) ? false : true;
   };
 
-  const { setTime, time } = useTime();
   const [flag, setFlag] = React.useState(time);
 
   const onSubmit = (time) => {
