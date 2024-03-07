@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { DatePickerWithPresets } from "@/components/ui/DatePicker/DatePickerWithPresets";
 import { addMinutes, format, isAfter, set } from "date-fns";
@@ -50,8 +50,7 @@ import endpoint from "@/utility/axios";
 import { useNavigate } from "react-router-dom";
 import Ticket from "../components/Ticket";
 //import { PDFDownloadLink } from "@react-pdf/renderer";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+
 function SelectButton({ children, onHandleSelectChange }) {
   return (
     <Select onValueChange={onHandleSelectChange}>
@@ -332,30 +331,7 @@ function Appointment({ salonDetails }) {
     setShowTicketDialog(true);
     //navigate("/");
   };
-  const pdfRef = useRef();
-  const downloadPDF = () => {
-    const input = pdfRef.current;
-    html2canvas(input).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4", true);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      const imgWidth = canvas.width;
-      const imgHeight = canvas.height;
-      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-      const imgX = (pdfWidth - imgWidth * ratio) / 2;
-      const imgY = 30;
-      pdf.addImage(
-        imgData,
-        "PNG",
-        imgX,
-        imgY,
-        imgWidth * ratio,
-        imgHeight * ratio
-      );
-      pdf.save("ticket.pdf");
-    });
-  };
+
   return (
     <>
       <form
@@ -454,7 +430,7 @@ function Appointment({ salonDetails }) {
           {ticketData && (
             <div className="modal">
               <div className="modal-content">
-                <Ticket {...ticketData} pdfRef={pdfRef} />
+                <Ticket {...ticketData} />
               </div>
             </div>
           )}{" "}
@@ -467,7 +443,6 @@ function Appointment({ salonDetails }) {
           >
             Close
           </Button>
-          <Button onClick={downloadPDF}>download</Button>
           {/* <PDFDownloadLink
             document={<Ticket {...ticketData} />}
             fileName="ticket.pdf"
