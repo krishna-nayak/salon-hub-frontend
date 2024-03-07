@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { DatePickerWithPresets } from "@/components/ui/DatePicker/DatePickerWithPresets";
 import { addMinutes, format, isAfter, set } from "date-fns";
@@ -47,7 +48,10 @@ import { useForm } from "react-hook-form";
 import endpoint from "@/utility/axios";
 
 import { useNavigate } from "react-router-dom";
-
+import Ticket from "../components/Ticket";
+//import { PDFDownloadLink } from "@react-pdf/renderer";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 function SelectButton({ children, onHandleSelectChange }) {
   return (
     <Select onValueChange={onHandleSelectChange}>
@@ -276,11 +280,11 @@ function Appointment({ salonDetails }) {
   // console.count("Render - Appointment");
 
   const navigate = useNavigate();
-
+  const [ticketData, setTicketData] = useState(null);
   const { time, setTime } = useTime();
   const [date, setDate] = React.useState(new Date());
   const [selectService, setService] = React.useState(null);
-
+  const [showTicketDialog, setShowTicketDialog] = useState(false);
   const onHandleSelectChange = (v) => {
     const services = salonDetails?.Services;
     const filter = services.filter(
@@ -317,98 +321,170 @@ function Appointment({ salonDetails }) {
       responde_date
     );
     console.log("result: ", result);
-    navigate("/");
+
+    const ticketInfo = {
+      name: data.name,
+      gender: data.gender,
+      service: selectService ? selectService.service_type : "Not found :|",
+      date,
+      time,
+    };
+
+    setTicketData(ticketInfo);
+    setShowTicketDialog(true);
+    //navigate("/");
+  };
+  const pdfRef = useRef();
+  const downloadPDF = () => {
+    const input = pdfRef.current;
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4", true);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+      const imgX = (pdfWidth - imgWidth * ratio) / 2;
+      const imgY = 30;
+      pdf.addImage(
+        imgData,
+        "PNG",
+        imgX,
+        imgY,
+        imgWidth * ratio,
+        imgHeight * ratio
+      );
+      pdf.save("ticket.pdf");
+    });
   };
   return (
-    <form
-      className={cn("grid items-start gap-4 p-4")}
-      onSubmit={handleSubmit(onSubmit)}
-      id="appoint"
-    >
-      <div className="grid gap-2">
-        <Label htmlFor="email">Name</Label>
-        <Input
-          type="text"
-          id="name"
-          placeholder="shadcn"
-          {...register("name")}
-        />
-      </div>
-      <div className="grid gap-2">
-        <div>Gender</div>
-        <div className="flex justify-between gap-2">
-          <Label htmlFor="male" className="basis-full">
-            <Input
-              type="radio"
-              id="male"
-              name="gender"
-              className="peer sr-only"
-              value="male"
-              {...register("gender")}
-            />
-            <Button
-              variant="outline"
-              className="peer-checked:text-white peer-checked:bg-black dark:peer-checked:text-black dark:peer-checked:bg-white w-full"
-              asChild
-            >
-              <div>Male</div>
-            </Button>
-          </Label>
-          <Label htmlFor="female" className="basis-full">
-            <Input
-              type="radio"
-              id="female"
-              name="gender"
-              className="peer sr-only"
-              value="female"
-              {...register("gender")}
-            />
-            <Button
-              variant="outline"
-              className="peer-checked:text-white peer-checked:bg-black dark:peer-checked:text-black dark:peer-checked:bg-white w-full"
-              asChild
-            >
-              <div>Female</div>
-            </Button>
-          </Label>
+    <>
+      <form
+        className={cn("grid items-start gap-4 p-4")}
+        onSubmit={handleSubmit(onSubmit)}
+        id="appoint"
+      >
+        <div className="grid gap-2">
+          <Label htmlFor="email">Name</Label>
+          <Input
+            type="text"
+            id="name"
+            placeholder="shadcn"
+            {...register("name")}
+          />
         </div>
-      </div>
-      <div className="grid gap-2">
-        <Label htmlFor="date">Service</Label>
-        <SelectButton onHandleSelectChange={onHandleSelectChange}>
-          {salonDetails?.Services?.map((service, idx) => (
-            <SelectItem value={service?.SalonService.salonServiceId} key={idx}>
-              {capitalizeAllWords(service.service_type)}
-            </SelectItem>
-          ))}
-        </SelectButton>
-      </div>
-
-      <div className="grid gap-2">
-        <Label htmlFor="date">Date</Label>
-        <DatePickerWithPresets setDate={setDate} date={date} />
-      </div>
-
-      {selectService?.duration && (
-        <div className="flex gap-2 items-center justify-between">
-          <Label htmlFor="date">Time: {time == "" ? "--:-- xx" : time}</Label>
-          <DialogBox>
-            <TimeSlotHandler>
-              {["Morning", "Noon", "Evening"].map((name, id) => (
-                <TabsContent key={id} value={name.toLowerCase()}>
-                  <CardHander
-                    name={name}
-                    salonDetails={salonDetails}
-                    date={date}
-                    duration={selectService?.duration}
-                  />
-                </TabsContent>
-              ))}
-            </TimeSlotHandler>
-          </DialogBox>
+        <div className="grid gap-2">
+          <div>Gender</div>
+          <div className="flex justify-between gap-2">
+            <Label htmlFor="male" className="basis-full">
+              <Input
+                type="radio"
+                id="male"
+                name="gender"
+                className="peer sr-only"
+                value="male"
+                {...register("gender")}
+              />
+              <Button
+                variant="outline"
+                className="peer-checked:text-white peer-checked:bg-black dark:peer-checked:text-black dark:peer-checked:bg-white w-full"
+                asChild
+              >
+                <div>Male</div>
+              </Button>
+            </Label>
+            <Label htmlFor="female" className="basis-full">
+              <Input
+                type="radio"
+                id="female"
+                name="gender"
+                className="peer sr-only"
+                value="female"
+                {...register("gender")}
+              />
+              <Button
+                variant="outline"
+                className="peer-checked:text-white peer-checked:bg-black dark:peer-checked:text-black dark:peer-checked:bg-white w-full"
+                asChild
+              >
+                <div>Female</div>
+              </Button>
+            </Label>
+          </div>
         </div>
-      )}
-    </form>
+        <div className="grid gap-2">
+          <Label htmlFor="date">Service</Label>
+          <SelectButton onHandleSelectChange={onHandleSelectChange}>
+            {salonDetails?.Services?.map((service, idx) => (
+              <SelectItem
+                value={service?.SalonService.salonServiceId}
+                key={idx}
+              >
+                {capitalizeAllWords(service.service_type)}
+              </SelectItem>
+            ))}
+          </SelectButton>
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="date">Date</Label>
+          <DatePickerWithPresets setDate={setDate} date={date} />
+        </div>
+        {selectService?.duration && (
+          <div className="flex gap-2 items-center justify-between">
+            <Label htmlFor="date">Time: {time == "" ? "--:-- xx" : time}</Label>
+            <DialogBox>
+              <TimeSlotHandler>
+                {["Morning", "Noon", "Evening"].map((name, id) => (
+                  <TabsContent key={id} value={name.toLowerCase()}>
+                    <CardHander
+                      name={name}
+                      salonDetails={salonDetails}
+                      date={date}
+                      duration={selectService?.duration}
+                    />
+                  </TabsContent>
+                ))}
+              </TimeSlotHandler>
+            </DialogBox>
+          </div>
+        )}
+      </form>
+      <Dialog open={showTicketDialog}>
+        <DialogTrigger asChild></DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          {ticketData && (
+            <div className="modal">
+              <div className="modal-content">
+                <Ticket {...ticketData} pdfRef={pdfRef} />
+              </div>
+            </div>
+          )}{" "}
+          <Button
+            type="button"
+            onClick={() => {
+              setShowTicketDialog(false);
+              navigate("/");
+            }}
+          >
+            Close
+          </Button>
+          <Button onClick={downloadPDF}>download</Button>
+          {/* <PDFDownloadLink
+            document={<Ticket {...ticketData} />}
+            fileName="ticket.pdf"
+          >
+            {({ loading }) =>
+              loading ? (
+                <button>Loading</button>
+              ) : (
+                <button className="text-black">Download</button>
+              )
+            }
+          </PDFDownloadLink> */}
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 

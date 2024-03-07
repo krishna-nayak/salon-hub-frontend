@@ -121,6 +121,7 @@ export default function Salon() {
           <div className="flex  flex-wrap gap-2">
             {BADGE.map((badge, idx) => (
               <Button
+                key={idx}
                 variant="outline"
                 className={`bg-black h-10 rounded-md text-slate-500 hover:bg-black hover:border-yellow-400 hover:text-yellow-400 ${
                   selectedService === "Facial" ? "bg-yellow-400" : ""
@@ -156,7 +157,7 @@ export default function Salon() {
                         {[...Array(5)].map((star, index) => {
                           const currentRate = index + 1;
                           return (
-                            <div>
+                            <div key={index}>
                               <TiStarFullOutline className="fill-yellow-400" />
                             </div>
                           );
