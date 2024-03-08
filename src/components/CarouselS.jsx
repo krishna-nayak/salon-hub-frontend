@@ -10,15 +10,12 @@ export default function CarouselS() {
     <Carousel className="w-96" autoPlay infiniteLoop showStatus={false}>
       <div>
         <img src={book} />
-        <p className="legend">Legend 1</p>
       </div>
       <div>
         <img src={salon} />
-        <p className="legend">Legend 2</p>
       </div>
       <div>
         <img src={appoint} />
-        <p className="legend">Legend 3</p>
       </div>
     </Carousel>
   );
