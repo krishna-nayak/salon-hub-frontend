@@ -16,6 +16,7 @@ import service3 from "../assets/service3.png";
 import service4 from "../assets/service4.png";
 import service5 from "../assets/service5.png";
 import service6 from "../assets/service6.png";
+import { BarLoader } from "react-spinners";
 const serviceImages = {
   "hair cut": service6,
   facial: service1,
@@ -31,7 +32,13 @@ export default function TableS({ salonDetails }) {
     !salonDetails.Services ||
     !Array.isArray(salonDetails.Services)
   ) {
-    return <div>No services available</div>;
+    return (
+      <div>
+        <div className="flex justify-center">
+          <BarLoader color="yellow" />
+        </div>
+      </div>
+    );
   }
   console.log(salonDetails);
   return (

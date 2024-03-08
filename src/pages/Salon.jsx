@@ -10,7 +10,17 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { IoSearchSharp } from "react-icons/io5";
 import Navbar from "../components/Navbar";
-
+import BarLoader from "react-spinners/BarLoader";
+import { FaRegSadTear } from "react-icons/fa";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 export default function Salon() {
   const [salonDatas, setSalonData] = useState(null);
   const location = useLocation();
@@ -20,6 +30,7 @@ export default function Salon() {
   const [filteredSalons, setFilteredSalons] = useState(null);
   const [selectedService, setSelectedService] = useState(null);
   const [rating, setRating] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const navigateTo = useNavigate();
   useEffect(() => {
     const fetchSalonData = async () => {
@@ -40,7 +51,11 @@ export default function Salon() {
   }, [selectedCity]);
 
   if (!salonDatas) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center">
+        <BarLoader color="yellow" />
+      </div>
+    );
   }
   const BADGE = [
     {
@@ -80,13 +95,15 @@ export default function Salon() {
         salon.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setFilteredSalons(filteredSalons);
+      setCurrentPage(1);
     }
   };
+
   const handleReset = () => {
     setSearchQuery("");
     setFilteredSalons(salonDatas);
   };
-
+  // for search by toggle
   const handleFilterByService = (service) => {
     const filteredSalons = salonDatas.filter((salon) =>
       salon.Services.some(
@@ -95,8 +112,23 @@ export default function Salon() {
     );
     setFilteredSalons(filteredSalons);
     if (filteredSalons.length === 0) {
-      toast(`No salons offer ${service} service in ${selectedCity} 😞`);
+      toast(`No salons offer ${service} in ${selectedCity} 😞`);
     }
+  };
+
+  // for pagination
+  const cardsPerPage = 6;
+  const indexOfLastCard = currentPage * cardsPerPage;
+  const indexOfFirstCard = indexOfLastCard - cardsPerPage;
+  const currentCards = filteredSalons
+    ? filteredSalons.slice(indexOfFirstCard, indexOfLastCard)
+    : [];
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  const handlePreviousPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   };
   return (
     <div>
@@ -135,11 +167,19 @@ export default function Salon() {
         </div>
 
         {filteredSalons && filteredSalons.length === 0 && (
-          <div>No salons found matching the search criteria.</div>
+          <div className="text-center  text-gray-500 font-semibold">
+            <div className="flex justify-center">
+              {" "}
+              <FaRegSadTear className="fill-yellow-400 size-10 " />
+            </div>
+            No salons found matching the search criteria.
+          </div>
         )}
         <div className="p-20 max-sm:p-8 ">
           <div className="flex justify-center gap-20 gap-y-10 items-center  flex-wrap ">
-            {filteredSalons?.map((salonData, index) => (
+            {" "}
+            {/* {filteredSalons?.map((salonData, index) */}
+            {currentCards?.map((salonData, index) => (
               <div key={index} className="salonCard ">
                 <div className="flex  max-sm:flex-wrap gap-3">
                   <img
@@ -197,6 +237,27 @@ export default function Salon() {
                 </div>
               </div>
             ))}
+          </div>
+          <div className=" mt-10">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious onClick={handlePreviousPage} />
+                </PaginationItem>
+                {Array.from({
+                  length: Math.ceil(filteredSalons.length / cardsPerPage),
+                }).map((_, index) => (
+                  <PaginationItem key={index}>
+                    <PaginationLink onClick={() => setCurrentPage(index + 1)}>
+                      {index + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                <PaginationItem>
+                  <PaginationNext onClick={handleNextPage} />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
           </div>
         </div>
       </div>
