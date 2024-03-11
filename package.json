@@ -46,6 +46,7 @@
     "react-router-dom": "^6.21.3",
     "react-select": "^5.8.0",
     "react-speech-recognition": "^3.10.0",
+    "react-spinners": "^0.13.8",
     "regenerator-runtime": "^0.14.1",
     "sonner": "^1.4.1",
     "tailwind-merge": "^2.2.1",
