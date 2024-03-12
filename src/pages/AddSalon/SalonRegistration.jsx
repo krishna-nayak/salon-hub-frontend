@@ -14,7 +14,7 @@ function SalonRegister({ salonData, setSalonData, setFile, errors }) {
   };
 
   return (
-    <div className="  ">
+    <div className="">
       <div className="max-sm:w-80">
         <div className="w-full bg-slate-100 rounded-lg shadow mt-0  xl:p-0 ">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">

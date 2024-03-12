@@ -10,11 +10,12 @@ const UseGetProfile = () => {
       const userId = localStorage.getItem("userId");
       if (!userId) return navigate("/login");
       const result = await endpoint.get(`/users/${userId}`);
-
+      // console.log(result);
       setUser({
         name: result.data.fullName,
         email: result.data.email,
         role: result.data.role,
+        salonId: result.data?.Salon?.salonId || undefined,
       });
     }
 

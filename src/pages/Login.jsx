@@ -31,6 +31,7 @@ export default function UserLogin() {
       toast("Welcome to SALON_HUB 🙏");
       console.log(res.data);
       localStorage.setItem("userId", res?.data?.userId);
+      localStorage.setItem("salonId", res?.data?.Salon?.salonId);
       navigate("/");
     } catch (err) {
       console.log(err);
