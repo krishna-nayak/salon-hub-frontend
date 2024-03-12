@@ -54,14 +54,16 @@ function App() {
 const Root = () => {
   return (
     <>
-      <div className="space-x-5 dark:text-white hidden">
-        <Link to="/">Home</Link>
-        <Link to="/SalonRegistration">SalonRegForm</Link>
-        <Link to="/login">UserLogin</Link>
-        <Link to="/userRegistration">UserRegistration</Link>
-        <Link to="/salon">salon</Link>
-        <Link to="/profile/user">user</Link>
-      </div>
+      {import.meta.env.ENV !== "production" && (
+        <div className="space-x-5 dark:text-white hidden">
+          <Link to="/">Home</Link>
+          <Link to="/SalonRegistration">SalonRegForm</Link>
+          <Link to="/login">UserLogin</Link>
+          <Link to="/userRegistration">UserRegistration</Link>
+          <Link to="/salon">salon</Link>
+          <Link to="/profile/user">user</Link>
+        </div>
+      )}
       <div>
         <Outlet />
       </div>
