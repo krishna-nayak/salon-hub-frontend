@@ -3,6 +3,7 @@ import Search from "../components/Search";
 import Navbar from "../components/Navbar";
 import ybackground from "../assets/ybackground.png";
 import Card from "../components/Card";
+//import QRScanner from "../components/QRScanner";
 export default function Home() {
   return (
     <div className="">
@@ -22,6 +23,8 @@ export default function Home() {
         </div>
       </div>
       <Card />
+
+      {/* <QRScanner /> */}
     </div>
   );
 }
