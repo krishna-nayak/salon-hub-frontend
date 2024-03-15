@@ -132,7 +132,7 @@ export default function Salon() {
   };
   return (
     <div>
-      {/* <Navbar /> */}
+      <Navbar />
       <div>
         <div className="flex flex-wrap justify-evenly p-10 gap-y-6">
           <div className="flex justify-center  items-center gap-2 ">

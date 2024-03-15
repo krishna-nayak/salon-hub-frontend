@@ -22,7 +22,7 @@ const serviceImages = {
   facial: service1,
   manicure: service3,
   massage: service2,
-  haircolor: service4,
+  "hair color": service4,
   pedicure: service5,
 };
 
