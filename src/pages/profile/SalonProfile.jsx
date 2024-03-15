@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/dialog";
 import MoblieViewService from "@/components/MoblieViewService";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import TableServiceComponent from "@/components/TableServiceComponent";
+import useScreenSize from "@/hooks/useSize";
 
 // import UseGetProfile from "@/hooks/fetch/useGetProfile";
 
@@ -30,7 +32,10 @@ const CITY = [
 export default function () {
   const navigate = useNavigate();
   const [selectedService, setSelectedService] = useState([]);
+  const [salonDetails, setSalonDetails] = useState({});
   const SERVICE_DATA = UseGet();
+  const size = useScreenSize();
+
   useEffect(() => {
     async function fetchSalonService() {
       const salonId = localStorage.getItem("salonId");
@@ -42,6 +47,7 @@ export default function () {
       const res = await endpoint.get(`/salon/${salonId}`);
       // console.log("result", res.data);
       const results = res?.data?.Services;
+      setSalonDetails(res?.data);
       // console.log(results);
       let service_opt = [];
       let i = 0;
@@ -77,6 +83,28 @@ export default function () {
     <div>
       <section>
         <div>
+          name: {salonDetails.name || ""}
+          <br />
+          address: {salonDetails.address || ""}
+          <br />
+          city: {salonDetails.city || ""}
+          <br />
+          openings: {salonDetails.openingHourStart}
+          <br />
+          closing: {salonDetails.closeingHour}
+          <div></div>
+          {size.width > 690 ? (
+            <TableServiceComponent
+              selectedService={selectedService}
+              setSelectedService={setSelectedService}
+            />
+          ) : (
+            <MoblieViewService
+              selectedService={selectedService}
+              setSelectedService={setSelectedService}
+            />
+          )}
+          <div></div>
           <AddNewService service_data={notSelectedServices} />
         </div>
       </section>
