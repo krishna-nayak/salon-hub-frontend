@@ -132,7 +132,7 @@ export default function Salon() {
   };
   return (
     <div>
-      {/* <Navbar /> */}
+      <Navbar />
       <div>
         <div className="flex flex-wrap justify-evenly p-10 gap-y-6">
           <div className="flex justify-center  items-center gap-2 ">
@@ -143,10 +143,16 @@ export default function Salon() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <Button onClick={handleReset} className="h-12">
+            <Button
+              onClick={handleReset}
+              className="h-12 bg-yellow-500 dark:bg-slate-900 hover:bg-yellow-400"
+            >
               <GrPowerReset className="fill-white" />
             </Button>
-            <Button onClick={handleSearch} className="h-12">
+            <Button
+              onClick={handleSearch}
+              className="h-12 bg-yellow-500 dark:bg-slate-900 hover:bg-yellow-400"
+            >
               <IoSearchSharp className="fill-white" />
             </Button>
           </div>{" "}
@@ -155,7 +161,7 @@ export default function Salon() {
               <Button
                 key={idx}
                 variant="outline"
-                className={`bg-black h-10 rounded-md text-slate-500 hover:bg-black hover:border-yellow-400 hover:text-yellow-400 ${
+                className={`dark:bg-black h-10 rounded-md text-slate-500 dark:hover:bg-black hover:border-yellow-400 hover:text-yellow-400 ${
                   selectedService === "Facial" ? "bg-yellow-400" : ""
                 }`}
                 onClick={() => handleFilterByService(badge.serviceBadge)}
@@ -189,7 +195,7 @@ export default function Salon() {
                   />
                   <div>
                     <div className="max-sm:flex max-sm:gap-2">
-                      <h5 className="mb-2 mt-2 text-2xl font-bold tracking-tight text-slate-400 ">
+                      <h5 className="mb-2 mt-2 text-2xl font-bold tracking-tight dark:text-slate-400 ">
                         {salonData.name}
                       </h5>
                       <div className="flex gap-1 -ml-3 mt-3 max-sm:gap-0">
@@ -209,13 +215,16 @@ export default function Salon() {
                     </p>
                   </div>
                 </div>
-                <h1 className="text-slate-400 text-xl font-bold mt-2">
+                <h1 className="dark:text-slate-400 text-xl font-bold mt-2">
                   Services:
                 </h1>
                 <div className="mt-2 gap-1 flex flex-wrap">
                   {salonData?.Services && salonData?.Services.length > 0 ? (
                     salonData?.Services?.map((service, index) => (
-                      <Badge key={index} className="text-yellow-400">
+                      <Badge
+                        key={index}
+                        className="bg-white hover:bg-transparent dark:border-black border-yellow-400 dark:bg-slate-900 text-yellow-400"
+                      >
                         {service.service_type.replace(/\b\w/g, (c) =>
                           c.toUpperCase()
                         )}
@@ -229,7 +238,7 @@ export default function Salon() {
                 <div className="mt-4 flex justify-between">
                   <Button
                     onClick={() => handleBookNow(salonData.salonId)}
-                    className="hover:bg-yellow-400 w-28"
+                    className=" w-28 bg-yellow-500 dark:bg-slate-900 hover:bg-yellow-400 dark:text-white"
                   >
                     Book Now
                   </Button>

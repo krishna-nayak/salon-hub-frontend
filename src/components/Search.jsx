@@ -15,6 +15,7 @@ export default function () {
   const [searchResults, setSearchResults] = useState([]);
   const navigateTo = useNavigate();
   const [date, setDate] = useState(null);
+
   useEffect(() => {
     const fetchCities = async () => {
       try {
@@ -38,14 +39,14 @@ export default function () {
     event.preventDefault();
     navigateTo(`/salon?city=${searchInput}`);
   };
-  /*const CITY = [
+  const CITY = [
     "Bhubneswar",
     "Delhi",
     "Bangarulu",
     "Hydrabad",
     "Mumbai",
     "Kolkata",
-  ];*/
+  ];
   return (
     <div className="flex  justify-between  ">
       <div className="">
@@ -57,11 +58,11 @@ export default function () {
             onChange={handleInputChange}
             className="custom-select appearance-none cursor-pointer -mt-1  h-8 w-40 max-sm:w-20"
           >
-            <option value="" className="bg-black ">
+            <option value="" className=" dark:bg-black">
               City
             </option>
-            {searchResults.map((city, index) => (
-              <option key={index} value={city} className="bg-black">
+            {CITY.map((city, index) => (
+              <option key={index} value={city} className="dark:bg-black">
                 {city}
               </option>
             ))}
@@ -78,7 +79,7 @@ export default function () {
                 {date ? format(date, "PPP") : <span>Date</span>}
               </div>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0 bg-black text-slate-400">
+            <PopoverContent className="w-auto p-0 text-slate-400">
               <Calendar
                 mode="single"
                 selected={date}
