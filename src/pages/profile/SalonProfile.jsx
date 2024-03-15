@@ -4,19 +4,18 @@ import { useNavigate } from "react-router-dom";
 import UseGet from "@/hooks/fetch/useGet";
 import endpoint from "@/utility/axios";
 import FancyMultiSelect from "@/components/ui/Dropdown/FancyMultiSelect";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import EditService from "../EditService";
-import { cn } from "@/lib/utils";
-import { Separator } from "@/components/ui/separator";
+
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import MoblieViewService from "@/components/MoblieViewService";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 // import UseGetProfile from "@/hooks/fetch/useGetProfile";
 
@@ -87,77 +86,111 @@ export default function () {
 
 function AddNewService({ service_data }) {
   const [newSelectedService, setNewSelectedService] = useState([]);
+
   return (
-    <div>
-      <FancyMultiSelect
-        selected={newSelectedService}
-        setSelected={setNewSelectedService}
-        options={service_data}
-      />
+    <>
+      <ServiceModal>
+        <div>
+          <FancyMultiSelect
+            selected={newSelectedService}
+            setSelected={setNewSelectedService}
+            options={service_data}
+          />
+        </div>
+        <ScrollArea className="h-[400px] rounded-md border">
+          <div className="p-4">
+            <h4 className="mb-4 text-sm font-medium leading-none">Service</h4>
+            <MoblieViewService
+              selectedService={newSelectedService}
+              setSelectedService={setNewSelectedService}
+            />
+          </div>
+        </ScrollArea>
 
-      <Table className="mt-4">
-        <TableCaption>A list of your services.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Service Name</TableHead>
-            <TableHead>Duration</TableHead>
-            <TableHead className="w-[30%]">Description</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
-            <TableHead className="text-center">Edit</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {newSelectedService?.map((service, idx) => (
-            <TableRow key={idx}>
-              <TableCell
-                className={cn(
-                  "font-medium border-l-4",
-                  service?.price && service?.duration
-                    ? "border-l-green-400"
-                    : "border-l-red-400"
-                )}
-              >
-                {service.label}
-              </TableCell>
-              <TableCell>
-                {service?.duration ||
-                  "Time take to complete this services in minutes."}
-              </TableCell>
-              <TableCell>
-                {service?.description || "Tell about the service."}
-              </TableCell>
-              <TableCell className="text-right">
-                ₹{service?.price || 0}
-              </TableCell>
-              <TableCell>
-                <div className="space-y-1">
-                  <EditService
-                    service={service}
-                    selected={newSelectedService}
-                    setSelected={setNewSelectedService}
-                  />
-                  <Separator />
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    className="w-full"
-                    onClick={(e) => {
-                      // const variable = service.id;
-                      const filteredSelect = newSelectedService?.filter(
-                        (item) => item.id !== service.id
-                      );
-
-                      setNewSelectedService(filteredSelect);
-                    }}
-                  >
-                    Delete
-                  </Button>
-                </div>
-              </TableCell>
+        {/* <Table className="mt-4">
+          <TableCaption>A list of your services.</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Service Name</TableHead>
+              <TableHead>Duration</TableHead>
+              <TableHead className="w-[30%]">Description</TableHead>
+              <TableHead className="text-right">Amount</TableHead>
+              <TableHead className="text-center">Edit</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+          </TableHeader>
+          <TableBody>
+            {newSelectedService?.map((service, idx) => (
+              <TableRow key={idx}>
+                <TableCell
+                  className={cn(
+                    "font-medium border-l-4",
+                    service?.price && service?.duration
+                      ? "border-l-green-400"
+                      : "border-l-red-400"
+                  )}
+                >
+                  {service.label}
+                </TableCell>
+                <TableCell>
+                  {service?.duration ||
+                    "Time take to complete this services in minutes."}
+                </TableCell>
+                <TableCell>
+                  {service?.description || "Tell about the service."}
+                </TableCell>
+                <TableCell className="text-right">
+                  ₹{service?.price || 0}
+                </TableCell>
+                <TableCell>
+                  <div className="space-y-1">
+                    <EditService
+                      service={service}
+                      selected={newSelectedService}
+                      setSelected={setNewSelectedService}
+                    />
+                    <Separator />
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      className="w-full"
+                      onClick={(e) => {
+                        // const variable = service.id;
+                        const filteredSelect = newSelectedService?.filter(
+                          (item) => item.id !== service.id
+                        );
+
+                        setNewSelectedService(filteredSelect);
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table> */}
+      </ServiceModal>
+    </>
+  );
+}
+
+function ServiceModal({ children }) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline">Add Service</Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-lg">
+        <DialogHeader>
+          <DialogTitle>Are you absolutely sure?</DialogTitle>
+          <DialogDescription>
+            This action cannot be undone. This will permanently delete your
+            account and remove your data from our servers.
+          </DialogDescription>
+          {children}
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
   );
 }
