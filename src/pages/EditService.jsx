@@ -59,7 +59,7 @@ export default function EditService({ service, selected, setSelected }) {
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="duration" className="text-right">
-                Duration
+                Duration<sup>*</sup>
                 <br /> (in minutes)
               </Label>
               <Input
@@ -85,7 +85,7 @@ export default function EditService({ service, selected, setSelected }) {
 
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="amount" className="text-right">
-                Amount
+                Amount<sup>*</sup>
               </Label>
               <Input
                 id="amount"

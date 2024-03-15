@@ -42,6 +42,15 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { CiCircleAlert } from "react-icons/ci";
 import EditService from "./EditService";
+import useScreenSize from "@/hooks/useSize";
+
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 // import { MdEdit } from "react-icons/md";
 // import { MdDelete } from "react-icons/md";
@@ -68,6 +77,7 @@ const SalonRegistrationPage = () => {
   const [city, setCity] = useState("");
   const navigateTo = useNavigate();
   const SERVICE_DATA = UseGet();
+  const size = useScreenSize();
   const {
     register,
     handleSubmit,
@@ -118,7 +128,7 @@ const SalonRegistrationPage = () => {
         className="space-y-3 counter px-8 border-l"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <h3 className="mt-8 scroll-m-20 text-2xl font-semibold tracking-tight">
+        <h3 className="mt-8 scroll-m-20 text-2xl font-semibold tracking-tight number">
           Registration
         </h3>
         <div className="flex flex-col space-y-1.5">
@@ -238,7 +248,7 @@ const SalonRegistrationPage = () => {
           </div>
         </div>
 
-        <h3 className="mt-8 scroll-m-20 text-xl font-semibold tracking-tight">
+        <h3 className="mt-8 scroll-m-20 text-xl font-semibold tracking-tight number">
           Services
         </h3>
 
@@ -248,73 +258,24 @@ const SalonRegistrationPage = () => {
             setSelected={setSelectedService}
             options={SERVICE_DATA}
           />
-          <Table className="mt-4">
-            <TableCaption>A list of your services.</TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Service Name</TableHead>
-                <TableHead>Duration</TableHead>
-                <TableHead className="w-[30%]">Description</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
-                <TableHead className="text-center">Edit</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {selectedService?.map((service, idx) => (
-                <TableRow key={idx}>
-                  <TableCell
-                    className={cn(
-                      "font-medium border-l-4",
-                      service?.price && service?.duration
-                        ? "border-l-green-400"
-                        : "border-l-red-400"
-                    )}
-                  >
-                    {service.label}
-                  </TableCell>
-                  <TableCell>
-                    {service?.duration ||
-                      "Time take to complete this services in minutes."}
-                  </TableCell>
-                  <TableCell>
-                    {service?.description || "Tell about the service."}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    ₹{service?.price || 0}
-                  </TableCell>
-                  <TableCell>
-                    {/* className="flex justify-evenly items-center" */}
-                    <div className="space-y-1">
-                      <EditService
-                        service={service}
-                        selected={selectedService}
-                        setSelected={setSelectedService}
-                      />
-                      <Separator />
-                      <Button
-                        type="button"
-                        variant="destructive"
-                        className="w-full"
-                        onClick={(e) => {
-                          // const variable = service.id;
-                          const filteredSelect = selectedService?.filter(
-                            (item) => item.id !== service.id
-                          );
-
-                          setSelectedService(filteredSelect);
-                        }}
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          {/* <TableServiceComponent
+            selectedService={selectedService}
+            setSelectedService={setSelectedService}
+          /> */}
+          {size.width > 730 ? (
+            <TableServiceComponent
+              selectedService={selectedService}
+              setSelectedService={setSelectedService}
+            />
+          ) : (
+            <MoblieViewService
+              selectedService={selectedService}
+              setSelectedService={setSelectedService}
+            />
+          )}
         </div>
 
-        <h3 className="font-heading mt-8 scroll-m-20 text-xl font-semibold tracking-tight">
+        <h3 className="font-heading mt-8 scroll-m-20 text-xl font-semibold tracking-tight number">
           Upload image of Store (Optional)
           <div>
             <Label htmlFor="files">Images</Label>
@@ -336,3 +297,127 @@ const SalonRegistrationPage = () => {
 };
 
 export default SalonRegistrationPage;
+
+function TableServiceComponent({ selectedService, setSelectedService }) {
+  return (
+    <Table className="mt-4">
+      <TableCaption>A list of your services.</TableCaption>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Service Name</TableHead>
+          <TableHead>Duration</TableHead>
+          <TableHead className="w-[30%]">Description</TableHead>
+          <TableHead className="text-right">Amount</TableHead>
+          <TableHead className="text-center">Edit</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {selectedService?.map((service, idx) => (
+          <TableRow key={idx}>
+            <TableCell
+              className={cn(
+                "font-medium border-l-4",
+                service?.price && service?.duration
+                  ? "border-l-green-400"
+                  : "border-l-red-400"
+              )}
+            >
+              {service.label}
+            </TableCell>
+            <TableCell>
+              {service?.duration ||
+                "Time take to complete this services in minutes."}
+            </TableCell>
+            <TableCell>
+              {service?.description || "Tell about the service."}
+            </TableCell>
+            <TableCell className="text-right">₹{service?.price || 0}</TableCell>
+            <TableCell>
+              {/* className="flex justify-evenly items-center" */}
+              <div className="space-y-1">
+                <EditService
+                  service={service}
+                  selected={selectedService}
+                  setSelected={setSelectedService}
+                />
+                <Separator />
+                <Button
+                  type="button"
+                  variant="destructive"
+                  className="w-full"
+                  onClick={(e) => {
+                    // const variable = service.id;
+                    const filteredSelect = selectedService?.filter(
+                      (item) => item.id !== service.id
+                    );
+
+                    setSelectedService(filteredSelect);
+                  }}
+                >
+                  Delete
+                </Button>
+              </div>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+}
+
+function MoblieViewService({ selectedService, setSelectedService }) {
+  return (
+    <div className="flex flex-col gap-2">
+      {selectedService?.map((service, idx) => (
+        <Card
+          key={idx}
+          className={cn(
+            "font-medium border-l-4 p-3 rounded",
+            service?.price && service?.duration
+              ? "border-l-green-400"
+              : "border-l-red-400"
+          )}
+        >
+          <CardHeader>
+            <CardTitle>{service.label}</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-2 p-3">
+            <div className="text-xs">
+              {service?.description || "Tell about the service. (description)"}
+            </div>
+            <div className="text-sm">
+              {!service?.duration || "Duration: "}
+              {service?.duration
+                ? service?.duration + " min"
+                : "Time take to complete this services in minutes. (duration)"}
+            </div>
+            <div className="text-sm">Price: ₹{service?.price || 0}</div>
+          </CardContent>
+          <CardFooter className="flex-col gap-1 p-0">
+            <EditService
+              service={service}
+              selected={selectedService}
+              setSelected={setSelectedService}
+            />
+            <Separator />
+            <Button
+              type="button"
+              variant="destructive"
+              className="w-full"
+              onClick={(e) => {
+                // const variable = service.id;
+                const filteredSelect = selectedService?.filter(
+                  (item) => item.id !== service.id
+                );
+
+                setSelectedService(filteredSelect);
+              }}
+            >
+              Delete
+            </Button>
+          </CardFooter>
+        </Card>
+      ))}
+    </div>
+  );
+}
