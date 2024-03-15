@@ -3,21 +3,21 @@ import React, { useEffect, useState } from "react";
 
 export default function QRScanner() {
   const [scanResult, setScanResult] = useState(null);
+
   useEffect(() => {
-    const scanner = new Html5QrcodeScanner("reader", {
+    let scanner = new Html5QrcodeScanner("reader", {
       qrbox: {
         width: 250,
         height: 250,
       },
-      fqs: 5, //Fraes per second
+      fps: 5, //Fraes per second
     });
-    scanner.render(success, error);
+
+    scanner.render(success);
+
     function success(result) {
       scanner.clear();
       setScanResult(result);
-    }
-    function error(err) {
-      console.warn(err);
     }
   }, []);
 
@@ -25,7 +25,7 @@ export default function QRScanner() {
     <div>
       <h1>SCAN QR CODE</h1>
       {scanResult ? (
-        <div>Sucess:{scanResult}</div>
+        <div>Success: {scanResult}</div>
       ) : (
         <div id="reader" className="w-96"></div>
       )}

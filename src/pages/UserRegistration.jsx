@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { CiCircleAlert } from "react-icons/ci";
 
@@ -129,6 +129,15 @@ export default function UserRegistration() {
             Create
           </Button>
         </CardFooter>
+        <p className="text-sm mb-2 px-4 text-center font-light text-gray-500 dark:text-gray-400">
+          Already have an account?{" "}
+          <Link
+            to={"/login"}
+            className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+          >
+            Log In
+          </Link>
+        </p>
       </Card>
     </section>
   );

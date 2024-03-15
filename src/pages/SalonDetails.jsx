@@ -2,9 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Button } from "@/components/ui/button";
 import endpoint from "../utility/axios";
-import { Label } from "@radix-ui/react-label";
-import { Input } from "@/components/ui/input";
-import salon2 from "../assets/salon2.jpg";
+import Navbar from "../components/Navbar";
 import { TiLocationOutline } from "react-icons/ti";
 import {
   Drawer,
@@ -48,6 +46,7 @@ export default function SalonDetails() {
 
   return (
     <div>
+      <Navbar />
       <TimeProvider>
         <div className="px-16 mt-10 ">
           <div className="flex justify-center gap-28  max-lg:gap-10  max-lg:flex-wrap ">
@@ -55,7 +54,7 @@ export default function SalonDetails() {
             <div>
               {" "}
               <div className="mt-10">
-                <h1 className="text-slate-300 text-5xl font-bold max-lg:text-3xl ">
+                <h1 className="dark:text-slate-300 text-5xl font-bold max-lg:text-3xl ">
                   {" "}
                   {salonDetails.name}
                 </h1>
@@ -78,14 +77,14 @@ export default function SalonDetails() {
                   for <br />
                   customers to purchase.
                 </p>
-                <div className="flex gap-1 mt-6 text-white">
+                <div className="flex gap-1 mt-6 dark:text-white">
                   <TiLocationOutline className=" fill-blue-800 size-5" />
 
                   <p>
                     {salonDetails.city} ,{salonDetails.address} ,India
                   </p>
                 </div>
-                <div className="text-white flex gap-2 mt-4 ">
+                <div className="dark:text-white flex gap-2 mt-4 ">
                   <FaRegClock className=" fill-blue-800 size-4" />
                   <p>
                     Opens at:{" "}
@@ -103,7 +102,9 @@ export default function SalonDetails() {
               <div className="mt-8">
                 <Drawer open={open} onOpenChange={setOpen}>
                   <DrawerTrigger asChild>
-                    <Button variant="outline">Appointment</Button>
+                    <Button className="bg-yellow-400 text-black dark:bg-slate-900 dark:text-white hover:bg-yellow-400">
+                      Appointment
+                    </Button>
                   </DrawerTrigger>
                   <DrawerContent>
                     <DrawerHeader className="text-left">

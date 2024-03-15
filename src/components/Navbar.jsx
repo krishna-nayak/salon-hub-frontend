@@ -1,29 +1,95 @@
-import React from "react";
+import React, { useState } from "react";
 import svetor from "../assets/svetor.png";
 import stitle from "../assets/stitle.png";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import { ThemeProvider, useTheme } from "@/hooks/context/theme-provider";
+import { Sling as Hamburger } from "hamburger-react";
 export default function Navbar() {
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-      <div className="h-20 bg-yellow-400">
+      <div className="h-16 bg-yellow-400 max-sm:hidden ">
         <div className="flex justify-between">
           <div className="flex">
-            <img src={svetor} alt="" className="w-20" />
+            <img src={svetor} alt="" className="w-16 " />
             <img src={stitle} alt="" className="h-10 w-28 mt-4" />
           </div>
-
-          <div className="p-4 flex gap-2">
+          <div className=" flex gap-8  max-md:gap-4 mt-4  font-bold text-white dark:text-black">
+            <Link to={"/"}>Home</Link>
+            <Link to={"/"}>About</Link>
+            <Link to={"/SalonRegistration"}>Register Salon</Link>
+          </div>
+          <div className="p-2 flex gap-2">
             <ToggleTheme className="" />
             <Button
-              className="bg-white text-black dark:bg-black dark:text-white "
-              asChild
+              variant="outline"
+              className=" text-white bg-transparent border-2  dark:text-black hover:bg-transparent"
             >
-              <Link to={"/profile/user"}>ACCOUNT</Link>
+              <Link to={"/login"}>Log In</Link>
+            </Button>
+            <Button className="bg-white text-black dark:bg-black dark:text-white">
+              <Link to={"/userRegistration"}>Sign Up</Link>
             </Button>
           </div>
         </div>
-      </div>{" "}
+      </div>
+      <div>
+        <div className="h-16 bg-yellow-400 hidden max-sm:block">
+          <div className="flex justify-between">
+            <div className="flex">
+              <img src={svetor} alt="" className="w-14 " />
+              <img src={stitle} alt="" className="h-8 w-22 mt-4" />
+            </div>
+            <div className="flex p-2">
+              <ToggleTheme className="rounded-full" />
+              <span onClick={toggleDropdown} className="-mt-2">
+                <Hamburger size={"25"} color={"#000000"} />
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      {showDropdown && (
+        <div className="z-50 absolute bg-white dark:bg-black right-4 -mt-4 p-2 rounded-lg shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)] ">
+          <div className=" text-black dark:text-white  font-normal  ">
+            <ul>
+              <li>
+                <Link to={"/"}>Home</Link>
+              </li>
+              <hr className=" h-px w-60 my-2 bg-gray-200 border-0 dark:bg-gray-700"></hr>
+              <li>
+                <Link to={"/"}>About</Link>
+              </li>
+              <hr className="w-60 h-px my-2 bg-gray-200 border-0 dark:bg-gray-700"></hr>
+              <li>
+                <Link to={"/"}> Take an appointment</Link>
+              </li>
+              <hr className="w-60 h-px my-2 bg-gray-200 border-0 dark:bg-gray-700"></hr>
+              <li>
+                <Link to={"/SalonRegistration"}> Register your salon</Link>
+              </li>
+              <hr className="w-60 h-px my-2 bg-gray-200 border-0 dark:bg-gray-700"></hr>
+            </ul>
+          </div>
+
+          <div className="p-2 flex justify-center gap-2">
+            <Button
+              variant="outline"
+              className=" text-black dark:text-white bg-transparent border-2   hover:bg-transparent"
+            >
+              <Link to={"/login"}>Log In</Link>
+            </Button>
+            <Button className="bg-yellow-400 text-black dark:bg-slate-800 dark:text-white">
+              <Link to={"/userRegistration"}>Sign Up</Link>
+            </Button>
+          </div>
+        </div>
+      )}
     </ThemeProvider>
   );
 }
@@ -41,7 +107,7 @@ function ToggleTheme() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
+        <Button variant="outline" size="icon" className="max-sm:w-8 max-sm:h-8">
           <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
           <span className="sr-only">Toggle theme</span>
