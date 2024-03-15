@@ -5,6 +5,15 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ThemeProvider, useTheme } from "@/hooks/context/theme-provider";
 import { Sling as Hamburger } from "hamburger-react";
+
+import { Sun, Moon } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 export default function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -93,14 +102,6 @@ export default function Navbar() {
     </ThemeProvider>
   );
 }
-import { Sun, Moon } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Link } from "react-router-dom";
 
 function ToggleTheme() {
   const { setTheme } = useTheme();
