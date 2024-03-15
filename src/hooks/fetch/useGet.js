@@ -19,6 +19,7 @@ const UseGet = () => {
             label: result.service_type.replace(/\b\w/g, (c) => c.toUpperCase()),
             serviceId: result.serviceId,
             price: null,
+            duration: null,
           }
         );
 

@@ -60,6 +60,7 @@ export const createDateFromTimeAmPm = (timeString) => {
   const date = new Date();
   date.setHours(hours);
   date.setMinutes(minutes);
+  date.setSeconds(0);
   const timeSlot = getTimeSlot(hours);
 
   return { date, timeSlot };

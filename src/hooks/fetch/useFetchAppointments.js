@@ -1,5 +1,9 @@
 import endpoint from "@/utility/axios";
-import { createDateFormat, createDateFromTime } from "@/utility/convert";
+import {
+  createDateFormat,
+  createDateFromTime,
+  createDateFromTimeAmPm,
+} from "@/utility/convert";
 import React, { useEffect, useState } from "react";
 
 const UseFetchAppointments = (salonId, date) => {
@@ -8,9 +12,12 @@ const UseFetchAppointments = (salonId, date) => {
     async function fetch() {
       const appoint_data = await endpoint.get(`/salon/appointment/${salonId}`);
 
+      // console.log(appoint_data);
       const results_appoint = appoint_data?.data || [];
 
       const selectedDate = createDateFormat(date);
+      // console.log(selectedDate);
+      // console.log(results_appoint);
       const results = results_appoint?.filter(
         (appointment) => appointment.date === selectedDate
       );
@@ -20,7 +27,7 @@ const UseFetchAppointments = (salonId, date) => {
         let renamedObject = Object.assign(
           {},
           {
-            time: createDateFromTime(result.time, date),
+            time: createDateFromTimeAmPm(result.time, date).date,
             totalDuration: result.duration,
           }
         );

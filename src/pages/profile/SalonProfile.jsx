@@ -1,239 +1,224 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
-import endpoint from "../../utility/axios";
+import { useNavigate } from "react-router-dom";
 
+import UseGet from "@/hooks/fetch/useGet";
+import endpoint from "@/utility/axios";
+import FancyMultiSelect from "@/components/ui/Dropdown/FancyMultiSelect";
+
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import MoblieViewService from "@/components/MoblieViewService";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import TableServiceComponent from "@/components/TableServiceComponent";
+import useScreenSize from "@/hooks/useSize";
+
+// import UseGetProfile from "@/hooks/fetch/useGetProfile";
+
+const CITY = [
+  "Bhubneswar",
+  "Delhi",
+  "Bangarulu",
+  "Hydrabad",
+  "Mumbai",
+  "Kolkata",
+];
 export default function () {
-  const [user, setUser] = useState(null);
-  const { userId } = useParams();
+  const navigate = useNavigate();
+  const [selectedService, setSelectedService] = useState([]);
+  const [salonDetails, setSalonDetails] = useState({});
+  const SERVICE_DATA = UseGet();
+  const size = useScreenSize();
 
   useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        const response = await endpoint.get(`/users/${userId}`);
-        setUser(response.data);
-      } catch (error) {
-        console.error("Error fetching user details:", error);
+    async function fetchSalonService() {
+      const salonId = localStorage.getItem("salonId");
+      if (salonId === undefined) {
+        localStorage.removeItem("salonId");
+        localStorage.removeItem("userid");
+        return navigate("/login");
       }
-    };
+      const res = await endpoint.get(`/salon/${salonId}`);
+      // console.log("result", res.data);
+      const results = res?.data?.Services;
+      setSalonDetails(res?.data);
+      // console.log(results);
+      let service_opt = [];
+      let i = 0;
+      for (let result of results) {
+        let renamedObject = Object.assign(
+          {},
+          {
+            id: i++,
+            value: result.service_type.replace(/\b\w/g, (c) => c.toUpperCase()),
+            label: result.service_type.replace(/\b\w/g, (c) => c.toUpperCase()),
+            serviceId: result.serviceId,
+            price: null,
+            duration: result?.SalonService.duration,
+            description: result?.SalonService.description,
+            price: result?.SalonService.price,
+          }
+        );
 
-    fetchUserDetails();
-  }, [userId]);
+        service_opt.push(renamedObject);
+      }
+      setSelectedService(service_opt);
+    }
+    fetchSalonService();
+  }, []);
 
-  // Render loading state while fetching user details
-  if (!user) {
-    return <div>Loading...</div>;
-  }
+  const notSelectedServices = SERVICE_DATA.filter((service) => {
+    return !selectedService.find(
+      (selected) => selected.serviceId === service.serviceId
+    );
+  });
+
   return (
     <div>
-      <h1>{user.fullName}</h1>
-      <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-3">
-        <div class="bg-gray-100 ">
-          <div className="text-center mt-12">
-            <h1 className="text-lg">You have not taken any appointment!</h1>
-
-            <button className="btn w-60 mt-8" type="button">
-              Take an appointment
-            </button>
-          </div>
+      <section>
+        <div>
+          name: {salonDetails.name || ""}
+          <br />
+          address: {salonDetails.address || ""}
+          <br />
+          city: {salonDetails.city || ""}
+          <br />
+          openings: {salonDetails.openingHourStart}
+          <br />
+          closing: {salonDetails.closeingHour}
+          <div></div>
+          {size.width > 690 ? (
+            <TableServiceComponent
+              selectedService={selectedService}
+              setSelectedService={setSelectedService}
+            />
+          ) : (
+            <MoblieViewService
+              selectedService={selectedService}
+              setSelectedService={setSelectedService}
+            />
+          )}
+          <div></div>
+          <AddNewService service_data={notSelectedServices} />
         </div>
-        <div class="bg-gray-100  ">
-          <div class="flex flex-wrap -mx-3 mb-5">
-            <div class="w-full max-w-full px-3 mb-6  mx-auto">
-              <div class="relative flex-[1_auto] flex flex-col break-words min-w-0 bg-clip-border rounded-[.95rem] bg-white m-5">
-                <div class="relative flex flex-col min-w-0 break-words border border-dashed bg-clip-border rounded-2xl border-stone-200 bg-light/30">
-                  <div class="px-9 pt-5 flex justify-between items-stretch flex-wrap min-h-[70px] pb-0 bg-transparent">
-                    <h3 class="flex flex-col items-start justify-center m-2 ml-0 font-medium text-xl/tight text-dark">
-                      <span class="mr-3 font-semibold text-dark">
-                        Salon Appointments
-                      </span>
-                    </h3>
-                  </div>
-
-                  <div class="flex-auto block py-8 pt-6 px-9">
-                    <div class="overflow-x-auto">
-                      <table class="w-full my-0 align-middle text-dark border-neutral-200">
-                        <thead class="align-bottom">
-                          <tr class="font-semibold text-[0.95rem] text-secondary-dark">
-                            <th class="pb-3 text-start min-w-[175px]">
-                              NAME OF CUSTOMER
-                            </th>
-                            <th class="pb-3  min-w-[100px]">DATE</th>
-                            <th class="pb-3  min-w-[100px]">DAY</th>
-                            <th class="pb-3 pr-12  min-w-[175px]"> PAIED</th>
-                            <th class="pb-3 pr-12  min-w-[100px]">AMOUNT</th>
-                            <th class="pb-3  min-w-[50px]">TIME</th>
-                            <th class="pb-3  min-w-[50px]">STATUS</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr class="border-b border-dashed last:border-b-0">
-                            <td class="p-3 pl-0">
-                              <div class=" items-center">
-                                <div class="flex flex-col justify-start">
-                                  <a
-                                    href="javascript:void(0)"
-                                    class="mb-1 font-semibold transition-colors duration-200 ease-in-out text-lg/normal text-secondary-inverse hover:text-primary"
-                                  >
-                                    {" "}
-                                    Olivia Cambell
-                                  </a>
-                                </div>
-                              </div>
-                            </td>
-                            <td class="p-3 pr-0 ">
-                              <span class="font-semibold text-light-inverse text-md/normal">
-                                14-2-2024
-                              </span>
-                            </td>
-                            <td class="p-3 pr-0 ">
-                              <span class="font-semibold text-light-inverse text-md/normal">
-                                Wednesday
-                              </span>
-                            </td>
-                            <td class="p-3 pr-12 ">
-                              <span class="text-center align-baseline inline-flex px-4 py-3 mr-auto items-center font-semibold text-[.95rem] leading-none text-success bg-success-light rounded-lg">
-                                Full Payment
-                              </span>
-                            </td>
-                            <td class="pr-0 text-start">
-                              <span class="font-semibold text-light-inverse text-md/normal">
-                                ₹ 250
-                              </span>
-                            </td>
-                            <td class="pr-0 text-start">
-                              <span class="font-semibold text-light-inverse text-md/normal">
-                                10:30 AM
-                              </span>
-                            </td>
-                          </tr>
-                          <tr class="border-b border-dashed last:border-b-0">
-                            <td class="p-3 pl-0">
-                              <div class=" items-center">
-                                <div class="flex flex-col justify-start">
-                                  <a
-                                    href="javascript:void(0)"
-                                    class="mb-1 font-semibold transition-colors duration-200 ease-in-out text-lg/normal text-secondary-inverse hover:text-primary"
-                                  >
-                                    Luca Micloe
-                                  </a>
-                                </div>
-                              </div>
-                            </td>
-                            <td class="p-3 pr-0 ">
-                              <span class="font-semibold text-light-inverse text-md/normal">
-                                14-2-2024
-                              </span>
-                            </td>
-                            <td class="p-3 pr-0 ">
-                              <span class="font-semibold text-light-inverse text-md/normal">
-                                Thrusday
-                              </span>
-                            </td>
-                            <td class="p-3 pr-12 ">
-                              <span class="text-center align-baseline inline-flex px-4 py-3 mr-auto items-center font-semibold text-[.95rem] leading-none text-warning bg-warning-light rounded-lg">
-                                Partial Payment
-                              </span>
-                            </td>
-                            <td class="pr-0 text-start">
-                              <span class="font-semibold text-light-inverse text-md/normal">
-                                ₹ 300
-                              </span>
-                            </td>
-                            <td class="pr-0 text-start">
-                              <span class="font-semibold text-light-inverse text-md/normal">
-                                10:00 AM
-                              </span>
-                            </td>
-                          </tr>
-                          <tr class="border-b border-dashed last:border-b-0">
-                            <td class="p-3 pl-0">
-                              <div class=" items-center">
-                                <div class="flex flex-col justify-start">
-                                  <a
-                                    href="javascript:void(0)"
-                                    class="mb-1 font-semibold transition-colors duration-200 ease-in-out text-lg/normal text-secondary-inverse hover:text-primary"
-                                  >
-                                    {" "}
-                                    Rodrige Peak
-                                  </a>
-                                </div>
-                              </div>
-                            </td>
-                            <td class="p-3 pr-0">
-                              <span class="font-semibold text-light-inverse text-md/normal">
-                                16-2-2024
-                              </span>
-                            </td>
-                            <td class="p-3 pr-0 ">
-                              <span class="font-semibold text-light-inverse text-md/normal">
-                                Saturday
-                              </span>
-                            </td>
-                            <td class="p-3 pr-12 ">
-                              <span class="text-center align-baseline inline-flex px-4 py-3 mr-auto items-center font-semibold text-[.95rem] leading-none text-success bg-success-light rounded-lg">
-                                Full Payment
-                              </span>
-                            </td>
-                            <td class="pr-0 text-start">
-                              <span class="font-semibold text-light-inverse text-md/normal">
-                                ₹ 250
-                              </span>
-                            </td>
-                            <td class="pr-0 text-start">
-                              <span class="font-semibold text-light-inverse text-md/normal">
-                                2:30 PM
-                              </span>
-                            </td>
-                          </tr>
-                          <tr class="border-b border-dashed last:border-b-0">
-                            <td class="p-3 pl-0">
-                              <div class=" items-center">
-                                <div class="flex flex-col justify-start">
-                                  <a
-                                    href="javascript:void(0)"
-                                    class="mb-1 font-semibold transition-colors duration-200 ease-in-out text-lg/normal text-secondary-inverse hover:text-primary"
-                                  >
-                                    Maddy Olte
-                                  </a>
-                                </div>
-                              </div>
-                            </td>
-                            <td class="p-3 pr-0 ">
-                              <span class="font-semibold text-light-inverse text-md/normal">
-                                15-2-2024
-                              </span>
-                            </td>
-                            <td class="p-3 pr-0 ">
-                              <span class="font-semibold text-light-inverse text-md/normal">
-                                Monday
-                              </span>
-                            </td>
-                            <td class="p-3 pr-12 ">
-                              <span class="text-center align-baseline inline-flex px-4 py-3 mr-auto items-center font-semibold text-[.95rem] leading-none text-warning bg-warning-light rounded-lg">
-                                Partial Payment
-                              </span>
-                            </td>
-                            <td class="pr-0 text-start">
-                              <span class="font-semibold text-light-inverse text-md/normal">
-                                ₹ 200
-                              </span>
-                            </td>
-                            <td class="pr-0 text-start">
-                              <span class="font-semibold text-light-inverse text-md/normal">
-                                12:30 PM
-                              </span>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      </section>
     </div>
+  );
+}
+
+function AddNewService({ service_data }) {
+  const [newSelectedService, setNewSelectedService] = useState([]);
+
+  return (
+    <>
+      <ServiceModal>
+        <div>
+          <FancyMultiSelect
+            selected={newSelectedService}
+            setSelected={setNewSelectedService}
+            options={service_data}
+          />
+        </div>
+        <ScrollArea className="h-[400px] rounded-md border">
+          <div className="p-4">
+            <h4 className="mb-4 text-sm font-medium leading-none">Service</h4>
+            <MoblieViewService
+              selectedService={newSelectedService}
+              setSelectedService={setNewSelectedService}
+            />
+          </div>
+        </ScrollArea>
+
+        {/* <Table className="mt-4">
+          <TableCaption>A list of your services.</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Service Name</TableHead>
+              <TableHead>Duration</TableHead>
+              <TableHead className="w-[30%]">Description</TableHead>
+              <TableHead className="text-right">Amount</TableHead>
+              <TableHead className="text-center">Edit</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {newSelectedService?.map((service, idx) => (
+              <TableRow key={idx}>
+                <TableCell
+                  className={cn(
+                    "font-medium border-l-4",
+                    service?.price && service?.duration
+                      ? "border-l-green-400"
+                      : "border-l-red-400"
+                  )}
+                >
+                  {service.label}
+                </TableCell>
+                <TableCell>
+                  {service?.duration ||
+                    "Time take to complete this services in minutes."}
+                </TableCell>
+                <TableCell>
+                  {service?.description || "Tell about the service."}
+                </TableCell>
+                <TableCell className="text-right">
+                  ₹{service?.price || 0}
+                </TableCell>
+                <TableCell>
+                  <div className="space-y-1">
+                    <EditService
+                      service={service}
+                      selected={newSelectedService}
+                      setSelected={setNewSelectedService}
+                    />
+                    <Separator />
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      className="w-full"
+                      onClick={(e) => {
+                        // const variable = service.id;
+                        const filteredSelect = newSelectedService?.filter(
+                          (item) => item.id !== service.id
+                        );
+
+                        setNewSelectedService(filteredSelect);
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table> */}
+      </ServiceModal>
+    </>
+  );
+}
+
+function ServiceModal({ children }) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline">Add Service</Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-lg">
+        <DialogHeader>
+          <DialogTitle>Are you absolutely sure?</DialogTitle>
+          <DialogDescription>
+            This action cannot be undone. This will permanently delete your
+            account and remove your data from our servers.
+          </DialogDescription>
+          {children}
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
   );
 }

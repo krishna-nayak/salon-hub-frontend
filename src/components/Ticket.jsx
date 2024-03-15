@@ -63,7 +63,7 @@ export default function Ticket({ name, gender, service, date, time }) {
     <div ref={pdfRef} className="text-black ">
       <div className="max-w-md w-full h-full mx-auto z-10 bg-yellow-400 rounded-3xl">
         <div className="flex flex-col">
-          <div className="bg-white relative drop-shadow-2xl  rounded-3xl p-4 m-4">
+          <div className="bg-white relative drop-shadow-2xl  rounded-3xl p-4 m-4 text-black">
             <div className="flex-none sm:flex">
               <div className="flex-auto justify-evenly">
                 <div className="flex items-center justify-between">
@@ -76,7 +76,7 @@ export default function Ticket({ name, gender, service, date, time }) {
                   <div className="ml-auto text-blue-800">SHT90380</div>
                 </div>
 
-                <div className=" border-dashed border-b-2 my-5 pt-2">
+                <div className="border-dashed border-b-2 my-5 pt-2">
                   <div className="absolute rounded-full w-5 h-5 bg-yellow-400 -mt-2 -left-2"></div>
                   <div className="absolute rounded-full w-5 h-5 bg-yellow-400 -mt-2 -right-2"></div>
                 </div>
@@ -111,7 +111,7 @@ export default function Ticket({ name, gender, service, date, time }) {
                   <div className="absolute rounded-full w-5 h-5 bg-yellow-400 -mt-2 -right-2"></div>
                 </div>
 
-                <div className="flex flex-col   justify-center text-sm ">
+                <div className="flex flex-col justify-center text-sm ">
                   <h6 className="font-bold text-center">SCAN TICKET</h6>
                   <img
                     src={qrCodeUrl}

@@ -3,7 +3,7 @@ import React from "react";
 
 const UserProfile = () => {
   const userData = UseGetProfile();
-  // console.log("sffs");
+
   return (
     <section>
       <h3 className="font-bold my-3 text-3xl">My Profile</h3>
