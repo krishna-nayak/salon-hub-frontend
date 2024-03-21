@@ -13,7 +13,11 @@ import EditService from "@/pages/EditService";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 
-function TableServiceComponent({ selectedService, setSelectedService }) {
+function TableServiceComponent({
+  selectedService,
+  setSelectedService,
+  extraFunction,
+}) {
   return (
     <Table className="mt-4">
       <TableCaption>A list of your services.</TableCaption>
@@ -61,12 +65,13 @@ function TableServiceComponent({ selectedService, setSelectedService }) {
                   variant="destructive"
                   className="w-full"
                   onClick={(e) => {
-                    // const variable = service.id;
                     const filteredSelect = selectedService?.filter(
                       (item) => item.id !== service.id
                     );
-
                     setSelectedService(filteredSelect);
+                    if (typeof extraFunction === "function") {
+                      extraFunction(service.serviceId);
+                    }
                   }}
                 >
                   Delete

@@ -1,31 +1,15 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { DatePickerWithPresets } from "@/components/ui/DatePicker/DatePickerWithPresets";
 import { addMinutes, format, isAfter, set } from "date-fns";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { SelectItem } from "@/components/ui/select";
 import {
   capitalizeAllWords,
   createDateFormat,
-  createDateFromTime,
   createDateFromTimeAmPm,
 } from "@/utility/convert";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { CalendarClock } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { TabsContent } from "@/components/ui/tabs";
 import {
   Card,
   CardContent,
@@ -35,73 +19,25 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { add } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { useTime } from "@/hooks/context/TimeContext";
 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { DialogClose } from "@radix-ui/react-dialog";
+
 import UseFetchAppointments from "@/hooks/fetch/useFetchAppointments";
 import { useForm } from "react-hook-form";
 import endpoint from "@/utility/axios";
 
 import { useNavigate } from "react-router-dom";
 import Ticket from "../components/Ticket";
+import {
+  DialogBox,
+  SelectButton,
+  TimeSlotHandler,
+} from "@/components/AppointmentComponents";
 //import { PDFDownloadLink } from "@react-pdf/renderer";
-
-function SelectButton({ children, onHandleSelectChange }) {
-  return (
-    <Select onValueChange={onHandleSelectChange}>
-      <SelectTrigger>
-        <SelectValue placeholder="Service" />
-      </SelectTrigger>
-      <SelectContent>{children}</SelectContent>
-    </Select>
-  );
-}
-
-function DialogBox({ children }) {
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button type="button" variant="outline">
-          <CalendarClock />
-          Time Slot
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[525px]">
-        <DialogHeader>
-          <DialogTitle>Time Slot</DialogTitle>
-          <DialogDescription>
-            Selete your preferable time slot
-          </DialogDescription>
-        </DialogHeader>
-        <div>{children}</div>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button type="button">Save changes</Button>
-          </DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-function TimeSlotHandler({ children }) {
-  return (
-    <Tabs defaultValue="morning" className="w-full">
-      <TabsList className="grid w-full grid-cols-3">
-        <TabsTrigger value="morning">Morning</TabsTrigger>
-        <TabsTrigger value="noon">Noon</TabsTrigger>
-        <TabsTrigger value="evening">Evening</TabsTrigger>
-      </TabsList>
-      {children}
-      {/* <TabsContent value="password">Change your password here.</TabsContent> */}
-    </Tabs>
-  );
-}
 
 const CardHander = React.memo(({ name, date, duration, salonDetails }) => {
   // console.count("Render - CardHander");
@@ -260,7 +196,6 @@ const CardHander = React.memo(({ name, date, duration, salonDetails }) => {
                 )}
                 onClick={() => {
                   // if (!slotCanBeBook(time)) return;
-
                   onSubmit(format(time, "hh:mm a'"));
                 }}
               >

@@ -1,15 +1,7 @@
 import FancyMultiSelect from "@/components/ui/Dropdown/FancyMultiSelect";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
@@ -35,6 +27,7 @@ import useScreenSize from "@/hooks/useSize";
 
 import TableServiceComponent from "@/components/TableServiceComponent";
 import MoblieViewService from "@/components/MoblieViewService";
+import { Separator } from "@/components/ui/separator";
 
 // import { MdEdit } from "react-icons/md";
 // import { MdDelete } from "react-icons/md";

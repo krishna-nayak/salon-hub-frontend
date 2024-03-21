@@ -8,8 +8,10 @@ import FancyMultiSelect from "@/components/ui/Dropdown/FancyMultiSelect";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -33,6 +35,7 @@ export default function () {
   const navigate = useNavigate();
   const [selectedService, setSelectedService] = useState([]);
   const [salonDetails, setSalonDetails] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(true);
   const SERVICE_DATA = UseGet();
   const size = useScreenSize();
 
@@ -70,14 +73,27 @@ export default function () {
       }
       setSelectedService(service_opt);
     }
-    fetchSalonService();
-  }, []);
+    if (isSubmitting) {
+      fetchSalonService();
+      setIsSubmitting(false);
+    }
+  }, [isSubmitting]);
 
   const notSelectedServices = SERVICE_DATA.filter((service) => {
     return !selectedService.find(
       (selected) => selected.serviceId === service.serviceId
     );
   });
+
+  const handleSalonServiceDelete = async (serviceId) => {
+    const salonId = localStorage.getItem("salonId");
+    console.log(serviceId);
+    try {
+      await endpoint.delete(`/salonService/${salonId}/delete/${serviceId}`);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
 
   return (
     <div>
@@ -97,27 +113,52 @@ export default function () {
             <TableServiceComponent
               selectedService={selectedService}
               setSelectedService={setSelectedService}
+              extraFunction={handleSalonServiceDelete}
             />
           ) : (
             <MoblieViewService
               selectedService={selectedService}
               setSelectedService={setSelectedService}
+              extraFunction={handleSalonServiceDelete}
             />
           )}
           <div></div>
-          <AddNewService service_data={notSelectedServices} />
+          <AddNewService
+            service_data={notSelectedServices}
+            setIsSubmitting={setIsSubmitting}
+          />
         </div>
       </section>
     </div>
   );
 }
 
-function AddNewService({ service_data }) {
+function AddNewService({ service_data, setIsSubmitting }) {
   const [newSelectedService, setNewSelectedService] = useState([]);
-
+  const handleSubmit = async (data) => {
+    const hasPriceAndDuration = newSelectedService.every(
+      (object) => object.price && object.duration
+    );
+    if (newSelectedService.length === 0) {
+      alert("Please select at least one service");
+      return; // Stop submission
+    }
+    if (hasPriceAndDuration) {
+      const services = { services: newSelectedService };
+      const salonId = localStorage.getItem("salonId");
+      const service_response = await endpoint.post(
+        `/salon/${salonId}/services`,
+        services
+      );
+      console.log("complete", service_response);
+      setIsSubmitting(true);
+    } else {
+      alert("service needs to be updated");
+    }
+  };
   return (
     <>
-      <ServiceModal>
+      <ServiceModal handleSubmit={handleSubmit}>
         <div>
           <FancyMultiSelect
             selected={newSelectedService}
@@ -134,76 +175,12 @@ function AddNewService({ service_data }) {
             />
           </div>
         </ScrollArea>
-
-        {/* <Table className="mt-4">
-          <TableCaption>A list of your services.</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Service Name</TableHead>
-              <TableHead>Duration</TableHead>
-              <TableHead className="w-[30%]">Description</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
-              <TableHead className="text-center">Edit</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {newSelectedService?.map((service, idx) => (
-              <TableRow key={idx}>
-                <TableCell
-                  className={cn(
-                    "font-medium border-l-4",
-                    service?.price && service?.duration
-                      ? "border-l-green-400"
-                      : "border-l-red-400"
-                  )}
-                >
-                  {service.label}
-                </TableCell>
-                <TableCell>
-                  {service?.duration ||
-                    "Time take to complete this services in minutes."}
-                </TableCell>
-                <TableCell>
-                  {service?.description || "Tell about the service."}
-                </TableCell>
-                <TableCell className="text-right">
-                  ₹{service?.price || 0}
-                </TableCell>
-                <TableCell>
-                  <div className="space-y-1">
-                    <EditService
-                      service={service}
-                      selected={newSelectedService}
-                      setSelected={setNewSelectedService}
-                    />
-                    <Separator />
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      className="w-full"
-                      onClick={(e) => {
-                        // const variable = service.id;
-                        const filteredSelect = newSelectedService?.filter(
-                          (item) => item.id !== service.id
-                        );
-
-                        setNewSelectedService(filteredSelect);
-                      }}
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table> */}
       </ServiceModal>
     </>
   );
 }
 
-function ServiceModal({ children }) {
+function ServiceModal({ children, handleSubmit }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -216,8 +193,20 @@ function ServiceModal({ children }) {
             This action cannot be undone. This will permanently delete your
             account and remove your data from our servers.
           </DialogDescription>
-          {children}
         </DialogHeader>
+        {children}
+        <DialogFooter className="sm:justify-start">
+          <DialogClose asChild>
+            <Button type="button" onClick={handleSubmit}>
+              Add
+            </Button>
+          </DialogClose>
+          <DialogClose asChild>
+            <Button type="button" variant="secondary">
+              Close
+            </Button>
+          </DialogClose>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

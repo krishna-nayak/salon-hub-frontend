@@ -10,7 +10,11 @@ import EditService from "@/pages/EditService";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 
-function MoblieViewService({ selectedService, setSelectedService }) {
+function MoblieViewService({
+  selectedService,
+  setSelectedService,
+  extraFunction,
+}) {
   return (
     <div className="flex flex-col gap-2">
       {selectedService?.map((service, idx) => (
@@ -50,12 +54,13 @@ function MoblieViewService({ selectedService, setSelectedService }) {
               variant="destructive"
               className="w-full"
               onClick={(e) => {
-                // const variable = service.id;
                 const filteredSelect = selectedService?.filter(
                   (item) => item.id !== service.id
                 );
-
                 setSelectedService(filteredSelect);
+                if (typeof extraFunction === "function") {
+                  extraFunction(service.serviceId);
+                }
               }}
             >
               Delete
