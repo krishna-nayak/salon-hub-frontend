@@ -16,10 +16,9 @@ import {
 
 export default function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false);
+  const userId = localStorage.getItem("userId");
 
-  const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
-  };
+  const toggleDropdown = () => setShowDropdown(!showDropdown);
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <div className="h-16 bg-yellow-400 max-sm:hidden ">
@@ -34,16 +33,24 @@ export default function Navbar() {
             <Link to={"/SalonRegistration"}>Register Salon</Link>
           </div>
           <div className="p-2 flex gap-2">
-            <ToggleTheme className="" />
-            <Button
-              variant="outline"
-              className=" text-white bg-transparent border-2  dark:text-black hover:bg-transparent"
-            >
-              <Link to={"/login"}>Log In</Link>
-            </Button>
-            <Button className="bg-white text-black dark:bg-black dark:text-white">
-              <Link to={"/userRegistration"}>Sign Up</Link>
-            </Button>
+            <ToggleTheme />
+            {userId == null ? (
+              <>
+                <Button
+                  variant="outline"
+                  className="text-black dark:text-white bg-transparent border-2 hover:bg-transparent"
+                >
+                  <Link to={"/login"}>Log In</Link>
+                </Button>
+                <Button className="bg-yellow-400 text-black hover:bg-white dark:bg-slate-800 dark:text-white">
+                  <Link to={"/userRegistration"}>Sign Up</Link>
+                </Button>
+              </>
+            ) : (
+              <Button className="bg-yellow-400 hover:bg-white text-black dark:bg-black dark:text-white border-2 border-black">
+                <Link to={"/profile/user"}>Profile</Link>
+              </Button>
+            )}
           </div>
         </div>
       </div>
@@ -56,8 +63,11 @@ export default function Navbar() {
             </div>
             <div className="flex p-2">
               <ToggleTheme className="rounded-full" />
-              <span onClick={toggleDropdown} className="-mt-2">
-                <Hamburger size={"25"} color={"#000000"} />
+              <span
+                onClick={toggleDropdown}
+                className="-mt-2 text-white dark:text-black"
+              >
+                <Hamburger size={"25"} />
               </span>
             </div>
           </div>
@@ -87,15 +97,23 @@ export default function Navbar() {
           </div>
 
           <div className="p-2 flex justify-center gap-2">
-            <Button
-              variant="outline"
-              className=" text-black dark:text-white bg-transparent border-2   hover:bg-transparent"
-            >
-              <Link to={"/login"}>Log In</Link>
-            </Button>
-            <Button className="bg-yellow-400 text-black dark:bg-slate-800 dark:text-white">
-              <Link to={"/userRegistration"}>Sign Up</Link>
-            </Button>
+            {userId == null ? (
+              <>
+                <Button
+                  variant="outline"
+                  className="text-black dark:text-white bg-transparent border-2 hover:bg-transparent"
+                >
+                  <Link to={"/login"}>Log In</Link>
+                </Button>
+                <Button className="bg-yellow-400 text-black dark:bg-slate-800 dark:text-white">
+                  <Link to={"/userRegistration"}>Sign Up</Link>
+                </Button>
+              </>
+            ) : (
+              <Button className="bg-yellow-400 text-black dark:bg-slate-800 dark:text-white">
+                <Link to={"/profile/user"}>Profile</Link>
+              </Button>
+            )}
           </div>
         </div>
       )}

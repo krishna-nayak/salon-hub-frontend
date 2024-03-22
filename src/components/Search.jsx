@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import endpoint from "../utility/axios";
 import { IoStorefront } from "react-icons/io5";
 import { format } from "date-fns";
 import { RiCalculatorFill } from "react-icons/ri";
@@ -45,7 +44,7 @@ export default function () {
         <div className="flex gap-2 mt-5 font-semibold cursor-pointer">
           <IoStorefront className="mt-1 ml-3" />
           <Select className="flex" onValueChange={handleInputChange}>
-            <SelectTrigger className="w-[180px] border-0 self-center -mt-1 h-8 max-sm:w-20 dark:bg-white">
+            <SelectTrigger className="w-[130px] border-0 self-center -mt-1 h-8 dark:bg-white">
               <SelectValue placeholder="City" />
             </SelectTrigger>
             <SelectContent>
@@ -56,21 +55,6 @@ export default function () {
               ))}
             </SelectContent>
           </Select>
-          {/* <select
-            id="city-dropdown"
-            value={searchInput}
-            onChange={handleInputChange}
-            className="custom-select appearance-none cursor-pointer -mt-1  h-8 w-40 max-sm:w-20"
-          >
-            <option value="" className="dark:bg-black">
-              City
-            </option>
-            {CITY.map((city, index) => (
-              <option key={index} value={city} className="dark:bg-black">
-                {city}
-              </option>
-            ))}
-          </select> */}
         </div>
       </div>
       <div className="flex">
