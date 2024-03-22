@@ -17,10 +17,20 @@ import {
 import { TiStarFullOutline } from "react-icons/ti";
 import { FaRegClock } from "react-icons/fa";
 import TableS from "@/components/TableS";
-
+import useScreenSize from "@/hooks/useSize";
 import { TimeProvider, useTime } from "@/hooks/context/TimeContext";
 import Appointment from "./Appointment";
 import CarouselS from "../components/CarouselS";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 export default function SalonDetails() {
   const { salonId } = useParams();
   const [salonDetails, setSalonDetails] = useState({});
@@ -44,6 +54,8 @@ export default function SalonDetails() {
     return <div>Loading...</div>;
   }
 
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const size = useScreenSize();
   return (
     <div>
       <Navbar />
@@ -100,32 +112,15 @@ export default function SalonDetails() {
               </div>
               {/* Drawer */}
               <div className="mt-8">
-                <Drawer open={open} onOpenChange={setOpen}>
-                  <DrawerTrigger asChild>
-                    <Button className="bg-yellow-400 text-black dark:bg-slate-900 dark:text-white hover:bg-yellow-400">
-                      Appointment
-                    </Button>
-                  </DrawerTrigger>
-                  <DrawerContent>
-                    <DrawerHeader className="text-left">
-                      <DrawerTitle>Appointment</DrawerTitle>
-                      <DrawerDescription>
-                        Give your details. Click{" "}
-                        <span className="font-bold">Book Now</span> when you're
-                        done.
-                      </DrawerDescription>
-                    </DrawerHeader>
-                    <Appointment salonDetails={salonDetails} />
-                    <DrawerFooter className="pt-2">
-                      <Button type="submit" form="appoint">
-                        Save changes
-                      </Button>
-                      <DrawerClose asChild>
-                        <Button variant="outline">Cancel</Button>
-                      </DrawerClose>
-                    </DrawerFooter>
-                  </DrawerContent>
-                </Drawer>
+                {size.width > 724 ? (
+                  <DialogProvider
+                    {...{ dialogOpen, setDialogOpen, salonDetails }}
+                  />
+                ) : (
+                  <DrawerProvider
+                    {...{ dialogOpen, setDialogOpen, salonDetails }}
+                  />
+                )}
               </div>
             </div>
           </div>
@@ -133,5 +128,65 @@ export default function SalonDetails() {
         <TableS salonDetails={salonDetails} salonId={salonId} />
       </TimeProvider>
     </div>
+  );
+}
+
+function DialogProvider({ dialogOpen, setDialogOpen, salonDetails }) {
+  return (
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+      <DialogTrigger asChild>
+        <Button className="bg-yellow-400 text-black dark:bg-slate-900 dark:text-white hover:bg-yellow-400">
+          Appointment
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Appointment</DialogTitle>
+          <DialogDescription>
+            Give your details. Click <span className="font-bold">Book Now</span>{" "}
+            when you're done.
+          </DialogDescription>
+        </DialogHeader>
+        <Appointment salonDetails={salonDetails} />
+        <DialogFooter>
+          <Button type="submit" form="appoint">
+            Save changes
+          </Button>
+          <DialogClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function DrawerProvider({ dialogOpen, setDialogOpen, salonDetails }) {
+  return (
+    <Drawer open={dialogOpen} onOpenChange={setDialogOpen}>
+      <DrawerTrigger asChild>
+        <Button className="bg-yellow-400 text-black dark:bg-slate-900 dark:text-white hover:bg-yellow-400">
+          Appointment
+        </Button>
+      </DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader className="text-left">
+          <DrawerTitle>Appointment</DrawerTitle>
+          <DrawerDescription>
+            Give your details. Click <span className="font-bold">Book Now</span>{" "}
+            when you're done.
+          </DrawerDescription>
+        </DrawerHeader>
+        <Appointment salonDetails={salonDetails} />
+        <DrawerFooter className="pt-2">
+          <Button type="submit" form="appoint">
+            Save changes
+          </Button>
+          <DrawerClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DrawerClose>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }

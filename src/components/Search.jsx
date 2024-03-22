@@ -10,55 +10,59 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+
+const CITY = [
+  "Bhubneswar",
+  "Delhi",
+  "Bangarulu",
+  "Hydrabad",
+  "Mumbai",
+  "Kolkata",
+];
+
 export default function () {
   const [searchInput, setSearchInput] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
   const navigateTo = useNavigate();
   const [date, setDate] = useState(null);
 
-  useEffect(() => {
-    const fetchCities = async () => {
-      try {
-        const response = await endpoint.get(`/salon`);
-        console.log(response);
-        const cities = response.data.result.map((salon) => salon.city);
-        setSearchResults(cities);
-      } catch (error) {
-        console.error("Error fetching cities:", error);
-      }
-    };
-
-    fetchCities();
-  }, []);
-
-  const handleInputChange = (event) => {
-    setSearchInput(event.target.value);
-  };
+  const handleInputChange = (v) => setSearchInput(v);
 
   const handleSearch = async (event) => {
     event.preventDefault();
     navigateTo(`/salon?city=${searchInput}`);
   };
-  const CITY = [
-    "Bhubneswar",
-    "Delhi",
-    "Bangarulu",
-    "Hydrabad",
-    "Mumbai",
-    "Kolkata",
-  ];
+
   return (
-    <div className="flex  justify-between  ">
+    <div className="flex justify-between">
       <div className="">
-        <div className="flex gap-2 mt-5  font-semibold cursor-pointer ">
+        <div className="flex gap-2 mt-5 font-semibold cursor-pointer">
           <IoStorefront className="mt-1 ml-3" />
-          <select
+          <Select className="flex" onValueChange={handleInputChange}>
+            <SelectTrigger className="w-[180px] border-0 self-center -mt-1 h-8 max-sm:w-20 dark:bg-white">
+              <SelectValue placeholder="City" />
+            </SelectTrigger>
+            <SelectContent>
+              {CITY.map((city, index) => (
+                <SelectItem key={index} value={city}>
+                  {city}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {/* <select
             id="city-dropdown"
             value={searchInput}
             onChange={handleInputChange}
             className="custom-select appearance-none cursor-pointer -mt-1  h-8 w-40 max-sm:w-20"
           >
-            <option value="" className=" dark:bg-black">
+            <option value="" className="dark:bg-black">
               City
             </option>
             {CITY.map((city, index) => (
@@ -66,12 +70,11 @@ export default function () {
                 {city}
               </option>
             ))}
-          </select>
+          </select> */}
         </div>
       </div>
       <div className="flex">
         <div className="p-5">
-          {" "}
           <Popover>
             <PopoverTrigger asChild>
               <div className="flex gap-2 font-semibold cursor-pointer">

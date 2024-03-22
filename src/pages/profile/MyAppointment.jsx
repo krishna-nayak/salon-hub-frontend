@@ -11,7 +11,6 @@ const MyAppointment = React.memo(() => {
     }
     fetchMyAppointment();
   }, []);
-  console.log("heelo/");
   return (
     <div>
       <h3 className="text-2xl font-bold my-3">Appointment</h3>

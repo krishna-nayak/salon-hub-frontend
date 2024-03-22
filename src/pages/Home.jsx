@@ -6,7 +6,7 @@ import Card from "../components/Card";
 //import QRScanner from "../components/QRScanner";
 export default function Home() {
   return (
-    <div className="">
+    <div>
       <Navbar />
       <div
         className="bg-cover bg-center h-96 flex items-center  justify-center p-8"

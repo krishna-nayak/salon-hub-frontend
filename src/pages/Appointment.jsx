@@ -380,18 +380,6 @@ function Appointment({ salonDetails }) {
           >
             Close
           </Button>
-          {/* <PDFDownloadLink
-            document={<Ticket {...ticketData} />}
-            fileName="ticket.pdf"
-          >
-            {({ loading }) =>
-              loading ? (
-                <button>Loading</button>
-              ) : (
-                <button className="text-black">Download</button>
-              )
-            }
-          </PDFDownloadLink> */}
         </DialogContent>
       </Dialog>
     </>
