@@ -64,7 +64,7 @@ export default function () {
             serviceId: result.serviceId,
             price: null,
             duration: result?.SalonService.duration,
-            description: result?.SalonService.description,
+            description: result?.SalonService.description || "No description",
             price: result?.SalonService.price,
           }
         );
