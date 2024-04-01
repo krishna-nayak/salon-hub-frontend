@@ -53,17 +53,17 @@ function TableServiceComponent({
             <TableCell className="text-right">₹{service?.price || 0}</TableCell>
             <TableCell>
               {/* className="flex justify-evenly items-center" */}
-              <div className="space-y-1">
+              <div className=" flex justify-center gap-6">
                 <EditService
                   service={service}
                   selected={selectedService}
                   setSelected={setSelectedService}
                 />
-                <Separator />
+
                 <Button
                   type="button"
-                  variant="destructive"
-                  className="w-full"
+                  variant="outline"
+                  className="w-full border-red-500 text-red-500"
                   onClick={(e) => {
                     const filteredSelect = selectedService?.filter(
                       (item) => item.id !== service.id

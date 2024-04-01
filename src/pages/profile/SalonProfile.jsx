@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { Separator } from "@/components/ui/separator";
 import UseGet from "@/hooks/fetch/useGet";
 import endpoint from "@/utility/axios";
 import FancyMultiSelect from "@/components/ui/Dropdown/FancyMultiSelect";
-
+import { MdDelete } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -20,7 +20,10 @@ import MoblieViewService from "@/components/MoblieViewService";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import TableServiceComponent from "@/components/TableServiceComponent";
 import useScreenSize from "@/hooks/useSize";
-
+import prof1 from "../../assets/prof1.png";
+import prof2 from "../../assets/prof2.png";
+import prof3 from "../../assets/prof3.png";
+import prof4 from "../../assets/prof4.png";
 // import UseGetProfile from "@/hooks/fetch/useGetProfile";
 
 const CITY = [
@@ -38,7 +41,7 @@ export default function () {
   const [isSubmitting, setIsSubmitting] = useState(true);
   const SERVICE_DATA = UseGet();
   const size = useScreenSize();
-
+  const numSelectedServices = selectedService.length;
   useEffect(() => {
     async function fetchSalonService() {
       const salonId = localStorage.getItem("salonId");
@@ -99,15 +102,66 @@ export default function () {
     <div>
       <section>
         <div>
-          name: {salonDetails.name || ""}
-          <br />
-          address: {salonDetails.address || ""}
-          <br />
-          city: {salonDetails.city || ""}
-          <br />
-          openings: {salonDetails.openingHourStart}
-          <br />
-          closing: {salonDetails.closeingHour}
+          <div className="flex max-sm:flex-wrap justify-between gap-4 ">
+            <div className="salonprof">
+              <div>
+                <span className="text-gray-500 font-semibold text-sm">
+                  Salon name{" "}
+                </span>
+                <br />
+                {salonDetails.name || ""}
+              </div>
+              <img
+                src={prof1}
+                alt="prof2"
+                className="w-14 h-14 max-md:w-10 max-md:h-10"
+              />
+            </div>
+            <div className="salonprof">
+              <div>
+                <span className="text-gray-500 font-semibold text-sm">
+                  Address{" "}
+                </span>
+                <br />
+                {salonDetails.address || ""} , {salonDetails.city || ""}
+              </div>
+              <img
+                src={prof3}
+                alt="prof3"
+                className="h-20 w-20 -mt-2 max-md:w-14 max-md:h-14"
+              />
+            </div>
+            <div className="salonprof">
+              <div>
+                <span className="text-gray-500 font-semibold text-sm">
+                  Timeing{" "}
+                </span>
+                <br />
+                {salonDetails.openingHourStart}-
+                {salonDetails.closeingHour || ""}
+              </div>
+              <img
+                src={prof4}
+                alt="prof4"
+                className="w-16 h-16 max-md:w-10 max-md:h-10"
+              />
+            </div>
+            <div className="salonprof">
+              <div>
+                <span className="text-gray-500 font-semibold text-sm">
+                  Total Services:
+                </span>{" "}
+                <br />
+                {numSelectedServices}
+              </div>
+              <img
+                src={prof2}
+                alt="prof2"
+                className="w-16 h-16 max-md:w-12 max-md:h-12"
+              />
+            </div>
+          </div>
+          {/* <Separator className="mt-8" /> */}
           <div></div>
           {size.width > 690 ? (
             <TableServiceComponent
@@ -184,7 +238,7 @@ function ServiceModal({ children, handleSubmit }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Add Service</Button>
+        <Button variant="outline">Add Service +</Button>
       </DialogTrigger>
       <DialogContent className="max-w-lg">
         <DialogHeader>
