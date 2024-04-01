@@ -42,17 +42,17 @@ function MoblieViewService({
             </div>
             <div className="text-sm">Price: ₹{service?.price || 0}</div>
           </CardContent>
-          <CardFooter className="flex-col gap-1 p-0">
+          <CardFooter className="flex gap-1 p-0">
             <EditService
               service={service}
               selected={selectedService}
               setSelected={setSelectedService}
             />
-            <Separator />
+
             <Button
               type="button"
-              variant="destructive"
-              className="w-full"
+              variant="outline"
+              className="w-full border-red-500 text-red-500"
               onClick={(e) => {
                 const filteredSelect = selectedService?.filter(
                   (item) => item.id !== service.id

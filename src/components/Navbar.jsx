@@ -48,7 +48,7 @@ export default function Navbar() {
               </>
             ) : (
               <Button className="bg-yellow-400 hover:bg-white text-black dark:bg-black dark:text-white border-2 border-black">
-                <Link to={"/profile/user"}>Profile</Link>
+                <Link to={"/profile/my-appointment"}>Profile</Link>
               </Button>
             )}
           </div>
@@ -111,7 +111,7 @@ export default function Navbar() {
               </>
             ) : (
               <Button className="bg-yellow-400 text-black dark:bg-slate-800 dark:text-white">
-                <Link to={"/profile/user"}>Profile</Link>
+                <Link to={"/profile/my-appointment"}>Profile</Link>
               </Button>
             )}
           </div>
