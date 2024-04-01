@@ -23,6 +23,8 @@ import ProfileLayout from "./pages/profile/layout/ProfileLayout";
 import MyAppointment from "./pages/profile/MyAppointment";
 import { ThemeProvider, useTheme } from "./hooks/context/theme-provider";
 import { Toggle } from "./components/ui/toggle";
+import AdminLayout from "./pages/Admin/AdminLayout";
+import AdminDashbord from "./pages/Admin/AdminDashbord";
 
 function App() {
   const router = createBrowserRouter(
@@ -40,6 +42,9 @@ function App() {
           <Route path="/profile/user" element={<UserProfile />} />
           <Route path="/profile/my-appointment" element={<MyAppointment />} />
           <Route path="/profile/salon" element={<SalonProfile />} />
+        </Route>
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="/admin/dashboard" element={<AdminDashbord />} />
         </Route>
       </Route>
     )
