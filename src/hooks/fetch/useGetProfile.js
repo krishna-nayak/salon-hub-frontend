@@ -16,6 +16,7 @@ const UseGetProfile = () => {
         email: result.data.email,
         role: result.data.role,
         salonId: result.data?.Salon?.salonId || undefined,
+        imageUrl: result.data?.imageUrl,
       });
     }
 

@@ -29,7 +29,7 @@ export default function UserRegistration() {
   } = useForm();
   const onSubmit = async (data) => {
     try {
-      console.log(data);
+      // console.log(data);
       const res = await endpoint.post("/users", data);
       console.log(res.data);
       toast("You are now registered 😄");
@@ -92,6 +92,45 @@ export default function UserRegistration() {
                     <AlertDescription>{errors.email.message}</AlertDescription>
                   </Alert>
                 )}
+              </div>
+              <div className="grid gap-2">
+                <div>Gender</div>
+                <div className="flex justify-between gap-2">
+                  <Label htmlFor="male" className="basis-full">
+                    <Input
+                      type="radio"
+                      id="male"
+                      name="gender"
+                      className="peer sr-only"
+                      value="male"
+                      {...register("gender")}
+                    />
+                    <Button
+                      variant="outline"
+                      className="peer-checked:text-white peer-checked:bg-black dark:peer-checked:text-black dark:peer-checked:bg-white w-full"
+                      asChild
+                    >
+                      <div>Male</div>
+                    </Button>
+                  </Label>
+                  <Label htmlFor="female" className="basis-full">
+                    <Input
+                      type="radio"
+                      id="female"
+                      name="gender"
+                      className="peer sr-only"
+                      value="female"
+                      {...register("gender")}
+                    />
+                    <Button
+                      variant="outline"
+                      className="peer-checked:text-white peer-checked:bg-black dark:peer-checked:text-black dark:peer-checked:bg-white w-full"
+                      asChild
+                    >
+                      <div>Female</div>
+                    </Button>
+                  </Label>
+                </div>
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="password">Password</Label>

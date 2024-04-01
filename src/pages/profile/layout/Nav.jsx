@@ -17,7 +17,10 @@ const Nav = ({ links, className }) => {
       <div className="flex justify-between max-md:p-2">
         <div className="flex gap-2 p-2">
           <img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR94Ein4bvhNHez_c_hYPGop3aRNJxxniWCLw&usqp=CAU"
+            src={
+              user?.imageUrl ||
+              `https://avatar.iran.liara.run/username?username=${user?.fullName}`
+            }
             alt="pic"
             className="rounded-full w-12 h-12"
           />
