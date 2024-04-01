@@ -25,6 +25,7 @@ import { ThemeProvider, useTheme } from "./hooks/context/theme-provider";
 import { Toggle } from "./components/ui/toggle";
 import AdminLayout from "./pages/Admin/AdminLayout";
 import AdminDashbord from "./pages/Admin/AdminDashbord";
+import ScrollToTop from "react-scroll-to-top";
 
 function App() {
   const router = createBrowserRouter(
@@ -39,7 +40,7 @@ function App() {
         <Route path="/salon" element={<Salon />} />
         <Route path="/salonDetails/:salonId" element={<SalonDetails />} />
         <Route path="/profile" element={<ProfileLayout />}>
-          <Route path="/profile/user" element={<UserProfile />} />
+          {/* <Route path="/profile/user" element={<UserProfile />} /> */}
           <Route path="/profile/my-appointment" element={<MyAppointment />} />
           <Route path="/profile/salon" element={<SalonProfile />} />
         </Route>
@@ -53,6 +54,13 @@ function App() {
     <div className="">
       <RouterProvider router={router} />
       <Toaster />
+      <ScrollToTop
+        smooth
+        className="scrlltop "
+        viewBox="-60 3 270 160"
+        top="100"
+        color="black"
+      />
     </div>
   );
 }

@@ -11,6 +11,9 @@
   .salonBadge {
     @apply bg-blue-100 text-blue-800 h-6 text-xs font-semibold px-2 py-0.5 rounded ms-3;
   }
+  .salonprof {
+    @apply flex justify-between dark:bg-transparent dark:shadow-gray-700 bg-slate-50 shadow-md rounded-lg shadow-gray-400 h-auto w-full p-2 text-base font-semibold max-lg:text-sm;
+  }
 }
 
 @tailwind utilities;
@@ -131,4 +134,54 @@ html {
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(transparent, #ffe100);
   border-radius: 6px;
+}
+.ribbon {
+  --f: 10px; /* control the folded part*/
+  --r: 15px; /* control the ribbon shape */
+  --t: 10px; /* the top offset */
+
+  position: absolute;
+  inset: var(--t) calc(-1 * var(--f)) auto auto;
+  padding: 0 10px var(--f) calc(10px + var(--r));
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - var(--f)),
+    calc(100% - var(--f)) 100%,
+    calc(100% - var(--f)) calc(100% - var(--f)),
+    0 calc(100% - var(--f)),
+    var(--r) calc(50% - var(--f) / 2)
+  );
+
+  box-shadow: 0 calc(-1 * var(--f)) 0 inset #0005;
+}
+.scrlltop {
+  background: rgb(252, 210, 43) !important;
+
+  background: radial-gradient(
+    circle,
+    rgb(246, 241, 200) 0%,
+    rgb(250, 224, 80) 35%,
+    rgb(232, 168, 6) 100%
+  ) !important;
+
+  bottom: 70px !important; /* Adjust bottom position */
+  right: 20px !important;
+  border-radius: 100% !important;
+  animation: bounce 2s ease infinite;
+}
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-30px);
+  }
+  60% {
+    transform: translateY(-15px);
+  }
 }
