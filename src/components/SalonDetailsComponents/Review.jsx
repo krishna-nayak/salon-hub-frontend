@@ -6,6 +6,8 @@ import { Star } from "lucide-react";
 import { FaStar } from "react-icons/fa6";
 import { useForm } from "react-hook-form";
 
+const ANONYMOUS =
+  "https://as1.ftcdn.net/v2/jpg/05/16/27/58/1000_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg";
 const StarFunc = ({ selected = false, onClick = (f) => f }) => (
   <FaStar
     color={selected ? "yellow" : "gray"}
@@ -43,15 +45,17 @@ const Review = ({ salonId }) => {
     const reviewArrData = await result_array_review?.data?.reviews;
     const userReview = await result_current_user_review?.data;
     //     const userReview = await result_current_user_review?.data?.user;
-    console.log(result_current_user_review);
+    console.log(reviewArrData);
+    console.log(userReview);
+
     if (!Array.isArray(reviewArrData)) {
       return alert("Error on review Side");
     }
 
-    if (userReview.id) {
+    if (userReview?.id) {
       setStarsSelected(userReview.rating);
       setValue("comment", userReview.comment);
-      console.log("Setting");
+      // console.log("Setting");
     }
     const filterReview = reviewArrData?.filter(
       (review) => review?.userId !== userId
@@ -65,8 +69,18 @@ const Review = ({ salonId }) => {
     fetchReview(salonId);
   }, [salonId]);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
+    try {
+      const userId = localStorage.getItem("userId");
+      if (!userId) return alert("Please Login");
+      await endpoint.post(`/reviews/${salonId}/${userId}`, {
+        comment: data.comment,
+        rating: starsSelected,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -75,18 +89,25 @@ const Review = ({ salonId }) => {
         Review by our users
       </h1>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          {[...Array(totalStars)].map((n, i) => (
-            <StarFunc
-              key={i}
-              selected={i < starsSelected}
-              onClick={() => handleStarClick(i)}
-            />
-          ))}
-          <p>
-            {starsSelected} of {totalStars} stars
-          </p>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 my-2">
+        <div className="flex gap-3">
+          <img
+            src={localStorage.getItem("imageUrl") || ANONYMOUS}
+            alt=""
+            width={50}
+          />
+          <div>
+            {[...Array(totalStars)].map((n, i) => (
+              <StarFunc
+                key={i}
+                selected={i < starsSelected}
+                onClick={() => handleStarClick(i)}
+              />
+            ))}
+            <p>
+              {starsSelected} of {totalStars} stars
+            </p>
+          </div>
         </div>
         <div>
           <Textarea

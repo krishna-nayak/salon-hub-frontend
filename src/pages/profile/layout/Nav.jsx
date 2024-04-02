@@ -45,6 +45,8 @@ const Nav = ({ links, className }) => {
               )}
               onClick={() => {
                 localStorage.removeItem("userId");
+                localStorage.removeItem("salonId");
+                localStorage.removeItem("imageUrl");
                 window.location = "/";
               }}
             >
@@ -111,6 +113,8 @@ const Nav = ({ links, className }) => {
           )}
           onClick={() => {
             localStorage.removeItem("userId");
+            localStorage.removeItem("salonId");
+            localStorage.removeItem("imageUrl");
             window.location = "/";
           }}
         >
