@@ -36,20 +36,17 @@ export default function SalonDetails() {
   const { salonId } = useParams();
   const [salonDetails, setSalonDetails] = useState({});
 
+  const fetchSalonDetails = async () => {
+    try {
+      const response = await endpoint.get(`/salon/${salonId}`);
+      setSalonDetails(response.data);
+    } catch (error) {
+      console.error("Error fetching salon details:", error);
+    }
+  };
   useEffect(() => {
-    const fetchSalonDetails = async () => {
-      try {
-        const response = await endpoint.get(`/salon/${salonId}`);
-        setSalonDetails(response.data);
-      } catch (error) {
-        console.error("Error fetching salon details:", error);
-      }
-    };
-
     fetchSalonDetails();
   }, []);
-
-  const [open, setOpen] = React.useState(false);
 
   if (!salonDetails) {
     return <div>Loading...</div>;

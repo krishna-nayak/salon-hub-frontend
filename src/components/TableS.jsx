@@ -42,7 +42,6 @@ export default function TableS({ salonDetails }) {
       </div>
     );
   }
-  console.log(salonDetails);
   return (
     <div className="mt-20 px-20 max-lg:px-2">
       <div>
