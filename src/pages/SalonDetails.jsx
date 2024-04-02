@@ -31,6 +31,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import Review from "@/components/SalonDetailsComponents/Review";
 export default function SalonDetails() {
   const { salonId } = useParams();
   const [salonDetails, setSalonDetails] = useState({});
@@ -126,6 +127,7 @@ export default function SalonDetails() {
           </div>
         </div>
         <TableS salonDetails={salonDetails} salonId={salonId} />
+        <Review salonId={salonId} />
       </TimeProvider>
     </div>
   );

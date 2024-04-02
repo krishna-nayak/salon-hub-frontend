@@ -185,3 +185,16 @@ html {
     transform: translateY(-15px);
   }
 }
+
+.star {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: gray;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.star.selected {
+  background-color: yellow;
+}
