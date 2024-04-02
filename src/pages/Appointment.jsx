@@ -243,12 +243,12 @@ function Appointment({ salonDetails }) {
       notes: "",
     };
 
-    // console.log(responde_date);
-
     const userId = localStorage.getItem("userId");
 
-    if (!userId)
-      return console.error("USER ID is not set. PLEASE TRY TO LOGIN FIRST");
+    if (!userId) {
+      console.error("USER ID is not set. PLEASE TRY TO LOGIN FIRST");
+      return navigate("/login");
+    }
 
     const result = await endpoint.post(
       `/appointment/${userId}/salonService`,
