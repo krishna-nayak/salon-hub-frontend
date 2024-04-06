@@ -14,6 +14,9 @@
   .salonprof {
     @apply flex justify-between dark:bg-transparent dark:shadow-gray-700 bg-slate-50 shadow-md rounded-lg shadow-gray-400 h-auto w-full p-2 text-base font-semibold max-lg:text-sm;
   }
+  .shade {
+    @apply bg-white border rounded-2xl dark:bg-gradient-to-b dark:from-slate-950 dark:from-10% dark:via-slate-950 dark:via-30% dark:to-gray-900 dark:to-90% shadow-md shadow-slate-500;
+  }
 }
 
 @tailwind utilities;
@@ -197,4 +200,9 @@ html {
 
 .star.selected {
   background-color: yellow;
+}
+.carouselavtar {
+  height: 4rem !important;
+  width: 4rem !important;
+  display: flex;
 }

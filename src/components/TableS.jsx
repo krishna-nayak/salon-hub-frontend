@@ -54,10 +54,10 @@ export default function TableS({ salonDetails }) {
         <div className="flex flex-wrap justify-center gap-8 px-20 relative mt-20 ">
           {salonDetails.Services.map((service, index) => (
             <div key={index}>
-              <div className="mt-10 relative bottom-4  block w-80  p-6 bg-white border border-gray-200 rounded-lg  hover:bg-gray-100 dark:bg-slate-800 dark:border-gray-700 dark:hover:bg-gray-700 shadow shadow-yellow-300">
+              <div className="mt-10 relative bottom-4  block w-80  p-6 shade">
                 <div>
                   <div className="absolute right-0 top-0 h-16 w-16 ">
-                    <div className="ribbon dark:bg-blue-600  bg-blue-200">
+                    <div className="ribbon dark:bg-blue-600  bg-blue-200 font-bold">
                       {" "}
                       ₹{service.SalonService.price}/-{" "}
                     </div>
