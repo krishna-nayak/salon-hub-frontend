@@ -21,6 +21,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { PuffLoader } from "react-spinners";
 export default function Salon() {
   const [salonDatas, setSalonData] = useState(null);
   const location = useLocation();
@@ -31,6 +32,7 @@ export default function Salon() {
   const [selectedService, setSelectedService] = useState(null);
   const [rating, setRating] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
   const navigateTo = useNavigate();
   useEffect(() => {
     const fetchSalonData = async () => {
@@ -130,6 +132,10 @@ export default function Salon() {
   const handlePreviousPage = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   };
+
+  const handleImageLoad = () => {
+    setImagesLoaded(true);
+  };
   return (
     <div>
       <Navbar />
@@ -188,10 +194,16 @@ export default function Salon() {
             {currentCards?.map((salonData, index) => (
               <div key={index} className="salonCard ">
                 <div className="flex  max-sm:flex-wrap gap-3">
+                  {!imagesLoaded && (
+                    <div className="flex justify-center">
+                      <PuffLoader color="yellow" speedMultiplier={4} />
+                    </div>
+                  )}
                   <img
                     className="salonImg"
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTblXojdXxCoLhR5H5tsZPMqXDMN69dFZv5sw&usqp=CAU"
-                    alt="ok"
+                    src={`https://source.unsplash.com/400x250/?salon,barber-salon,shop,pedicure,haircut,manicure,men-facial,${salonData.name}`}
+                    alt="Salon"
+                    onLoad={handleImageLoad}
                   />
                   <div>
                     <div className="max-sm:flex max-sm:gap-2">
