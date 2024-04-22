@@ -18,7 +18,7 @@ import {
 } from "./ui/select";
 
 const CITY = [
-  "Bhubneswar",
+  "Bhubaneswar",
   "Delhi",
   "Bangarulu",
   "Hydrabad",
