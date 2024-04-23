@@ -39,7 +39,7 @@ export default function () {
   };
 
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between ">
       <div className="">
         <div className="flex gap-2 mt-5 font-semibold cursor-pointer">
           <IoStorefront className="mt-1 ml-3" />

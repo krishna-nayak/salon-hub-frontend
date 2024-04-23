@@ -50,7 +50,7 @@ export default function Ticket({ name, gender, service, date, time }) {
         const qrCodeY = imgY + imgHeight * ratio - qrCodeHeight * 1.6;
         pdf.addImage(qrCodeImage, qrCodeX, qrCodeY, qrCodeWidth, qrCodeHeight);
         pdf.save("ticket.pdf");
-        setDownloading(false);
+        setDownloading(false); //downloading process completed
 
         if (button) {
           button.style.display = "block";

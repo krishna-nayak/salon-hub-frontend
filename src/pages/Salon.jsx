@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { TiStarFullOutline } from "react-icons/ti";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { GrPowerReset } from "react-icons/gr";
+import { BiReset } from "react-icons/bi";
 import endpoint from "../utility/axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -153,7 +153,7 @@ export default function Salon() {
               onClick={handleReset}
               className="h-12 bg-yellow-500 dark:bg-slate-900 hover:bg-yellow-400"
             >
-              <GrPowerReset className="fill-white" />
+              <BiReset className="fill-white" />
             </Button>
             <Button
               onClick={handleSearch}
