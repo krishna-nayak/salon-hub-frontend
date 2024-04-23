@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 
 const getTimeSlot = (hours) => {
   if (hours >= 0 && hours < 12) {
@@ -67,3 +67,11 @@ export const createDateFromTimeAmPm = (timeString) => {
 };
 
 export const createDateFormat = (date) => format(date, "dd-MM-yyyy");
+
+export const formattedTime = (timeString) => {
+  // Parse the time string into a Date object
+  const time = parse(timeString, "HH:mm", new Date());
+  // Format the time in hh:mm a format
+  const formattedTime = format(time, "hh:mm a");
+  return formattedTime;
+};

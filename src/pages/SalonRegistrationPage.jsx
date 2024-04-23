@@ -28,6 +28,7 @@ import useScreenSize from "@/hooks/useSize";
 import TableServiceComponent from "@/components/TableServiceComponent";
 import MoblieViewService from "@/components/MoblieViewService";
 import { Separator } from "@/components/ui/separator";
+import { formattedTime } from "@/utility/convert";
 
 // import { MdEdit } from "react-icons/md";
 // import { MdDelete } from "react-icons/md";
@@ -79,10 +80,15 @@ const SalonRegistrationPage = () => {
       formData.append("description", gatherData.description);
       formData.append("address", gatherData.address);
       formData.append("city", gatherData.city);
-      formData.append("openingHourStart", gatherData.openingHourStart);
-      formData.append("closeingHour", gatherData.closingHour);
+      formData.append(
+        "openingHourStart",
+        formattedTime(gatherData.openingHour)
+      );
+      formData.append("closeingHour", formattedTime(gatherData.closingHour));
       // formData.append("files", file);
       formData.append("email", gatherData.email);
+
+      console.log(formData);
 
       const salon_response = await endpoint.post(`/salon`, formData);
       const service_id = salon_response.data?.salonId;
