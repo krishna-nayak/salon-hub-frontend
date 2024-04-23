@@ -224,7 +224,7 @@ function Appointment({ salonDetails }) {
     const filter = services.filter(
       (service) => service?.SalonService?.salonServiceId === v
     );
-    console.log(filter);
+    // console.log(filter);
     if (filter.length > 0) {
       setService({
         ...filter[0].SalonService,
@@ -246,6 +246,7 @@ function Appointment({ salonDetails }) {
       duration: selectService.duration,
       notes: "",
     };
+    // console.log(responde_date);
 
     const userId = localStorage.getItem("userId");
 

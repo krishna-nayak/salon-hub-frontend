@@ -53,7 +53,9 @@ const MyAppointment = React.memo(() => {
           <TableBody>
             {myAppointment.map((appoint, idx) => (
               <TableRow key={idx}>
-                <TableCell>{appoint.username}</TableCell>
+                <TableCell>
+                  {appoint?.customerName || appoint?.username}
+                </TableCell>
                 <TableCell>
                   <img
                     src={serviceImages[appoint.service_name]}
