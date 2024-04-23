@@ -222,10 +222,14 @@ function Appointment({ salonDetails }) {
   const onHandleSelectChange = (v) => {
     const services = salonDetails?.Services;
     const filter = services.filter(
-      (service) => service.SalonService.salonServiceId === v
+      (service) => service?.SalonService?.salonServiceId === v
     );
+    console.log(filter);
     if (filter.length > 0) {
-      setService(filter[0].SalonService);
+      setService({
+        ...filter[0].SalonService,
+        service_type: filter[0]?.service_type,
+      });
       setTime("");
     }
   };
@@ -259,10 +263,11 @@ function Appointment({ salonDetails }) {
     const ticketInfo = {
       name: data.name,
       gender: data.gender,
-      service: selectService ? selectService.service_type : "Not found :|",
+      service: selectService ? selectService?.service_type : "Not found :|",
       date,
       time,
     };
+    // console.log(ticketInfo, selectService);
 
     setTicketData(ticketInfo);
     setShowTicketDialog(true);
