@@ -27,7 +27,7 @@ import prof4 from "../../assets/prof4.png";
 // import UseGetProfile from "@/hooks/fetch/useGetProfile";
 
 const CITY = [
-  "Bhubneswar",
+  "Bhubaneswar",
   "Delhi",
   "Bangarulu",
   "Hydrabad",

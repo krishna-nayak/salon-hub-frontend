@@ -42,7 +42,7 @@ const FRAMEWORKS = [
 ];
 
 const CITY = [
-  "Bhubneswar",
+  "Bhubaneswar",
   "Delhi",
   "Bangarulu",
   "Hydrabad",

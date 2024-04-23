@@ -18,7 +18,7 @@ import {
 } from "./ui/select";
 
 const CITY = [
-  "Bhubneswar",
+  "Bhubaneswar",
   "Delhi",
   "Bangarulu",
   "Hydrabad",
@@ -44,7 +44,7 @@ export default function () {
         <div className="flex gap-2 mt-5 font-semibold cursor-pointer">
           <IoStorefront className="mt-1 ml-3" />
           <Select className="flex" onValueChange={handleInputChange}>
-            <SelectTrigger className="w-[130px] border-0 self-center -mt-1 h-8 dark:bg-white">
+            <SelectTrigger className="w-[110px] border-0 self-center -mt-1 h-8 dark:bg-white">
               <SelectValue placeholder="City" />
             </SelectTrigger>
             <SelectContent>

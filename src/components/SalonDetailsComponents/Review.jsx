@@ -53,8 +53,8 @@ const Review = ({ salonId }) => {
     const reviewArrData = await result_array_review?.data?.reviews;
     const userReview = await result_current_user_review?.data;
     //     const userReview = await result_current_user_review?.data?.user;
-    console.log(reviewArrData);
-    console.log(userReview);
+    // console.log(reviewArrData);
+    // console.log(userReview);
 
     if (!Array.isArray(reviewArrData)) {
       return alert("Error on review Side");
@@ -69,15 +69,18 @@ const Review = ({ salonId }) => {
     const filterReview = reviewArrData?.filter(
       (review) => review?.userId !== userId
     );
+    // const filterReview = reviewArrData;
+    setReviewArrays(reviewArrData);
 
-    setReviewArrays(filterReview);
-
+    // console.log("filterReview", filterReview);
     // Calculate counts of ratings for each star
     const counts = Array(totalStars).fill(0);
-    filterReview.forEach((review) => {
+    // console.log("filtered ratings", filterReview);
+    reviewArrData.forEach((review) => {
       counts[review.rating - 1]++;
     });
     setStarsRatingCounts(counts);
+    console.log(counts);
   };
 
   useEffect(() => {
@@ -86,7 +89,7 @@ const Review = ({ salonId }) => {
   }, [salonId]);
 
   const onSubmit = async (data) => {
-    console.log(data);
+    // console.log(data);
     try {
       const userId = localStorage.getItem("userId");
       if (!userId) return alert("Please Login");
@@ -170,7 +173,9 @@ const Review = ({ salonId }) => {
                   className="bg-yellow-400 h-2.5 rounded-full"
                   style={{
                     width: `${
-                      (starsRatingCounts[i] / reviewArrays.length) * 100
+                      reviewArrays.length != 0
+                        ? (starsRatingCounts[i] / reviewArrays.length) * 100
+                        : 0
                     }%`,
                   }}
                 ></div>
